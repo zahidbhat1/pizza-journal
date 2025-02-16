@@ -1,6 +1,65 @@
 import 'package:dio/dio.dart';
 import 'package:pizzajournals/data/source/error/app_exception.dart';
-import 'package:pizzajournals/data/source/network/api_response_extensions.dart';
+
+extension ApiResponseExtensions on Response {
+  ServerException? get errorDataToServerException {
+    try {
+      final data = this.data;
+      if (data is Map<String, dynamic>) {
+        // First try to get the message from the top level
+        if (data.containsKey('message') && data['message'] is String) {
+          return ServerException(
+            type: ServerExceptionType.general,
+            message: data['message'] as String,
+          );
+        }
+
+        // If not found at top level, try to extract from nested error structure
+        if (data.containsKey('error') &&
+            data['error'] is Map<String, dynamic>) {
+          final error = data['error'] as Map<String, dynamic>;
+
+          // Try to get from error.err.message
+          if (error.containsKey('err') &&
+              error['err'] is Map<String, dynamic>) {
+            final err = error['err'] as Map<String, dynamic>;
+            if (err.containsKey('message') && err['message'] is String) {
+              return ServerException(
+                type: ServerExceptionType.general,
+                message: err['message'] as String,
+              );
+            }
+          }
+
+          // If we have a stack trace with error message
+          if (error.containsKey('stack') && error['stack'] is String) {
+            final stack = error['stack'] as String;
+            // Try to extract message from stack if it contains "Error: ..."
+            final errorRegex = RegExp(r'Error: ([^\n]+)');
+            final match = errorRegex.firstMatch(stack);
+            if (match != null && match.groupCount >= 1) {
+              return ServerException(
+                type: ServerExceptionType.general,
+                message: match.group(1) ?? 'Unknown error',
+              );
+            }
+          }
+        }
+      }
+
+      // Fallback for unexpected response format
+      return ServerException(
+        type: ServerExceptionType.unknown,
+        message: 'Unknown server error',
+      );
+    } catch (e) {
+      return ServerException(
+        type: ServerExceptionType.unknown,
+        message: 'Error parsing server response: $e',
+      );
+    }
+  }
+}
 
 extension AppErrorExtension on Object {
   ServerException get errorToServerException {

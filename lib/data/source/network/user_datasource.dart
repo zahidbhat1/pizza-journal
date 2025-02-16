@@ -248,13 +248,14 @@ class UserDataSource {
         ApiPath.userRegisterPath,
         data: data,
       );
+
       final dataItem = DataItem<dynamic>.fromJson(
         response.responseData,
         (json) => '$json',
         dataJsonKeyName: '',
       );
 
-      return dataItem.code == '200';
+      return dataItem.success == true;
     } catch (_) {
       rethrow;
     }

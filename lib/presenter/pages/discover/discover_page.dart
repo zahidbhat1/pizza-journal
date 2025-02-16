@@ -17,6 +17,8 @@ import 'package:pizzajournals/presenter/pages/discover/widget/map_locator.dart';
 import 'package:pizzajournals/presenter/themes/colors.dart';
 import 'package:pizzajournals/presenter/widgets/cached_image.dart';
 
+import '../../../utils/alert_manager.dart';
+
 @RoutePage()
 class DiscoverPage extends StatefulWidget {
   const DiscoverPage({super.key});
@@ -69,6 +71,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
   String socialLink = '';
   String mapLink = '';
   final TextEditingController _locationController = TextEditingController();
+  late final AlertManager _alertManager;
 
   DiscoverBloc get _discoverBloc => context.read<DiscoverBloc>();
 
@@ -346,7 +349,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
                                     border: Border.all(
                                         color: AppColors.grey2, width: 1),
                                   ),
-                                  child: _buildCheeseTasteDropDown(),
+                                  child: _buildCheeseTasteDropDown(context),
                                 ),
                               ),
                               Expanded(
@@ -360,21 +363,22 @@ class _DiscoverPageState extends State<DiscoverPage> {
                                     border: Border.all(
                                         color: AppColors.grey2, width: 1),
                                   ),
-                                  child: _buildCheeseAmountDropDown(),
+                                  child: _buildCheeseAmountDropDown(context),
                                 ),
                               ),
                             ],
                           ),
                           Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            // Distribute space evenly
                             children: [
-                              const Spacer(),
                               GestureDetector(
                                 onTap: () {
                                   _submitSearch();
                                 },
                                 child: Container(
-                                  margin:
-                                      const EdgeInsets.symmetric(vertical: 12),
+                                  margin: const EdgeInsets.symmetric(
+                                      vertical: 12, horizontal: 15),
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 16, vertical: 12),
                                   decoration: BoxDecoration(
@@ -391,12 +395,11 @@ class _DiscoverPageState extends State<DiscoverPage> {
                                   ),
                                 ),
                               ),
-                              const Spacer(),
                               GestureDetector(
                                 onTap: () {},
                                 child: Container(
-                                  margin:
-                                      const EdgeInsets.symmetric(vertical: 12),
+                                  margin: const EdgeInsets.symmetric(
+                                      vertical: 12, horizontal: 15),
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 16, vertical: 12),
                                   decoration: BoxDecoration(
@@ -413,32 +416,25 @@ class _DiscoverPageState extends State<DiscoverPage> {
                                   ),
                                 ),
                               ),
-                              const Spacer(),
-                              Container(
-                                margin:
-                                    const EdgeInsets.symmetric(vertical: 12),
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 16, vertical: 12),
-                                decoration: BoxDecoration(
-                                  color: AppColors.main,
-                                  borderRadius: BorderRadius.circular(8),
-                                  border: Border.all(
-                                      color: AppColors.lightOrange, width: 1),
-                                ),
-                                child: const Center(
-                                  child: Flexible(
-                                    child: Text(
-                                      'Save by new name',
-                                      maxLines: 1,
-                                      style: TextStyle(
-                                        color: AppColors.white,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              const Spacer(),
+
+                              // GestureDetector(
+                              //   onTap: () {},
+                              //   child: Container(
+                              //     margin: const EdgeInsets.symmetric(vertical: 12),
+                              //     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                              //     decoration: BoxDecoration(
+                              //       color: AppColors.main,
+                              //       borderRadius: BorderRadius.circular(8),
+                              //       border: Border.all(color: AppColors.lightOrange, width: 1),
+                              //     ),
+                              //     child: const Center(
+                              //       child: Text(
+                              //         'Save by new name',
+                              //         style: TextStyle(color: AppColors.white),
+                              //       ),
+                              //     ),
+                              //   ),
+                              // ),
                             ],
                           ),
                         ],
@@ -752,39 +748,45 @@ class _DiscoverPageState extends State<DiscoverPage> {
   Widget _buildRatingDropDown() {
     return Row(
       children: [
-        DropdownButton<String>(
-          value: dropdownRatingValue,
-          icon: Container(),
-          elevation: 16,
-          style: const TextStyle(color: AppColors.black),
-          underline: Container(
-            height: 0,
-          ),
-          onChanged: (String? newValue) {
-            setState(() {
-              dropdownRatingValue = newValue!;
-            });
-          },
-          items: <String>[
-            'Rating',
-            '5 Star',
-            '4 Star',
-            '3 Star',
-            '2 Star',
-            '1 Star'
-          ].map<DropdownMenuItem<String>>((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(value,
+        Expanded(
+          // Use Expanded to take available space
+          child: DropdownButton<String>(
+            value: dropdownRatingValue,
+            icon: const Icon(Icons.arrow_drop_down),
+            // Use built-in arrow
+            elevation: 16,
+            style: const TextStyle(
+              color: AppColors.black,
+              fontSize: 14,
+            ),
+            underline: Container(height: 0),
+            onChanged: (String? newValue) {
+              setState(() {
+                dropdownRatingValue = newValue!;
+              });
+            },
+            items: <String>[
+              'Rating',
+              '5 Star',
+              '4 Star',
+              '3 Star',
+              '2 Star',
+              '1 Star'
+            ].map<DropdownMenuItem<String>>((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(
+                  value,
+                  overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                      color: value == 'Rating'
-                          ? AppColors.grey
-                          : AppColors.black)),
-            );
-          }).toList(),
+                    color: value == 'Rating' ? AppColors.grey : AppColors.black,
+                  ),
+                ),
+              );
+            }).toList(),
+            isExpanded: true,
+          ),
         ),
-        const Spacer(),
-        const Icon(Icons.arrow_downward),
       ],
     );
   }
@@ -827,34 +829,39 @@ class _DiscoverPageState extends State<DiscoverPage> {
   Widget _buildCrushDropDown() {
     return Row(
       children: [
-        DropdownButton<String>(
-          value: dropdownCrushValue,
-          icon: Container(),
-          elevation: 16,
-          style: const TextStyle(color: AppColors.black),
-          underline: Container(height: 0),
-          onChanged: (String? newValue) {
-            setState(() {
-              dropdownCrushValue = newValue!;
-            });
-          },
-          items: <String>['Crush Type', 'Thick', 'Thin', 'Average']
-              .map<DropdownMenuItem<String>>((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(
-                // Removed Expanded
-                value,
-                style: TextStyle(
-                  color:
-                      value == 'Crush Type' ? AppColors.grey : AppColors.black,
+        Expanded(
+          child: DropdownButton<String>(
+            value: dropdownCrushValue,
+            icon: const Icon(Icons.arrow_drop_down),
+            elevation: 16,
+            style: const TextStyle(
+              color: AppColors.black,
+              fontSize: 14,
+            ),
+            underline: Container(height: 0),
+            onChanged: (String? newValue) {
+              setState(() {
+                dropdownCrushValue = newValue!;
+              });
+            },
+            items: <String>['Crush Type', 'Thick', 'Thin', 'Average']
+                .map<DropdownMenuItem<String>>((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(
+                  value,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: value == 'Crush Type'
+                        ? AppColors.grey
+                        : AppColors.black,
+                  ),
                 ),
-              ),
-            );
-          }).toList(),
+              );
+            }).toList(),
+            isExpanded: true,
+          ),
         ),
-        const Spacer(),
-        const Icon(Icons.arrow_downward),
       ],
     );
   }
@@ -862,34 +869,41 @@ class _DiscoverPageState extends State<DiscoverPage> {
   Widget _buildSauceTypeDropDown() {
     return Row(
       children: [
-        DropdownButton<String>(
-          value: dropdownSauceTypeValue,
-          icon: Container(),
-          elevation: 16,
-          style: const TextStyle(color: AppColors.black),
-          underline: Container(height: 0),
-          onChanged: (String? newValue) {
-            setState(() {
-              dropdownSauceTypeValue = newValue!;
-            });
-          },
-          items: <String>['Sweet/Spicy', 'Sweet', 'Spicy', 'No Flavor', 'N/A']
-              .map<DropdownMenuItem<String>>((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(
-                // Removed Expanded
-                value,
-                style: TextStyle(
-                  color:
-                      value == 'Sweet/Spicy' ? AppColors.grey : AppColors.black,
+        Expanded(
+          // Use Expanded to take available space
+          child: DropdownButton<String>(
+            value: dropdownSauceTypeValue,
+            icon: const Icon(Icons.arrow_drop_down),
+            // Use built-in arrow
+            elevation: 16,
+            style: const TextStyle(
+              color: AppColors.black,
+              fontSize: 14, // Adjust font size for small screens
+            ),
+            underline: Container(height: 0),
+            onChanged: (String? newValue) {
+              setState(() {
+                dropdownSauceTypeValue = newValue!;
+              });
+            },
+            items: <String>['Sweet/Spicy', 'Sweet', 'Spicy', 'No Flavor', 'N/A']
+                .map<DropdownMenuItem<String>>((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(
+                  value,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: value == 'Sweet/Spicy'
+                        ? AppColors.grey
+                        : AppColors.black,
+                  ),
                 ),
-              ),
-            );
-          }).toList(),
+              );
+            }).toList(),
+            isExpanded: true, // Allow the dropdown to expand to fill the space
+          ),
         ),
-        const Spacer(),
-        const Icon(Icons.arrow_downward),
       ],
     );
   }
@@ -897,101 +911,122 @@ class _DiscoverPageState extends State<DiscoverPage> {
   Widget _buildSauceAmountDropDown() {
     return Row(
       children: [
-        DropdownButton<String>(
-          value: dropdownSauceAmountValue,
-          icon: Container(),
-          elevation: 16,
-          style: const TextStyle(color: AppColors.black),
-          underline: Container(height: 0),
-          onChanged: (String? newValue) {
-            setState(() {
-              dropdownSauceAmountValue = newValue!;
-            });
-          },
-          items: <String>['Amount', 'Light', 'Heavy', 'Average']
-              .map<DropdownMenuItem<String>>((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(
-                // Removed Expanded
-                value,
-                style: TextStyle(
-                  color: value == 'Amount' ? AppColors.grey : AppColors.black,
+        Expanded(
+          // Use Expanded to take available space
+          child: DropdownButton<String>(
+            value: dropdownSauceAmountValue,
+            icon: const Icon(Icons.arrow_drop_down),
+            // Use built-in arrow
+            elevation: 16,
+            style: const TextStyle(
+              color: AppColors.black,
+              fontSize: 14, // Adjust font size for small screens
+            ),
+            underline: Container(height: 0),
+            onChanged: (String? newValue) {
+              setState(() {
+                dropdownSauceAmountValue = newValue!;
+              });
+            },
+            items: <String>['Amount', 'Light', 'Heavy', 'Average']
+                .map<DropdownMenuItem<String>>((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(
+                  value,
+                  overflow: TextOverflow.ellipsis, // Add ellipsis for overflow
+                  style: TextStyle(
+                    color: value == 'Amount' ? AppColors.grey : AppColors.black,
+                  ),
                 ),
-              ),
-            );
-          }).toList(),
+              );
+            }).toList(),
+            isExpanded: true, // Allow the dropdown to expand to fill the space
+          ),
         ),
-        const Spacer(),
-        const Icon(Icons.arrow_downward),
       ],
     );
   }
 
-  Widget _buildCheeseTasteDropDown() {
+  Widget _buildCheeseTasteDropDown(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double fontSize =
+        screenWidth < 300 ? 12 : 14; // Adjust font size for small screens
+
     return Row(
       children: [
-        DropdownButton<String>(
-          value: dropdownCheeseTasteValue,
-          icon: Container(),
-          elevation: 16,
-          style: const TextStyle(color: AppColors.black),
-          underline: Container(height: 0),
-          onChanged: (String? newValue) {
-            setState(() {
-              dropdownCheeseTasteValue = newValue!;
-            });
-          },
-          items: <String>['Taste', 'Great', 'OK', 'Ehh']
-              .map<DropdownMenuItem<String>>((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(
-                // Removed Expanded
-                value,
-                style: TextStyle(
-                  color: value == 'Taste' ? AppColors.grey : AppColors.black,
+        Expanded(
+          child: DropdownButton<String>(
+            value: dropdownCheeseTasteValue,
+            icon: const Icon(Icons.arrow_drop_down),
+            elevation: 16,
+            style: TextStyle(
+              color: AppColors.black,
+              fontSize: fontSize, // Dynamic font size
+            ),
+            underline: Container(height: 0),
+            onChanged: (String? newValue) {
+              setState(() {
+                dropdownCheeseTasteValue = newValue!;
+              });
+            },
+            items: <String>['Taste', 'Great', 'OK', 'Ehh']
+                .map<DropdownMenuItem<String>>((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(
+                  value,
+                  overflow: TextOverflow.ellipsis, // Add ellipsis for overflow
+                  style: TextStyle(
+                    color: value == 'Taste' ? AppColors.grey : AppColors.black,
+                  ),
                 ),
-              ),
-            );
-          }).toList(),
+              );
+            }).toList(),
+            isExpanded: true,
+          ),
         ),
-        const Spacer(),
-        const Icon(Icons.arrow_downward),
       ],
     );
   }
 
-  Widget _buildCheeseAmountDropDown() {
+  Widget _buildCheeseAmountDropDown(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double fontSize = screenWidth < 300 ? 12 : 14;
+
     return Row(
       children: [
-        DropdownButton<String>(
-          value: dropdownCheeseAmountValue,
-          icon: Container(),
-          elevation: 16,
-          style: const TextStyle(color: AppColors.black),
-          underline: Container(height: 0),
-          onChanged: (String? newValue) {
-            setState(() {
-              dropdownCheeseAmountValue = newValue!;
-            });
-          },
-          items: <String>['Amount', 'Light', 'Heavy', 'Average']
-              .map<DropdownMenuItem<String>>((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(
-                // Removed Expanded
-                value,
-                style: TextStyle(
-                  color: value == 'Amount' ? AppColors.grey : AppColors.black,
+        Expanded(
+          child: DropdownButton<String>(
+            value: dropdownCheeseAmountValue,
+            icon: const Icon(Icons.arrow_drop_down),
+            elevation: 16,
+            style: TextStyle(
+              color: AppColors.black,
+              fontSize: fontSize, // Dynamic font size
+            ),
+            underline: Container(height: 0),
+            onChanged: (String? newValue) {
+              setState(() {
+                dropdownCheeseAmountValue = newValue!;
+              });
+            },
+            items: <String>['Amount', 'Light', 'Heavy', 'Average']
+                .map<DropdownMenuItem<String>>((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(
+                  value,
+                  overflow: TextOverflow.ellipsis, // Add ellipsis for overflow
+                  style: TextStyle(
+                    color: value == 'Amount' ? AppColors.grey : AppColors.black,
+                  ),
                 ),
-              ),
-            );
-          }).toList(),
+              );
+            }).toList(),
+            isExpanded: true,
+          ),
         ),
-        const Spacer(),
-        const Icon(Icons.arrow_downward),
       ],
     );
   }
@@ -1042,6 +1077,10 @@ class _DiscoverPageState extends State<DiscoverPage> {
               zipController.text = state.pincode;
               if (state.isPlaceAdded) {
                 WidgetsBinding.instance.addPostFrameCallback((_) {
+                  _alertManager.showSuccess(
+                    title: 'Success',
+                    message: 'Place added successfully',
+                  );
                   Future.delayed(Duration(milliseconds: 100), () {
                     if (context.router.canPop()) {
                       context.router.pop();

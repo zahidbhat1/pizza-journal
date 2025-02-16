@@ -175,33 +175,40 @@ class DefaultUserRepository extends UserRepository {
     required String confirmPassword,
   }) async {
     try {
+      // Client-side validation
       if (!ValidatorUtils.isEmailValid(email)) {
         throw AppException.serverException(
           type: ServerExceptionType.general,
-          message: "errorInvalidEmailAddress",
+          message: "Invalid email address",
         );
       }
       if (password != confirmPassword) {
         throw AppException.serverException(
           type: ServerExceptionType.general,
-          message: "Invalid Password",
+          message: "Passwords do not match",
         );
       }
 
+      // Call the registration API
       final success = await _userDataSource.validateRegister(
         email: email,
         name: name,
         password: password,
         passwordConfirm: confirmPassword,
       );
+
+      // Handle the registration result
       if (!success) {
         throw AppException.serverException(
           type: ServerExceptionType.general,
-          message: "Error",
+          message: "Registration failed",
         );
       }
-    } catch (_) {
-      rethrow;
+
+      // If registration is successful, do not throw an exception
+      // The BLoC will handle the navigation or success message
+    } catch (e) {
+      rethrow; // Re-throw the exception for the BLoC to handle
     }
   }
 

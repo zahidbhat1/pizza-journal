@@ -114,10 +114,10 @@ class _LoginPageState extends State<LoginPage> {
             controller: _emailController,
             obscureText: false,
             onChanged: (text) => _loginBloc.add(
-              LoginEmailOnChanged(email: text),
+              LoginEmailOnChanged(email: text.trim()),
             ),
             onSubmitted: (text) => _loginBloc.add(
-              LoginEmailOnChanged(email: text),
+              LoginEmailOnChanged(email: text.trim()),
             ),
           ),
           const SizedBox(height: 12),
@@ -127,10 +127,10 @@ class _LoginPageState extends State<LoginPage> {
             controller: _passwordController,
             obscureText: true,
             onChanged: (text) => _loginBloc.add(
-              LoginPasswordOnChanged(password: text),
+              LoginPasswordOnChanged(password: text.trim()),
             ),
             onSubmitted: (text) => _loginBloc.add(
-              LoginPasswordOnChanged(password: text),
+              LoginPasswordOnChanged(password: text.trim()),
             ),
           ),
           Row(

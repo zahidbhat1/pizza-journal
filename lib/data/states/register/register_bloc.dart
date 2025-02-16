@@ -88,13 +88,19 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     try {
       emit(state.copyWith(isSignupLoading: true));
 
+      // Call the validateUser method
       await _userRepository.validateUser(
         email: event.email,
         name: event.name,
         password: event.password,
         confirmPassword: event.confirmPassword,
       );
+
+      // If no exception is thrown, registration is successful
+      // Navigate to the login screen or home screen
+      await _router.replace(const LoginRoute());
     } catch (e) {
+      // Handle exceptions (e.g., validation errors, network errors)
       _alertManager.showError(message: e.errorMessage);
     } finally {
       emit(state.copyWith(isSignupLoading: false));
