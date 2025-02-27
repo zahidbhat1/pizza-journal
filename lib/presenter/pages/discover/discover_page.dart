@@ -1634,6 +1634,51 @@ class _DiscoverPageState extends State<DiscoverPage> {
                                       onTap: blocState.isAddingPlace
                                           ? null
                                           : () {
+
+                                        if (_streetController.text.isEmpty||
+                                        pizzaPlace.isEmpty
+
+
+
+                                        )
+
+
+                                        {
+
+                                          final overlay = Overlay.of(context);
+                                          final overlayEntry = OverlayEntry(
+                                            builder: (context) => Positioned(
+                                              top: MediaQuery.of(context).padding.top +
+                                                  10, // Adjust for status bar
+                                              left: 20,
+                                              right: 20,
+                                              child: Material(
+                                                color: Colors.transparent,
+                                                child: Container(
+                                                  padding: EdgeInsets.all(10),
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.redAccent,
+                                                    borderRadius: BorderRadius.circular(8),
+                                                  ),
+                                                  child: Text(
+                                                    "Please select all required options.",
+                                                    style: TextStyle(
+                                                        color: Colors.white, fontSize: 16),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          );
+
+                                          overlay.insert(overlayEntry);
+
+                                          Future.delayed(Duration(seconds: 2), () {
+                                            overlayEntry.remove();
+                                          });
+                                          return;
+                                        }
+
+
                                         // if (blocState.images.isEmpty) {
                                         //   widget.alertManager.showValidation(
                                         //     title: 'Validation',

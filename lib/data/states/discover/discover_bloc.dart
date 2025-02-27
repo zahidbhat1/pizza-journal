@@ -84,12 +84,10 @@ class DiscoverBloc extends Bloc<DiscoverEvent, DiscoverState> {
     } catch (e) {
       print("Error fetching pizza places: $e");
 
-      // ✅ If `e` is already a `ServerException`, don't wrap it again
-      final serverException = e is ServerException
-          ? e
-          : ServerException(
+      // ✅ Since `getPizzaPlaces()` already throws `ServerException`, use it directly
+      final serverException = e is ServerException ? e : ServerException(
         type: ServerExceptionType.unknown,
-        message: e.toString(),
+        message: "An unexpected error occurred.",
       );
 
       print("ServerException type: ${serverException.type}, message: ${serverException.message}");
@@ -105,6 +103,7 @@ class DiscoverBloc extends Bloc<DiscoverEvent, DiscoverState> {
       ));
     }
   }
+
 
 
   @override
@@ -294,7 +293,7 @@ class DiscoverBloc extends Bloc<DiscoverEvent, DiscoverState> {
     try {
       emit(state.copyWith(isAddingPlace: true));
 
-      // Upload images
+
       final uploadResponse = await _userRepository.uploadPhotos(
         files: state.images ?? [],
       );

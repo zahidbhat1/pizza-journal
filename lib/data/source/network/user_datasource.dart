@@ -232,32 +232,32 @@ class UserDataSource {
     required List<File?> files,
   }) async {
     try {
-      final response = await _networkManager
-          .request(RequestMethod.post, ApiPath.pizzaPlaces, data: data);
-      // final dataItem = DataItem<LoginModel>.fromJson(
-      //   response.responseData,
-      //   LoginModel.fromJsonModel,
-      //   dataJsonKeyName: 'data',
-      // );
-      // if(response.statusCode==200){
-      //   return "Added";
-      // }else{
-      //   response.
-      // }
+      final response = await _networkManager.request(
+        RequestMethod.post,
+        ApiPath.pizzaPlaces,
+        data: data,
+      );
+
       if (response.statusCode == 200) {
         final pizzaPlaceData = response.responseData["data"];
         if (pizzaPlaceData != null) {
-          return PizzaPlaceModel.fromJson(pizzaPlaceData); // ✅ Returning actual model
+          return PizzaPlaceModel.fromJson(pizzaPlaceData);
         } else {
           throw Exception("Failed to parse pizza place data.");
         }
       } else {
-        throw Exception(response.responseData["message"] ?? "Failed to add pizza place");
+        // ✅ Extract actual error message from the API response
+        final errorMessage = response.responseData["error"] ??
+            response.responseData["message"] ??
+            "Failed to add pizza place";
+
+        throw Exception(errorMessage); // ✅ Throw correct error message
       }
     } catch (e) {
-      throw Exception("Error adding pizza place: ${e.toString()}");
+      throw Exception("Error adding pizza place: ${e.toString()}"); // ✅ Preserve actual error
     }
   }
+
   Future<bool> validateRegister({
     required String email,
     required String name,
@@ -366,25 +366,15 @@ class UserDataSource {
         queryParameters: query,
       );
 
-      // Handle specific HTTP error responses
-      if (response.statusCode == 408) {
-        throw ServerException(
-          type: ServerExceptionType.timeOut,
-          message: 'The request timed out. Please try again later.',
-        );
-      }
+      // ✅ Extract error message properly
+      if (response.statusCode != 200) {
+        final errorMessage = response.responseData["error"] ??
+            response.responseData["message"] ??
+            "Failed to fetch pizza places";
 
-      if (response.statusCode == 500) {
-        throw ServerException(
-          type: ServerExceptionType.internal,
-          message: 'An internal server error occurred. Please try again later.',
-        );
-      }
-
-      if (response.data is Map<String, dynamic> && response.data['error'] != null) {
         throw ServerException(
           type: ServerExceptionType.general,
-          message: response.data['error'] as String,
+          message: errorMessage,
         );
       }
 
@@ -406,19 +396,16 @@ class UserDataSource {
 
       throw ServerException(
         type: type,
-        message: type == ServerExceptionType.noInternet
+        message: e.message ?? (type == ServerExceptionType.noInternet
             ? 'No internet connection. Please check your network and try again.'
-            : 'An unexpected network error occurred.',
+            : 'A network error occurred.'),
       );
 
-    } catch (e) {
-      // Catch all other unexpected errors
-      throw ServerException(
-        type: ServerExceptionType.unknown,
-        message: 'An unexpected error occurred.',
-      );
+    } catch (_) {
+      rethrow;
     }
   }
+
 
 
   Future<DataList<PizzaPlaceModel>> getUserPizzaPlaces() async {

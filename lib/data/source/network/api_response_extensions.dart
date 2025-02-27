@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:pizzajournals/data/source/network/models/error_data.dart';
 
+import '../error/app_exception.dart';
+
 extension ResponseExtension<T> on Response<T> {
   bool get hasError {
     if (data != null && data is Map<String, dynamic>) {
@@ -10,7 +12,7 @@ extension ResponseExtension<T> on Response<T> {
     }
     return false;
   }
-
+  //
   // ServerException? get errorDataToServerException {
   //   if (data != null && data is Map<String, dynamic>) {
   //     final mapData = data as Map<String, dynamic>;

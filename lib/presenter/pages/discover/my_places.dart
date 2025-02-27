@@ -162,7 +162,14 @@ class _MyPlacesPageState extends State<MyPlacesPage> with AutoRouteAware {
                 child: state.showLoading
                     ? const Center(child: CircularProgressIndicator())
                     : state.userPizzaPlaces.isEmpty
-                        ? const Center(child: Text('No places found'))
+                        ?ListView(
+                  // This makes it scrollable even when empty
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  children: const [
+                    SizedBox(height: 200), // Add some space to allow swiping
+                    Center(child: Text('No places found')),
+                  ],
+                )
                         : ListView.builder(
                             itemCount: state.userPizzaPlaces.length,
                             itemBuilder: (context, index) {
