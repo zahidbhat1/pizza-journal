@@ -1,0 +1,2 @@
+D:/flutter/projects/pizza journal/android/app/.cxx/RelWithDebInfo/d586x4w6/armeabi-v7a/CMakeFiles/edit_cache.dir
+D:/flutter/projects/pizza journal/android/app/.cxx/RelWithDebInfo/d586x4w6/armeabi-v7a/CMakeFiles/rebuild_cache.dir

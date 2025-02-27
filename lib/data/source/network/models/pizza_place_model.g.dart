@@ -21,9 +21,10 @@ _$PizzaPlaceModelImpl _$$PizzaPlaceModelImplFromJson(
       address: json['address'] == null
           ? null
           : AddressModel.fromJson(json['address'] as Map<String, dynamic>),
-      summary: json['summary'] == null
-          ? null
-          : Summary.fromJson(json['summary'] as Map<String, dynamic>),
+      summary: (json['summary'] as Map<String, dynamic>?)?.map(
+        (k, e) =>
+            MapEntry(k, PizzaTypeSummary.fromJson(e as Map<String, dynamic>)),
+      ),
       photos: json['photos'] as List<dynamic>? ?? const [],
       links: json['links'] == null
           ? null

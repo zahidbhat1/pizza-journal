@@ -161,12 +161,12 @@ class _MyPlacesPageState extends State<MyPlacesPage> with AutoRouteAware {
                 },
                 child: state.showLoading
                     ? const Center(child: CircularProgressIndicator())
-                    : state.pizzaPlaces.isEmpty
+                    : state.userPizzaPlaces.isEmpty
                         ? const Center(child: Text('No places found'))
                         : ListView.builder(
-                            itemCount: state.pizzaPlaces.length,
+                            itemCount: state.userPizzaPlaces.length,
                             itemBuilder: (context, index) {
-                              return _buildItem(state.pizzaPlaces[index]);
+                              return _buildItem(state.userPizzaPlaces[index]);
                             },
                           ),
               ),

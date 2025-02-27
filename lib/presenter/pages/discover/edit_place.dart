@@ -113,22 +113,22 @@ class _EditPlacePageState extends State<EditPlacePage> {
               ),
             ),
             const SizedBox(height: 8),
-            TextField(
-              controller: stateController,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'State',
-              ),
-            ),
-            const SizedBox(height: 8),
-            TextField(
-              controller: zipController,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'ZIP',
-              ),
-            ),
-            const SizedBox(height: 16),
+            // TextField(
+            //   controller: stateController,
+            //   decoration: const InputDecoration(
+            //     border: OutlineInputBorder(),
+            //     labelText: 'State',
+            //   ),
+            // ),
+            // const SizedBox(height: 8),
+            // TextField(
+            //   controller: zipController,
+            //   decoration: const InputDecoration(
+            //     border: OutlineInputBorder(),
+            //     labelText: 'ZIP',
+            //   ),
+            // ),
+            // const SizedBox(height: 16),
 
             // Hours Section
             GestureDetector(

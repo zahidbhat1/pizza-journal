@@ -12,6 +12,8 @@ import 'package:pizzajournals/presenter/pages/profile/profile_page.dart';
 import 'package:pizzajournals/presenter/pages/splash/splash_page.dart';
 import 'package:pizzajournals/presenter/pages/welcome/welcome_page.dart';
 
+import '../../di.dart';
+import '../../utils/alert_manager.dart';
 import '../pages/discover/my_places.dart';
 import '../pages/profile/widgets/update_profile.dart';
 import '../pages/suggestions/suggestion_list.dart';

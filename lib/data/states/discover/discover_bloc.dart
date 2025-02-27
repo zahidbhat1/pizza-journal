@@ -2,8 +2,10 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:injectable/injectable.dart';
 import 'package:pizzajournals/data/repositories/user_repository.dart';
+import 'package:pizzajournals/data/source/network/extensions/app_error_extension.dart';
 import 'package:pizzajournals/data/states/action/action_bloc.dart';
 import 'package:pizzajournals/data/states/auth/auth_bloc.dart';
 import 'package:pizzajournals/data/states/auth/auth_state.dart';
@@ -12,6 +14,9 @@ import 'package:pizzajournals/data/states/discover/discover_state.dart';
 import 'package:pizzajournals/presenter/navigation/navigation.dart';
 import 'package:pizzajournals/presenter/pages/discover/place_detail_arguments.dart';
 import 'package:pizzajournals/utils/alert_manager.dart';
+
+import '../../../utils/error_types.dart';
+import '../../source/error/app_exception.dart';
 
 @singleton
 class DiscoverBloc extends Bloc<DiscoverEvent, DiscoverState> {
@@ -57,32 +62,50 @@ class DiscoverBloc extends Bloc<DiscoverEvent, DiscoverState> {
     // on<DiscoverFetchLocationFromPincode>(_onFetchLocationFromPincode);
     on<UpdateMapLocation>(_onUpdateMapLocation);
     on<LocationSelected>(_onLocationSelected);
+    on<DiscoverSelectPizzaType>(_onSelectPizzaType);
+    on<FetchPlaceDetails>(_onFetchPlaceDetails);
   }
-
   void _onLoad(
-    DiscoverLoad event,
-    Emitter<DiscoverState> emit,
-  ) async {
+      DiscoverLoad event,
+      Emitter<DiscoverState> emit,
+      ) async {
     emit(state.copyWith(showLoading: true));
 
     try {
-      print("Fetching pizza places from API..."); // Debug log
+      print("Fetching pizza places from API...");
       var dataList = await _userRepository.getPizzaPlaces(event.request);
-      print("API Response: ${dataList.data}"); // Debug log
+      print("API Response: ${dataList.data}");
 
       emit(state.copyWith(
         showLoading: false,
         pizzaPlaces: dataList.data ?? [],
       ));
+
     } catch (e) {
-      print("Error fetching pizza places: $e"); // Debug log
+      print("Error fetching pizza places: $e");
+
+      // ✅ If `e` is already a `ServerException`, don't wrap it again
+      final serverException = e is ServerException
+          ? e
+          : ServerException(
+        type: ServerExceptionType.unknown,
+        message: e.toString(),
+      );
+
+      print("ServerException type: ${serverException.type}, message: ${serverException.message}");
+
+      _alertManager.showError(
+        title: 'Error',
+        message: getErrorMessage(serverException), // ✅ Clean message
+      );
+
       emit(state.copyWith(
         showLoading: false,
         pizzaPlaces: [], // Clear places on error
       ));
-      _alertManager.showError(title: 'Error', message: e.toString());
     }
   }
+
 
   @override
   Stream<DiscoverState> mapEventToState(DiscoverEvent event) async* {
@@ -110,6 +133,15 @@ class DiscoverBloc extends Bloc<DiscoverEvent, DiscoverState> {
   ) async {
     // Simply update the fetchedLocation in state
     emit(state.copyWith(fetchedLocation: event.location));
+
+  }
+
+
+  void _onSelectPizzaType(
+      DiscoverSelectPizzaType event,
+      Emitter<DiscoverState> emit,
+      ) {
+    emit(state.copyWith(selectedPizzaType: event.pizzaType));
   }
 
   void _onFetchLocationFromPincode(
@@ -166,7 +198,7 @@ class DiscoverBloc extends Bloc<DiscoverEvent, DiscoverState> {
 
       emit(state.copyWith(
         showLoading: false,
-        pizzaPlaces: dataList.data ?? [],
+        userPizzaPlaces: dataList.data ?? [],
       ));
     } catch (e) {
       print("Error fetching user places: $e"); // Debug log
@@ -191,41 +223,45 @@ class DiscoverBloc extends Bloc<DiscoverEvent, DiscoverState> {
   }
 
   void _onPizzaPlaceReviews(
-    DiscoverPizzaPlaceReviews event,
-    Emitter<DiscoverState> emit,
-  ) async {
-    emit(state.copyWith(showLoading: true));
-    emit(state.copyWith(myReview: null));
+      DiscoverPizzaPlaceReviews event,
+      Emitter emit,
+      ) async {
+    emit(state.copyWith(showLoading: true, myReview: null));
 
     try {
       var dataList = await _userRepository.getPizzaPlaceReviews(
         placeId: event.pizzaPlaceModel?.id ?? '',
       );
 
+
+      final availablePizzaTypes = dataList.summaries?.keys.toList() ?? [];
+      print('Available pizza types: $availablePizzaTypes');
+
+
+      final defaultPizzaType = state.selectedPizzaType.isNotEmpty && availablePizzaTypes.contains(state.selectedPizzaType)
+          ? state.selectedPizzaType
+          : availablePizzaTypes.contains("Traditional Round")
+          ? "Traditional Round"
+          : (availablePizzaTypes.isNotEmpty ? availablePizzaTypes.first : "");
+
       emit(state.copyWith(
         reviews: dataList,
+        selectedPizzaType: defaultPizzaType,
         showLoading: false,
       ));
 
-      if (_authBloc.state.status == AuthStateStatus.authenticated) {
-        try {
-          var myReview = dataList.reviews?.firstWhere(
-            (review) => review?.user?.id == _authBloc.state.user?.id,
-          );
-          emit(state.copyWith(myReview: myReview));
-        } catch (e) {
-          emit(state.copyWith(myReview: null));
-        }
-      }
+
     } catch (e) {
-      print("Error fetching reviews: $e"); // Debug log
+      print("Error fetching reviews: $e");
       emit(state.copyWith(
         showLoading: false,
         reviews: null,
+        selectedPizzaType: "",
       ));
       _alertManager.showError(title: 'Error', message: e.toString());
     }
   }
+
 
   void _onAddImage(
     DiscoverAddImage event,
@@ -241,60 +277,84 @@ class DiscoverBloc extends Bloc<DiscoverEvent, DiscoverState> {
   }
 
   void _onAddPizzaPlace(
-    DiscoverAddPlace event,
-    Emitter<DiscoverState> emit,
-  ) async {
+      DiscoverAddPlace event,
+      Emitter<DiscoverState> emit,
+      ) async {
     if (_authBloc.state.status == AuthStateStatus.unauthenticated) {
       _actionIfNotLoggedIn();
       return;
+    }
+    if (state.images == null || state.images!.isEmpty) {
+    _alertManager.showValidation(
+    message: "Please select at least one image"
+    );
+    return;
     }
 
     try {
       emit(state.copyWith(isAddingPlace: true));
 
-      print(
-          'Starting image upload with ${state.images?.length ?? 0} images'); // Debug log
-
+      // Upload images
       final uploadResponse = await _userRepository.uploadPhotos(
         files: state.images ?? [],
       );
-
-      print('Upload Response: $uploadResponse'); // Debug log
 
       if (uploadResponse.data == null || uploadResponse.data!.isEmpty) {
         throw Exception('Failed to upload images: No URLs returned');
       }
 
+      // Prepare form data
       Map<String, dynamic> formData = Map<String, dynamic>.from(event.data);
       formData['photos'] = jsonEncode(uploadResponse.data);
 
-      print('Final form data: $formData'); // Debug log
-
-      await _userRepository.addPizzaPlace(
+      // Add new place - this will return PizzaPlaceModel on success or throw exception on failure
+      final newPlace = await _userRepository.addPizzaPlace(
         data: formData,
         files: [],
       );
 
+
+      // If we reach here, it means the request was successful
       _alertManager.showSuccess(
         title: 'Success',
-        message: 'Place added successfully',
+        message: 'Pizza Place Added Successfully',
       );
 
       emit(state.copyWith(
         isAddingPlace: false,
+        newlyAddedPlace: newPlace,
         isPlaceAdded: true,
         images: [],
       ));
 
+      Future.delayed(Duration(milliseconds: 1000), () {
+
+
+        _router.push(
+          PizzaPlaceRoute(
+            arguments: PizzaPlaceArguments(
+              pizzaPlaceModel: newPlace,
+            ),
+          ),
+        );
+      });
+
+      // Reload places
       add(const DiscoverEvent.load(null));
     } catch (e, stackTrace) {
-      print('Error in _onAddPizzaPlace:'); // Debug log
+      print('Error in _onAddPizzaPlace:');
       print('Error: $e');
       print('Stack trace: $stackTrace');
 
+      // Extract just the error message without the "Exception:" prefix
+      String errorMessage = e.toString();
+      if (errorMessage.startsWith("Exception: ")) {
+        errorMessage = errorMessage.substring("Exception: ".length);
+      }
+
       _alertManager.showError(
         title: 'Error',
-        message: e.toString(),
+        message: errorMessage,
       );
 
       emit(state.copyWith(isAddingPlace: false));
@@ -307,6 +367,13 @@ class DiscoverBloc extends Bloc<DiscoverEvent, DiscoverState> {
   ) async {
     if (_authBloc.state.status == AuthStateStatus.unauthenticated) {
       _actionIfNotLoggedIn();
+      return;
+    }
+
+    if (state.images == null || state.images!.isEmpty) {
+      _alertManager.showValidation(
+          message: "Please select at least one image"
+      );
       return;
     }
 
@@ -338,7 +405,9 @@ class DiscoverBloc extends Bloc<DiscoverEvent, DiscoverState> {
 
         try {
           var myReview = dataList.reviews?.firstWhere(
-            (review) => review?.user?.id == _authBloc.state.user?.id,
+                (review) =>
+            review?.user?.id == _authBloc.state.user?.id &&
+                review?.pizzaType == data["pizzaType"], // Check pizza type
           );
           emit(state.copyWith(myReview: myReview));
         } catch (e) {
@@ -397,21 +466,55 @@ class DiscoverBloc extends Bloc<DiscoverEvent, DiscoverState> {
     }
   }
 
+  void _onFetchPlaceDetails(
+    FetchPlaceDetails event,
+    Emitter<DiscoverState> emit,
+  ) async {
+    try {
+      // Show loading state if needed
+      emit(state.copyWith(showLoading: true));
+
+      // Call your API to get place details
+      final placeDetails = await _userRepository.getPlaceDetails(event.placeId);
+
+      // Extract coordinates
+      final lat = placeDetails.geometry?.location.lat ?? 0.0;
+      final lng = placeDetails.geometry?.location.lng ?? 0.0;
+      final newLocation = LatLng(lat, lng);
+      final mapLink = "https://www.google.com/maps?q=$lat,$lng";
+      print('map link = $mapLink');
+
+      // Update state with the new location and disable map interaction
+      emit(state.copyWith(
+        selectedMapLocation: newLocation,
+        isMapInteractionEnabled: false,
+        mapLink: mapLink,
+        showLoading: false,
+      ));
+    } catch (e) {
+      print("Error fetching place details: $e");
+      emit(state.copyWith(showLoading: false));
+    }
+  }
+
   void _onSearchLocations(
     DiscoverSearchLocations event,
     Emitter<DiscoverState> emit,
   ) async {
     if (event.query.length < 2) {
+      print("Clearing suggestions...");
       emit(state.copyWith(locationSuggestions: []));
+      print("Updated suggestions: ${state.locationSuggestions}");
       return;
     }
 
     try {
       final suggestions =
           await _userRepository.getLocationSuggestionss(event.query);
+      print("Fetched suggestions: $suggestions");
       emit(state.copyWith(locationSuggestions: suggestions));
     } catch (e) {
-      print("Error searching locations: $e"); // Debug log
+      print("Error searching locations: $e");
       emit(state.copyWith(locationSuggestions: []));
     }
   }

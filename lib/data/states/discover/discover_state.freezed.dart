@@ -18,6 +18,8 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$DiscoverState {
   String? get email => throw _privateConstructorUsedError;
   List<PizzaPlaceModel> get pizzaPlaces => throw _privateConstructorUsedError;
+  List<PizzaPlaceModel> get userPizzaPlaces =>
+      throw _privateConstructorUsedError;
   List<File?> get images => throw _privateConstructorUsedError;
   PizzaReviewModel? get reviews => throw _privateConstructorUsedError;
   Review? get myReview => throw _privateConstructorUsedError;
@@ -29,9 +31,18 @@ mixin _$DiscoverState {
   String get city => throw _privateConstructorUsedError;
   String get stateName => throw _privateConstructorUsedError;
   String get country => throw _privateConstructorUsedError;
+  String get mapLink => throw _privateConstructorUsedError;
+  LatLng? get selectedMapLocation => throw _privateConstructorUsedError;
+  PizzaPlaceModel? get newlyAddedPlace => throw _privateConstructorUsedError;
+  bool get isMapInteractionEnabled =>
+      throw _privateConstructorUsedError; // Add @Default annotation here
   DataItem<void>? get addReviewResponse => throw _privateConstructorUsedError;
   List<LocationSuggestions> get locationSuggestions =>
       throw _privateConstructorUsedError;
+  Map<String, PizzaTypeSummary> get summary =>
+      throw _privateConstructorUsedError; // Stores all pizza types summary
+  String get selectedPizzaType =>
+      throw _privateConstructorUsedError; // Default to "Traditional Round"
   LatLng? get fetchedLocation => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -48,6 +59,7 @@ abstract class $DiscoverStateCopyWith<$Res> {
   $Res call(
       {String? email,
       List<PizzaPlaceModel> pizzaPlaces,
+      List<PizzaPlaceModel> userPizzaPlaces,
       List<File?> images,
       PizzaReviewModel? reviews,
       Review? myReview,
@@ -59,12 +71,19 @@ abstract class $DiscoverStateCopyWith<$Res> {
       String city,
       String stateName,
       String country,
+      String mapLink,
+      LatLng? selectedMapLocation,
+      PizzaPlaceModel? newlyAddedPlace,
+      bool isMapInteractionEnabled,
       DataItem<void>? addReviewResponse,
       List<LocationSuggestions> locationSuggestions,
+      Map<String, PizzaTypeSummary> summary,
+      String selectedPizzaType,
       LatLng? fetchedLocation});
 
   $PizzaReviewModelCopyWith<$Res>? get reviews;
   $ReviewCopyWith<$Res>? get myReview;
+  $PizzaPlaceModelCopyWith<$Res>? get newlyAddedPlace;
 }
 
 /// @nodoc
@@ -82,6 +101,7 @@ class _$DiscoverStateCopyWithImpl<$Res, $Val extends DiscoverState>
   $Res call({
     Object? email = freezed,
     Object? pizzaPlaces = null,
+    Object? userPizzaPlaces = null,
     Object? images = null,
     Object? reviews = freezed,
     Object? myReview = freezed,
@@ -93,8 +113,14 @@ class _$DiscoverStateCopyWithImpl<$Res, $Val extends DiscoverState>
     Object? city = null,
     Object? stateName = null,
     Object? country = null,
+    Object? mapLink = null,
+    Object? selectedMapLocation = freezed,
+    Object? newlyAddedPlace = freezed,
+    Object? isMapInteractionEnabled = null,
     Object? addReviewResponse = freezed,
     Object? locationSuggestions = null,
+    Object? summary = null,
+    Object? selectedPizzaType = null,
     Object? fetchedLocation = freezed,
   }) {
     return _then(_value.copyWith(
@@ -105,6 +131,10 @@ class _$DiscoverStateCopyWithImpl<$Res, $Val extends DiscoverState>
       pizzaPlaces: null == pizzaPlaces
           ? _value.pizzaPlaces
           : pizzaPlaces // ignore: cast_nullable_to_non_nullable
+              as List<PizzaPlaceModel>,
+      userPizzaPlaces: null == userPizzaPlaces
+          ? _value.userPizzaPlaces
+          : userPizzaPlaces // ignore: cast_nullable_to_non_nullable
               as List<PizzaPlaceModel>,
       images: null == images
           ? _value.images
@@ -150,6 +180,22 @@ class _$DiscoverStateCopyWithImpl<$Res, $Val extends DiscoverState>
           ? _value.country
           : country // ignore: cast_nullable_to_non_nullable
               as String,
+      mapLink: null == mapLink
+          ? _value.mapLink
+          : mapLink // ignore: cast_nullable_to_non_nullable
+              as String,
+      selectedMapLocation: freezed == selectedMapLocation
+          ? _value.selectedMapLocation
+          : selectedMapLocation // ignore: cast_nullable_to_non_nullable
+              as LatLng?,
+      newlyAddedPlace: freezed == newlyAddedPlace
+          ? _value.newlyAddedPlace
+          : newlyAddedPlace // ignore: cast_nullable_to_non_nullable
+              as PizzaPlaceModel?,
+      isMapInteractionEnabled: null == isMapInteractionEnabled
+          ? _value.isMapInteractionEnabled
+          : isMapInteractionEnabled // ignore: cast_nullable_to_non_nullable
+              as bool,
       addReviewResponse: freezed == addReviewResponse
           ? _value.addReviewResponse
           : addReviewResponse // ignore: cast_nullable_to_non_nullable
@@ -158,6 +204,14 @@ class _$DiscoverStateCopyWithImpl<$Res, $Val extends DiscoverState>
           ? _value.locationSuggestions
           : locationSuggestions // ignore: cast_nullable_to_non_nullable
               as List<LocationSuggestions>,
+      summary: null == summary
+          ? _value.summary
+          : summary // ignore: cast_nullable_to_non_nullable
+              as Map<String, PizzaTypeSummary>,
+      selectedPizzaType: null == selectedPizzaType
+          ? _value.selectedPizzaType
+          : selectedPizzaType // ignore: cast_nullable_to_non_nullable
+              as String,
       fetchedLocation: freezed == fetchedLocation
           ? _value.fetchedLocation
           : fetchedLocation // ignore: cast_nullable_to_non_nullable
@@ -188,6 +242,18 @@ class _$DiscoverStateCopyWithImpl<$Res, $Val extends DiscoverState>
       return _then(_value.copyWith(myReview: value) as $Val);
     });
   }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $PizzaPlaceModelCopyWith<$Res>? get newlyAddedPlace {
+    if (_value.newlyAddedPlace == null) {
+      return null;
+    }
+
+    return $PizzaPlaceModelCopyWith<$Res>(_value.newlyAddedPlace!, (value) {
+      return _then(_value.copyWith(newlyAddedPlace: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -201,6 +267,7 @@ abstract class _$$DiscoverStateImplCopyWith<$Res>
   $Res call(
       {String? email,
       List<PizzaPlaceModel> pizzaPlaces,
+      List<PizzaPlaceModel> userPizzaPlaces,
       List<File?> images,
       PizzaReviewModel? reviews,
       Review? myReview,
@@ -212,14 +279,22 @@ abstract class _$$DiscoverStateImplCopyWith<$Res>
       String city,
       String stateName,
       String country,
+      String mapLink,
+      LatLng? selectedMapLocation,
+      PizzaPlaceModel? newlyAddedPlace,
+      bool isMapInteractionEnabled,
       DataItem<void>? addReviewResponse,
       List<LocationSuggestions> locationSuggestions,
+      Map<String, PizzaTypeSummary> summary,
+      String selectedPizzaType,
       LatLng? fetchedLocation});
 
   @override
   $PizzaReviewModelCopyWith<$Res>? get reviews;
   @override
   $ReviewCopyWith<$Res>? get myReview;
+  @override
+  $PizzaPlaceModelCopyWith<$Res>? get newlyAddedPlace;
 }
 
 /// @nodoc
@@ -235,6 +310,7 @@ class __$$DiscoverStateImplCopyWithImpl<$Res>
   $Res call({
     Object? email = freezed,
     Object? pizzaPlaces = null,
+    Object? userPizzaPlaces = null,
     Object? images = null,
     Object? reviews = freezed,
     Object? myReview = freezed,
@@ -246,8 +322,14 @@ class __$$DiscoverStateImplCopyWithImpl<$Res>
     Object? city = null,
     Object? stateName = null,
     Object? country = null,
+    Object? mapLink = null,
+    Object? selectedMapLocation = freezed,
+    Object? newlyAddedPlace = freezed,
+    Object? isMapInteractionEnabled = null,
     Object? addReviewResponse = freezed,
     Object? locationSuggestions = null,
+    Object? summary = null,
+    Object? selectedPizzaType = null,
     Object? fetchedLocation = freezed,
   }) {
     return _then(_$DiscoverStateImpl(
@@ -258,6 +340,10 @@ class __$$DiscoverStateImplCopyWithImpl<$Res>
       pizzaPlaces: null == pizzaPlaces
           ? _value._pizzaPlaces
           : pizzaPlaces // ignore: cast_nullable_to_non_nullable
+              as List<PizzaPlaceModel>,
+      userPizzaPlaces: null == userPizzaPlaces
+          ? _value._userPizzaPlaces
+          : userPizzaPlaces // ignore: cast_nullable_to_non_nullable
               as List<PizzaPlaceModel>,
       images: null == images
           ? _value._images
@@ -303,6 +389,22 @@ class __$$DiscoverStateImplCopyWithImpl<$Res>
           ? _value.country
           : country // ignore: cast_nullable_to_non_nullable
               as String,
+      mapLink: null == mapLink
+          ? _value.mapLink
+          : mapLink // ignore: cast_nullable_to_non_nullable
+              as String,
+      selectedMapLocation: freezed == selectedMapLocation
+          ? _value.selectedMapLocation
+          : selectedMapLocation // ignore: cast_nullable_to_non_nullable
+              as LatLng?,
+      newlyAddedPlace: freezed == newlyAddedPlace
+          ? _value.newlyAddedPlace
+          : newlyAddedPlace // ignore: cast_nullable_to_non_nullable
+              as PizzaPlaceModel?,
+      isMapInteractionEnabled: null == isMapInteractionEnabled
+          ? _value.isMapInteractionEnabled
+          : isMapInteractionEnabled // ignore: cast_nullable_to_non_nullable
+              as bool,
       addReviewResponse: freezed == addReviewResponse
           ? _value.addReviewResponse
           : addReviewResponse // ignore: cast_nullable_to_non_nullable
@@ -311,6 +413,14 @@ class __$$DiscoverStateImplCopyWithImpl<$Res>
           ? _value._locationSuggestions
           : locationSuggestions // ignore: cast_nullable_to_non_nullable
               as List<LocationSuggestions>,
+      summary: null == summary
+          ? _value._summary
+          : summary // ignore: cast_nullable_to_non_nullable
+              as Map<String, PizzaTypeSummary>,
+      selectedPizzaType: null == selectedPizzaType
+          ? _value.selectedPizzaType
+          : selectedPizzaType // ignore: cast_nullable_to_non_nullable
+              as String,
       fetchedLocation: freezed == fetchedLocation
           ? _value.fetchedLocation
           : fetchedLocation // ignore: cast_nullable_to_non_nullable
@@ -325,6 +435,7 @@ class _$DiscoverStateImpl implements _DiscoverState {
   const _$DiscoverStateImpl(
       {this.email,
       final List<PizzaPlaceModel> pizzaPlaces = const [],
+      final List<PizzaPlaceModel> userPizzaPlaces = const [],
       final List<File?> images = const [],
       this.reviews = null,
       this.myReview = null,
@@ -336,12 +447,20 @@ class _$DiscoverStateImpl implements _DiscoverState {
       this.city = '',
       this.stateName = '',
       this.country = '',
+      this.mapLink = '',
+      this.selectedMapLocation,
+      this.newlyAddedPlace = null,
+      this.isMapInteractionEnabled = true,
       this.addReviewResponse = null,
       final List<LocationSuggestions> locationSuggestions = const [],
+      final Map<String, PizzaTypeSummary> summary = const {},
+      this.selectedPizzaType = "Traditional Round",
       this.fetchedLocation})
       : _pizzaPlaces = pizzaPlaces,
+        _userPizzaPlaces = userPizzaPlaces,
         _images = images,
-        _locationSuggestions = locationSuggestions;
+        _locationSuggestions = locationSuggestions,
+        _summary = summary;
 
   @override
   final String? email;
@@ -352,6 +471,15 @@ class _$DiscoverStateImpl implements _DiscoverState {
     if (_pizzaPlaces is EqualUnmodifiableListView) return _pizzaPlaces;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_pizzaPlaces);
+  }
+
+  final List<PizzaPlaceModel> _userPizzaPlaces;
+  @override
+  @JsonKey()
+  List<PizzaPlaceModel> get userPizzaPlaces {
+    if (_userPizzaPlaces is EqualUnmodifiableListView) return _userPizzaPlaces;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_userPizzaPlaces);
   }
 
   final List<File?> _images;
@@ -395,6 +523,18 @@ class _$DiscoverStateImpl implements _DiscoverState {
   final String country;
   @override
   @JsonKey()
+  final String mapLink;
+  @override
+  final LatLng? selectedMapLocation;
+  @override
+  @JsonKey()
+  final PizzaPlaceModel? newlyAddedPlace;
+  @override
+  @JsonKey()
+  final bool isMapInteractionEnabled;
+// Add @Default annotation here
+  @override
+  @JsonKey()
   final DataItem<void>? addReviewResponse;
   final List<LocationSuggestions> _locationSuggestions;
   @override
@@ -406,12 +546,26 @@ class _$DiscoverStateImpl implements _DiscoverState {
     return EqualUnmodifiableListView(_locationSuggestions);
   }
 
+  final Map<String, PizzaTypeSummary> _summary;
+  @override
+  @JsonKey()
+  Map<String, PizzaTypeSummary> get summary {
+    if (_summary is EqualUnmodifiableMapView) return _summary;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(_summary);
+  }
+
+// Stores all pizza types summary
+  @override
+  @JsonKey()
+  final String selectedPizzaType;
+// Default to "Traditional Round"
   @override
   final LatLng? fetchedLocation;
 
   @override
   String toString() {
-    return 'DiscoverState(email: $email, pizzaPlaces: $pizzaPlaces, images: $images, reviews: $reviews, myReview: $myReview, showLoading: $showLoading, isAddingPlace: $isAddingPlace, isPlaceAdded: $isPlaceAdded, street: $street, pincode: $pincode, city: $city, stateName: $stateName, country: $country, addReviewResponse: $addReviewResponse, locationSuggestions: $locationSuggestions, fetchedLocation: $fetchedLocation)';
+    return 'DiscoverState(email: $email, pizzaPlaces: $pizzaPlaces, userPizzaPlaces: $userPizzaPlaces, images: $images, reviews: $reviews, myReview: $myReview, showLoading: $showLoading, isAddingPlace: $isAddingPlace, isPlaceAdded: $isPlaceAdded, street: $street, pincode: $pincode, city: $city, stateName: $stateName, country: $country, mapLink: $mapLink, selectedMapLocation: $selectedMapLocation, newlyAddedPlace: $newlyAddedPlace, isMapInteractionEnabled: $isMapInteractionEnabled, addReviewResponse: $addReviewResponse, locationSuggestions: $locationSuggestions, summary: $summary, selectedPizzaType: $selectedPizzaType, fetchedLocation: $fetchedLocation)';
   }
 
   @override
@@ -422,6 +576,8 @@ class _$DiscoverStateImpl implements _DiscoverState {
             (identical(other.email, email) || other.email == email) &&
             const DeepCollectionEquality()
                 .equals(other._pizzaPlaces, _pizzaPlaces) &&
+            const DeepCollectionEquality()
+                .equals(other._userPizzaPlaces, _userPizzaPlaces) &&
             const DeepCollectionEquality().equals(other._images, _images) &&
             (identical(other.reviews, reviews) || other.reviews == reviews) &&
             (identical(other.myReview, myReview) ||
@@ -438,33 +594,52 @@ class _$DiscoverStateImpl implements _DiscoverState {
             (identical(other.stateName, stateName) ||
                 other.stateName == stateName) &&
             (identical(other.country, country) || other.country == country) &&
+            (identical(other.mapLink, mapLink) || other.mapLink == mapLink) &&
+            (identical(other.selectedMapLocation, selectedMapLocation) ||
+                other.selectedMapLocation == selectedMapLocation) &&
+            (identical(other.newlyAddedPlace, newlyAddedPlace) ||
+                other.newlyAddedPlace == newlyAddedPlace) &&
+            (identical(
+                    other.isMapInteractionEnabled, isMapInteractionEnabled) ||
+                other.isMapInteractionEnabled == isMapInteractionEnabled) &&
             (identical(other.addReviewResponse, addReviewResponse) ||
                 other.addReviewResponse == addReviewResponse) &&
             const DeepCollectionEquality()
                 .equals(other._locationSuggestions, _locationSuggestions) &&
+            const DeepCollectionEquality().equals(other._summary, _summary) &&
+            (identical(other.selectedPizzaType, selectedPizzaType) ||
+                other.selectedPizzaType == selectedPizzaType) &&
             (identical(other.fetchedLocation, fetchedLocation) ||
                 other.fetchedLocation == fetchedLocation));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      email,
-      const DeepCollectionEquality().hash(_pizzaPlaces),
-      const DeepCollectionEquality().hash(_images),
-      reviews,
-      myReview,
-      showLoading,
-      isAddingPlace,
-      isPlaceAdded,
-      street,
-      pincode,
-      city,
-      stateName,
-      country,
-      addReviewResponse,
-      const DeepCollectionEquality().hash(_locationSuggestions),
-      fetchedLocation);
+  int get hashCode => Object.hashAll([
+        runtimeType,
+        email,
+        const DeepCollectionEquality().hash(_pizzaPlaces),
+        const DeepCollectionEquality().hash(_userPizzaPlaces),
+        const DeepCollectionEquality().hash(_images),
+        reviews,
+        myReview,
+        showLoading,
+        isAddingPlace,
+        isPlaceAdded,
+        street,
+        pincode,
+        city,
+        stateName,
+        country,
+        mapLink,
+        selectedMapLocation,
+        newlyAddedPlace,
+        isMapInteractionEnabled,
+        addReviewResponse,
+        const DeepCollectionEquality().hash(_locationSuggestions),
+        const DeepCollectionEquality().hash(_summary),
+        selectedPizzaType,
+        fetchedLocation
+      ]);
 
   @JsonKey(ignore: true)
   @override
@@ -477,6 +652,7 @@ abstract class _DiscoverState implements DiscoverState {
   const factory _DiscoverState(
       {final String? email,
       final List<PizzaPlaceModel> pizzaPlaces,
+      final List<PizzaPlaceModel> userPizzaPlaces,
       final List<File?> images,
       final PizzaReviewModel? reviews,
       final Review? myReview,
@@ -488,14 +664,22 @@ abstract class _DiscoverState implements DiscoverState {
       final String city,
       final String stateName,
       final String country,
+      final String mapLink,
+      final LatLng? selectedMapLocation,
+      final PizzaPlaceModel? newlyAddedPlace,
+      final bool isMapInteractionEnabled,
       final DataItem<void>? addReviewResponse,
       final List<LocationSuggestions> locationSuggestions,
+      final Map<String, PizzaTypeSummary> summary,
+      final String selectedPizzaType,
       final LatLng? fetchedLocation}) = _$DiscoverStateImpl;
 
   @override
   String? get email;
   @override
   List<PizzaPlaceModel> get pizzaPlaces;
+  @override
+  List<PizzaPlaceModel> get userPizzaPlaces;
   @override
   List<File?> get images;
   @override
@@ -519,10 +703,22 @@ abstract class _DiscoverState implements DiscoverState {
   @override
   String get country;
   @override
+  String get mapLink;
+  @override
+  LatLng? get selectedMapLocation;
+  @override
+  PizzaPlaceModel? get newlyAddedPlace;
+  @override
+  bool get isMapInteractionEnabled;
+  @override // Add @Default annotation here
   DataItem<void>? get addReviewResponse;
   @override
   List<LocationSuggestions> get locationSuggestions;
   @override
+  Map<String, PizzaTypeSummary> get summary;
+  @override // Stores all pizza types summary
+  String get selectedPizzaType;
+  @override // Default to "Traditional Round"
   LatLng? get fetchedLocation;
   @override
   @JsonKey(ignore: true)

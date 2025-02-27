@@ -14,12 +14,12 @@ enum DiscoverStateShopType {
   shop,
   recommended,
 }
-
 @freezed
 class DiscoverState with _$DiscoverState {
   const factory DiscoverState({
     String? email,
     @Default([]) List<PizzaPlaceModel> pizzaPlaces,
+    @Default([]) List<PizzaPlaceModel> userPizzaPlaces,
     @Default([]) List<File?> images,
     @Default(null) PizzaReviewModel? reviews,
     @Default(null) Review? myReview,
@@ -31,8 +31,14 @@ class DiscoverState with _$DiscoverState {
     @Default('') String city,
     @Default('') String stateName,
     @Default('') String country,
+    @Default('') String mapLink,
+    LatLng? selectedMapLocation,
+    @Default(null) PizzaPlaceModel? newlyAddedPlace,
+    @Default(true) bool isMapInteractionEnabled, // Add @Default annotation here
     @Default(null) DataItem<void>? addReviewResponse,
     @Default([]) List<LocationSuggestions> locationSuggestions,
+    @Default({}) Map<String, PizzaTypeSummary> summary, // Stores all pizza types summary
+    @Default("Traditional Round") String selectedPizzaType, // Default to "Traditional Round"
     LatLng? fetchedLocation,
   }) = _DiscoverState;
 }

@@ -20,7 +20,10 @@ PizzaReviewModel _$PizzaReviewModelFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$PizzaReviewModel {
-  Summary? get summary => throw _privateConstructorUsedError;
+// Change from "summaries" to "summary" to match API
+  @JsonKey(name: 'summary')
+  Map<String, PizzaTypeSummary>? get summaries =>
+      throw _privateConstructorUsedError;
   List<Review?>? get reviews => throw _privateConstructorUsedError;
   String? get userId => throw _privateConstructorUsedError;
 
@@ -36,9 +39,10 @@ abstract class $PizzaReviewModelCopyWith<$Res> {
           PizzaReviewModel value, $Res Function(PizzaReviewModel) then) =
       _$PizzaReviewModelCopyWithImpl<$Res, PizzaReviewModel>;
   @useResult
-  $Res call({Summary? summary, List<Review?>? reviews, String? userId});
-
-  $SummaryCopyWith<$Res>? get summary;
+  $Res call(
+      {@JsonKey(name: 'summary') Map<String, PizzaTypeSummary>? summaries,
+      List<Review?>? reviews,
+      String? userId});
 }
 
 /// @nodoc
@@ -54,15 +58,15 @@ class _$PizzaReviewModelCopyWithImpl<$Res, $Val extends PizzaReviewModel>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? summary = freezed,
+    Object? summaries = freezed,
     Object? reviews = freezed,
     Object? userId = freezed,
   }) {
     return _then(_value.copyWith(
-      summary: freezed == summary
-          ? _value.summary
-          : summary // ignore: cast_nullable_to_non_nullable
-              as Summary?,
+      summaries: freezed == summaries
+          ? _value.summaries
+          : summaries // ignore: cast_nullable_to_non_nullable
+              as Map<String, PizzaTypeSummary>?,
       reviews: freezed == reviews
           ? _value.reviews
           : reviews // ignore: cast_nullable_to_non_nullable
@@ -72,18 +76,6 @@ class _$PizzaReviewModelCopyWithImpl<$Res, $Val extends PizzaReviewModel>
           : userId // ignore: cast_nullable_to_non_nullable
               as String?,
     ) as $Val);
-  }
-
-  @override
-  @pragma('vm:prefer-inline')
-  $SummaryCopyWith<$Res>? get summary {
-    if (_value.summary == null) {
-      return null;
-    }
-
-    return $SummaryCopyWith<$Res>(_value.summary!, (value) {
-      return _then(_value.copyWith(summary: value) as $Val);
-    });
   }
 }
 
@@ -95,10 +87,10 @@ abstract class _$$PizzaReviewModelImplCopyWith<$Res>
       __$$PizzaReviewModelImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({Summary? summary, List<Review?>? reviews, String? userId});
-
-  @override
-  $SummaryCopyWith<$Res>? get summary;
+  $Res call(
+      {@JsonKey(name: 'summary') Map<String, PizzaTypeSummary>? summaries,
+      List<Review?>? reviews,
+      String? userId});
 }
 
 /// @nodoc
@@ -112,15 +104,15 @@ class __$$PizzaReviewModelImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? summary = freezed,
+    Object? summaries = freezed,
     Object? reviews = freezed,
     Object? userId = freezed,
   }) {
     return _then(_$PizzaReviewModelImpl(
-      summary: freezed == summary
-          ? _value.summary
-          : summary // ignore: cast_nullable_to_non_nullable
-              as Summary?,
+      summaries: freezed == summaries
+          ? _value._summaries
+          : summaries // ignore: cast_nullable_to_non_nullable
+              as Map<String, PizzaTypeSummary>?,
       reviews: freezed == reviews
           ? _value._reviews
           : reviews // ignore: cast_nullable_to_non_nullable
@@ -138,16 +130,28 @@ class __$$PizzaReviewModelImplCopyWithImpl<$Res>
 @JsonSerializable(fieldRename: FieldRename.none)
 class _$PizzaReviewModelImpl implements _PizzaReviewModel {
   const _$PizzaReviewModelImpl(
-      {required this.summary,
+      {@JsonKey(name: 'summary') final Map<String, PizzaTypeSummary>? summaries,
       final List<Review?>? reviews = const [],
-      required this.userId})
-      : _reviews = reviews;
+      this.userId})
+      : _summaries = summaries,
+        _reviews = reviews;
 
   factory _$PizzaReviewModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$PizzaReviewModelImplFromJson(json);
 
+// Change from "summaries" to "summary" to match API
+  final Map<String, PizzaTypeSummary>? _summaries;
+// Change from "summaries" to "summary" to match API
   @override
-  final Summary? summary;
+  @JsonKey(name: 'summary')
+  Map<String, PizzaTypeSummary>? get summaries {
+    final value = _summaries;
+    if (value == null) return null;
+    if (_summaries is EqualUnmodifiableMapView) return _summaries;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(value);
+  }
+
   final List<Review?>? _reviews;
   @override
   @JsonKey()
@@ -164,7 +168,7 @@ class _$PizzaReviewModelImpl implements _PizzaReviewModel {
 
   @override
   String toString() {
-    return 'PizzaReviewModel(summary: $summary, reviews: $reviews, userId: $userId)';
+    return 'PizzaReviewModel(summaries: $summaries, reviews: $reviews, userId: $userId)';
   }
 
   @override
@@ -172,15 +176,19 @@ class _$PizzaReviewModelImpl implements _PizzaReviewModel {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$PizzaReviewModelImpl &&
-            (identical(other.summary, summary) || other.summary == summary) &&
+            const DeepCollectionEquality()
+                .equals(other._summaries, _summaries) &&
             const DeepCollectionEquality().equals(other._reviews, _reviews) &&
             (identical(other.userId, userId) || other.userId == userId));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, summary,
-      const DeepCollectionEquality().hash(_reviews), userId);
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(_summaries),
+      const DeepCollectionEquality().hash(_reviews),
+      userId);
 
   @JsonKey(ignore: true)
   @override
@@ -199,15 +207,16 @@ class _$PizzaReviewModelImpl implements _PizzaReviewModel {
 
 abstract class _PizzaReviewModel implements PizzaReviewModel {
   const factory _PizzaReviewModel(
-      {required final Summary? summary,
+      {@JsonKey(name: 'summary') final Map<String, PizzaTypeSummary>? summaries,
       final List<Review?>? reviews,
-      required final String? userId}) = _$PizzaReviewModelImpl;
+      final String? userId}) = _$PizzaReviewModelImpl;
 
   factory _PizzaReviewModel.fromJson(Map<String, dynamic> json) =
       _$PizzaReviewModelImpl.fromJson;
 
-  @override
-  Summary? get summary;
+  @override // Change from "summaries" to "summary" to match API
+  @JsonKey(name: 'summary')
+  Map<String, PizzaTypeSummary>? get summaries;
   @override
   List<Review?>? get reviews;
   @override
@@ -218,37 +227,44 @@ abstract class _PizzaReviewModel implements PizzaReviewModel {
       throw _privateConstructorUsedError;
 }
 
-Summary _$SummaryFromJson(Map<String, dynamic> json) {
-  return _Summary.fromJson(json);
+PizzaTypeSummary _$PizzaTypeSummaryFromJson(Map<String, dynamic> json) {
+  return _PizzaTypeSummary.fromJson(json);
 }
 
 /// @nodoc
-mixin _$Summary {
-  Sauce? get sauce => throw _privateConstructorUsedError;
-  Cheese? get cheese => throw _privateConstructorUsedError;
-  Crust? get crust => throw _privateConstructorUsedError;
+mixin _$PizzaTypeSummary {
+  CrustSummary get crust => throw _privateConstructorUsedError;
+  SauceSummary get sauce => throw _privateConstructorUsedError;
+  CheeseSummary get cheese => throw _privateConstructorUsedError;
+  int get count => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $SummaryCopyWith<Summary> get copyWith => throw _privateConstructorUsedError;
+  $PizzaTypeSummaryCopyWith<PizzaTypeSummary> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $SummaryCopyWith<$Res> {
-  factory $SummaryCopyWith(Summary value, $Res Function(Summary) then) =
-      _$SummaryCopyWithImpl<$Res, Summary>;
+abstract class $PizzaTypeSummaryCopyWith<$Res> {
+  factory $PizzaTypeSummaryCopyWith(
+          PizzaTypeSummary value, $Res Function(PizzaTypeSummary) then) =
+      _$PizzaTypeSummaryCopyWithImpl<$Res, PizzaTypeSummary>;
   @useResult
-  $Res call({Sauce? sauce, Cheese? cheese, Crust? crust});
+  $Res call(
+      {CrustSummary crust,
+      SauceSummary sauce,
+      CheeseSummary cheese,
+      int count});
 
-  $SauceCopyWith<$Res>? get sauce;
-  $CheeseCopyWith<$Res>? get cheese;
-  $CrustCopyWith<$Res>? get crust;
+  $CrustSummaryCopyWith<$Res> get crust;
+  $SauceSummaryCopyWith<$Res> get sauce;
+  $CheeseSummaryCopyWith<$Res> get cheese;
 }
 
 /// @nodoc
-class _$SummaryCopyWithImpl<$Res, $Val extends Summary>
-    implements $SummaryCopyWith<$Res> {
-  _$SummaryCopyWithImpl(this._value, this._then);
+class _$PizzaTypeSummaryCopyWithImpl<$Res, $Val extends PizzaTypeSummary>
+    implements $PizzaTypeSummaryCopyWith<$Res> {
+  _$PizzaTypeSummaryCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -258,108 +274,111 @@ class _$SummaryCopyWithImpl<$Res, $Val extends Summary>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? sauce = freezed,
-    Object? cheese = freezed,
-    Object? crust = freezed,
+    Object? crust = null,
+    Object? sauce = null,
+    Object? cheese = null,
+    Object? count = null,
   }) {
     return _then(_value.copyWith(
-      sauce: freezed == sauce
-          ? _value.sauce
-          : sauce // ignore: cast_nullable_to_non_nullable
-              as Sauce?,
-      cheese: freezed == cheese
-          ? _value.cheese
-          : cheese // ignore: cast_nullable_to_non_nullable
-              as Cheese?,
-      crust: freezed == crust
+      crust: null == crust
           ? _value.crust
           : crust // ignore: cast_nullable_to_non_nullable
-              as Crust?,
+              as CrustSummary,
+      sauce: null == sauce
+          ? _value.sauce
+          : sauce // ignore: cast_nullable_to_non_nullable
+              as SauceSummary,
+      cheese: null == cheese
+          ? _value.cheese
+          : cheese // ignore: cast_nullable_to_non_nullable
+              as CheeseSummary,
+      count: null == count
+          ? _value.count
+          : count // ignore: cast_nullable_to_non_nullable
+              as int,
     ) as $Val);
   }
 
   @override
   @pragma('vm:prefer-inline')
-  $SauceCopyWith<$Res>? get sauce {
-    if (_value.sauce == null) {
-      return null;
-    }
+  $CrustSummaryCopyWith<$Res> get crust {
+    return $CrustSummaryCopyWith<$Res>(_value.crust, (value) {
+      return _then(_value.copyWith(crust: value) as $Val);
+    });
+  }
 
-    return $SauceCopyWith<$Res>(_value.sauce!, (value) {
+  @override
+  @pragma('vm:prefer-inline')
+  $SauceSummaryCopyWith<$Res> get sauce {
+    return $SauceSummaryCopyWith<$Res>(_value.sauce, (value) {
       return _then(_value.copyWith(sauce: value) as $Val);
     });
   }
 
   @override
   @pragma('vm:prefer-inline')
-  $CheeseCopyWith<$Res>? get cheese {
-    if (_value.cheese == null) {
-      return null;
-    }
-
-    return $CheeseCopyWith<$Res>(_value.cheese!, (value) {
+  $CheeseSummaryCopyWith<$Res> get cheese {
+    return $CheeseSummaryCopyWith<$Res>(_value.cheese, (value) {
       return _then(_value.copyWith(cheese: value) as $Val);
     });
   }
-
-  @override
-  @pragma('vm:prefer-inline')
-  $CrustCopyWith<$Res>? get crust {
-    if (_value.crust == null) {
-      return null;
-    }
-
-    return $CrustCopyWith<$Res>(_value.crust!, (value) {
-      return _then(_value.copyWith(crust: value) as $Val);
-    });
-  }
 }
 
 /// @nodoc
-abstract class _$$SummaryImplCopyWith<$Res> implements $SummaryCopyWith<$Res> {
-  factory _$$SummaryImplCopyWith(
-          _$SummaryImpl value, $Res Function(_$SummaryImpl) then) =
-      __$$SummaryImplCopyWithImpl<$Res>;
+abstract class _$$PizzaTypeSummaryImplCopyWith<$Res>
+    implements $PizzaTypeSummaryCopyWith<$Res> {
+  factory _$$PizzaTypeSummaryImplCopyWith(_$PizzaTypeSummaryImpl value,
+          $Res Function(_$PizzaTypeSummaryImpl) then) =
+      __$$PizzaTypeSummaryImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({Sauce? sauce, Cheese? cheese, Crust? crust});
+  $Res call(
+      {CrustSummary crust,
+      SauceSummary sauce,
+      CheeseSummary cheese,
+      int count});
 
   @override
-  $SauceCopyWith<$Res>? get sauce;
+  $CrustSummaryCopyWith<$Res> get crust;
   @override
-  $CheeseCopyWith<$Res>? get cheese;
+  $SauceSummaryCopyWith<$Res> get sauce;
   @override
-  $CrustCopyWith<$Res>? get crust;
+  $CheeseSummaryCopyWith<$Res> get cheese;
 }
 
 /// @nodoc
-class __$$SummaryImplCopyWithImpl<$Res>
-    extends _$SummaryCopyWithImpl<$Res, _$SummaryImpl>
-    implements _$$SummaryImplCopyWith<$Res> {
-  __$$SummaryImplCopyWithImpl(
-      _$SummaryImpl _value, $Res Function(_$SummaryImpl) _then)
+class __$$PizzaTypeSummaryImplCopyWithImpl<$Res>
+    extends _$PizzaTypeSummaryCopyWithImpl<$Res, _$PizzaTypeSummaryImpl>
+    implements _$$PizzaTypeSummaryImplCopyWith<$Res> {
+  __$$PizzaTypeSummaryImplCopyWithImpl(_$PizzaTypeSummaryImpl _value,
+      $Res Function(_$PizzaTypeSummaryImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? sauce = freezed,
-    Object? cheese = freezed,
-    Object? crust = freezed,
+    Object? crust = null,
+    Object? sauce = null,
+    Object? cheese = null,
+    Object? count = null,
   }) {
-    return _then(_$SummaryImpl(
-      sauce: freezed == sauce
-          ? _value.sauce
-          : sauce // ignore: cast_nullable_to_non_nullable
-              as Sauce?,
-      cheese: freezed == cheese
-          ? _value.cheese
-          : cheese // ignore: cast_nullable_to_non_nullable
-              as Cheese?,
-      crust: freezed == crust
+    return _then(_$PizzaTypeSummaryImpl(
+      crust: null == crust
           ? _value.crust
           : crust // ignore: cast_nullable_to_non_nullable
-              as Crust?,
+              as CrustSummary,
+      sauce: null == sauce
+          ? _value.sauce
+          : sauce // ignore: cast_nullable_to_non_nullable
+              as SauceSummary,
+      cheese: null == cheese
+          ? _value.cheese
+          : cheese // ignore: cast_nullable_to_non_nullable
+              as CheeseSummary,
+      count: null == count
+          ? _value.count
+          : count // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -367,100 +386,119 @@ class __$$SummaryImplCopyWithImpl<$Res>
 /// @nodoc
 
 @JsonSerializable(fieldRename: FieldRename.none)
-class _$SummaryImpl implements _Summary {
-  const _$SummaryImpl(
-      {required this.sauce, required this.cheese, required this.crust});
+class _$PizzaTypeSummaryImpl implements _PizzaTypeSummary {
+  const _$PizzaTypeSummaryImpl(
+      {required this.crust,
+      required this.sauce,
+      required this.cheese,
+      required this.count});
 
-  factory _$SummaryImpl.fromJson(Map<String, dynamic> json) =>
-      _$$SummaryImplFromJson(json);
+  factory _$PizzaTypeSummaryImpl.fromJson(Map<String, dynamic> json) =>
+      _$$PizzaTypeSummaryImplFromJson(json);
 
   @override
-  final Sauce? sauce;
+  final CrustSummary crust;
   @override
-  final Cheese? cheese;
+  final SauceSummary sauce;
   @override
-  final Crust? crust;
+  final CheeseSummary cheese;
+  @override
+  final int count;
 
   @override
   String toString() {
-    return 'Summary(sauce: $sauce, cheese: $cheese, crust: $crust)';
+    return 'PizzaTypeSummary(crust: $crust, sauce: $sauce, cheese: $cheese, count: $count)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$SummaryImpl &&
+            other is _$PizzaTypeSummaryImpl &&
+            (identical(other.crust, crust) || other.crust == crust) &&
             (identical(other.sauce, sauce) || other.sauce == sauce) &&
             (identical(other.cheese, cheese) || other.cheese == cheese) &&
-            (identical(other.crust, crust) || other.crust == crust));
+            (identical(other.count, count) || other.count == count));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, sauce, cheese, crust);
+  int get hashCode => Object.hash(runtimeType, crust, sauce, cheese, count);
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$SummaryImplCopyWith<_$SummaryImpl> get copyWith =>
-      __$$SummaryImplCopyWithImpl<_$SummaryImpl>(this, _$identity);
+  _$$PizzaTypeSummaryImplCopyWith<_$PizzaTypeSummaryImpl> get copyWith =>
+      __$$PizzaTypeSummaryImplCopyWithImpl<_$PizzaTypeSummaryImpl>(
+          this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$SummaryImplToJson(
+    return _$$PizzaTypeSummaryImplToJson(
       this,
     );
   }
 }
 
-abstract class _Summary implements Summary {
-  const factory _Summary(
-      {required final Sauce? sauce,
-      required final Cheese? cheese,
-      required final Crust? crust}) = _$SummaryImpl;
+abstract class _PizzaTypeSummary implements PizzaTypeSummary {
+  const factory _PizzaTypeSummary(
+      {required final CrustSummary crust,
+      required final SauceSummary sauce,
+      required final CheeseSummary cheese,
+      required final int count}) = _$PizzaTypeSummaryImpl;
 
-  factory _Summary.fromJson(Map<String, dynamic> json) = _$SummaryImpl.fromJson;
+  factory _PizzaTypeSummary.fromJson(Map<String, dynamic> json) =
+      _$PizzaTypeSummaryImpl.fromJson;
 
   @override
-  Sauce? get sauce;
+  CrustSummary get crust;
   @override
-  Cheese? get cheese;
+  SauceSummary get sauce;
   @override
-  Crust? get crust;
+  CheeseSummary get cheese;
+  @override
+  int get count;
   @override
   @JsonKey(ignore: true)
-  _$$SummaryImplCopyWith<_$SummaryImpl> get copyWith =>
+  _$$PizzaTypeSummaryImplCopyWith<_$PizzaTypeSummaryImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
-Sauce _$SauceFromJson(Map<String, dynamic> json) {
-  return _Sauce.fromJson(json);
+CrustSummary _$CrustSummaryFromJson(Map<String, dynamic> json) {
+  return _CrustSummary.fromJson(json);
 }
 
 /// @nodoc
-mixin _$Sauce {
-  int? get sauceSweet => throw _privateConstructorUsedError;
-  int? get sauceSpicy => throw _privateConstructorUsedError;
-  int? get sauceNoFlavour => throw _privateConstructorUsedError;
+mixin _$CrustSummary {
+  int get thin => throw _privateConstructorUsedError;
+  int get thick => throw _privateConstructorUsedError;
+  int get average => throw _privateConstructorUsedError;
+  int get crispy =>
+      throw _privateConstructorUsedError; // Kept as int because it's a percentage (100 = fully crispy)
+  int get dry =>
+      throw _privateConstructorUsedError; // Kept as int because it's a percentage
+  int get fluffy => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $SauceCopyWith<Sauce> get copyWith => throw _privateConstructorUsedError;
+  $CrustSummaryCopyWith<CrustSummary> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $SauceCopyWith<$Res> {
-  factory $SauceCopyWith(Sauce value, $Res Function(Sauce) then) =
-      _$SauceCopyWithImpl<$Res, Sauce>;
+abstract class $CrustSummaryCopyWith<$Res> {
+  factory $CrustSummaryCopyWith(
+          CrustSummary value, $Res Function(CrustSummary) then) =
+      _$CrustSummaryCopyWithImpl<$Res, CrustSummary>;
   @useResult
-  $Res call({int? sauceSweet, int? sauceSpicy, int? sauceNoFlavour});
+  $Res call(
+      {int thin, int thick, int average, int crispy, int dry, int fluffy});
 }
 
 /// @nodoc
-class _$SauceCopyWithImpl<$Res, $Val extends Sauce>
-    implements $SauceCopyWith<$Res> {
-  _$SauceCopyWithImpl(this._value, this._then);
+class _$CrustSummaryCopyWithImpl<$Res, $Val extends CrustSummary>
+    implements $CrustSummaryCopyWith<$Res> {
+  _$CrustSummaryCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -470,65 +508,97 @@ class _$SauceCopyWithImpl<$Res, $Val extends Sauce>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? sauceSweet = freezed,
-    Object? sauceSpicy = freezed,
-    Object? sauceNoFlavour = freezed,
+    Object? thin = null,
+    Object? thick = null,
+    Object? average = null,
+    Object? crispy = null,
+    Object? dry = null,
+    Object? fluffy = null,
   }) {
     return _then(_value.copyWith(
-      sauceSweet: freezed == sauceSweet
-          ? _value.sauceSweet
-          : sauceSweet // ignore: cast_nullable_to_non_nullable
-              as int?,
-      sauceSpicy: freezed == sauceSpicy
-          ? _value.sauceSpicy
-          : sauceSpicy // ignore: cast_nullable_to_non_nullable
-              as int?,
-      sauceNoFlavour: freezed == sauceNoFlavour
-          ? _value.sauceNoFlavour
-          : sauceNoFlavour // ignore: cast_nullable_to_non_nullable
-              as int?,
+      thin: null == thin
+          ? _value.thin
+          : thin // ignore: cast_nullable_to_non_nullable
+              as int,
+      thick: null == thick
+          ? _value.thick
+          : thick // ignore: cast_nullable_to_non_nullable
+              as int,
+      average: null == average
+          ? _value.average
+          : average // ignore: cast_nullable_to_non_nullable
+              as int,
+      crispy: null == crispy
+          ? _value.crispy
+          : crispy // ignore: cast_nullable_to_non_nullable
+              as int,
+      dry: null == dry
+          ? _value.dry
+          : dry // ignore: cast_nullable_to_non_nullable
+              as int,
+      fluffy: null == fluffy
+          ? _value.fluffy
+          : fluffy // ignore: cast_nullable_to_non_nullable
+              as int,
     ) as $Val);
   }
 }
 
 /// @nodoc
-abstract class _$$SauceImplCopyWith<$Res> implements $SauceCopyWith<$Res> {
-  factory _$$SauceImplCopyWith(
-          _$SauceImpl value, $Res Function(_$SauceImpl) then) =
-      __$$SauceImplCopyWithImpl<$Res>;
+abstract class _$$CrustSummaryImplCopyWith<$Res>
+    implements $CrustSummaryCopyWith<$Res> {
+  factory _$$CrustSummaryImplCopyWith(
+          _$CrustSummaryImpl value, $Res Function(_$CrustSummaryImpl) then) =
+      __$$CrustSummaryImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int? sauceSweet, int? sauceSpicy, int? sauceNoFlavour});
+  $Res call(
+      {int thin, int thick, int average, int crispy, int dry, int fluffy});
 }
 
 /// @nodoc
-class __$$SauceImplCopyWithImpl<$Res>
-    extends _$SauceCopyWithImpl<$Res, _$SauceImpl>
-    implements _$$SauceImplCopyWith<$Res> {
-  __$$SauceImplCopyWithImpl(
-      _$SauceImpl _value, $Res Function(_$SauceImpl) _then)
+class __$$CrustSummaryImplCopyWithImpl<$Res>
+    extends _$CrustSummaryCopyWithImpl<$Res, _$CrustSummaryImpl>
+    implements _$$CrustSummaryImplCopyWith<$Res> {
+  __$$CrustSummaryImplCopyWithImpl(
+      _$CrustSummaryImpl _value, $Res Function(_$CrustSummaryImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? sauceSweet = freezed,
-    Object? sauceSpicy = freezed,
-    Object? sauceNoFlavour = freezed,
+    Object? thin = null,
+    Object? thick = null,
+    Object? average = null,
+    Object? crispy = null,
+    Object? dry = null,
+    Object? fluffy = null,
   }) {
-    return _then(_$SauceImpl(
-      sauceSweet: freezed == sauceSweet
-          ? _value.sauceSweet
-          : sauceSweet // ignore: cast_nullable_to_non_nullable
-              as int?,
-      sauceSpicy: freezed == sauceSpicy
-          ? _value.sauceSpicy
-          : sauceSpicy // ignore: cast_nullable_to_non_nullable
-              as int?,
-      sauceNoFlavour: freezed == sauceNoFlavour
-          ? _value.sauceNoFlavour
-          : sauceNoFlavour // ignore: cast_nullable_to_non_nullable
-              as int?,
+    return _then(_$CrustSummaryImpl(
+      thin: null == thin
+          ? _value.thin
+          : thin // ignore: cast_nullable_to_non_nullable
+              as int,
+      thick: null == thick
+          ? _value.thick
+          : thick // ignore: cast_nullable_to_non_nullable
+              as int,
+      average: null == average
+          ? _value.average
+          : average // ignore: cast_nullable_to_non_nullable
+              as int,
+      crispy: null == crispy
+          ? _value.crispy
+          : crispy // ignore: cast_nullable_to_non_nullable
+              as int,
+      dry: null == dry
+          ? _value.dry
+          : dry // ignore: cast_nullable_to_non_nullable
+              as int,
+      fluffy: null == fluffy
+          ? _value.fluffy
+          : fluffy // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -536,105 +606,129 @@ class __$$SauceImplCopyWithImpl<$Res>
 /// @nodoc
 
 @JsonSerializable(fieldRename: FieldRename.none)
-class _$SauceImpl implements _Sauce {
-  const _$SauceImpl(
-      {required this.sauceSweet,
-      required this.sauceSpicy,
-      required this.sauceNoFlavour});
+class _$CrustSummaryImpl implements _CrustSummary {
+  const _$CrustSummaryImpl(
+      {required this.thin,
+      required this.thick,
+      required this.average,
+      required this.crispy,
+      required this.dry,
+      required this.fluffy});
 
-  factory _$SauceImpl.fromJson(Map<String, dynamic> json) =>
-      _$$SauceImplFromJson(json);
+  factory _$CrustSummaryImpl.fromJson(Map<String, dynamic> json) =>
+      _$$CrustSummaryImplFromJson(json);
 
   @override
-  final int? sauceSweet;
+  final int thin;
   @override
-  final int? sauceSpicy;
+  final int thick;
   @override
-  final int? sauceNoFlavour;
+  final int average;
+  @override
+  final int crispy;
+// Kept as int because it's a percentage (100 = fully crispy)
+  @override
+  final int dry;
+// Kept as int because it's a percentage
+  @override
+  final int fluffy;
 
   @override
   String toString() {
-    return 'Sauce(sauceSweet: $sauceSweet, sauceSpicy: $sauceSpicy, sauceNoFlavour: $sauceNoFlavour)';
+    return 'CrustSummary(thin: $thin, thick: $thick, average: $average, crispy: $crispy, dry: $dry, fluffy: $fluffy)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$SauceImpl &&
-            (identical(other.sauceSweet, sauceSweet) ||
-                other.sauceSweet == sauceSweet) &&
-            (identical(other.sauceSpicy, sauceSpicy) ||
-                other.sauceSpicy == sauceSpicy) &&
-            (identical(other.sauceNoFlavour, sauceNoFlavour) ||
-                other.sauceNoFlavour == sauceNoFlavour));
+            other is _$CrustSummaryImpl &&
+            (identical(other.thin, thin) || other.thin == thin) &&
+            (identical(other.thick, thick) || other.thick == thick) &&
+            (identical(other.average, average) || other.average == average) &&
+            (identical(other.crispy, crispy) || other.crispy == crispy) &&
+            (identical(other.dry, dry) || other.dry == dry) &&
+            (identical(other.fluffy, fluffy) || other.fluffy == fluffy));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode =>
-      Object.hash(runtimeType, sauceSweet, sauceSpicy, sauceNoFlavour);
+      Object.hash(runtimeType, thin, thick, average, crispy, dry, fluffy);
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$SauceImplCopyWith<_$SauceImpl> get copyWith =>
-      __$$SauceImplCopyWithImpl<_$SauceImpl>(this, _$identity);
+  _$$CrustSummaryImplCopyWith<_$CrustSummaryImpl> get copyWith =>
+      __$$CrustSummaryImplCopyWithImpl<_$CrustSummaryImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$SauceImplToJson(
+    return _$$CrustSummaryImplToJson(
       this,
     );
   }
 }
 
-abstract class _Sauce implements Sauce {
-  const factory _Sauce(
-      {required final int? sauceSweet,
-      required final int? sauceSpicy,
-      required final int? sauceNoFlavour}) = _$SauceImpl;
+abstract class _CrustSummary implements CrustSummary {
+  const factory _CrustSummary(
+      {required final int thin,
+      required final int thick,
+      required final int average,
+      required final int crispy,
+      required final int dry,
+      required final int fluffy}) = _$CrustSummaryImpl;
 
-  factory _Sauce.fromJson(Map<String, dynamic> json) = _$SauceImpl.fromJson;
+  factory _CrustSummary.fromJson(Map<String, dynamic> json) =
+      _$CrustSummaryImpl.fromJson;
 
   @override
-  int? get sauceSweet;
+  int get thin;
   @override
-  int? get sauceSpicy;
+  int get thick;
   @override
-  int? get sauceNoFlavour;
+  int get average;
+  @override
+  int get crispy;
+  @override // Kept as int because it's a percentage (100 = fully crispy)
+  int get dry;
+  @override // Kept as int because it's a percentage
+  int get fluffy;
   @override
   @JsonKey(ignore: true)
-  _$$SauceImplCopyWith<_$SauceImpl> get copyWith =>
+  _$$CrustSummaryImplCopyWith<_$CrustSummaryImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
-Cheese _$CheeseFromJson(Map<String, dynamic> json) {
-  return _Cheese.fromJson(json);
+SauceSummary _$SauceSummaryFromJson(Map<String, dynamic> json) {
+  return _SauceSummary.fromJson(json);
 }
 
 /// @nodoc
-mixin _$Cheese {
-  int? get cheeseGreat => throw _privateConstructorUsedError;
-  int? get cheeseEhh => throw _privateConstructorUsedError;
+mixin _$SauceSummary {
+  int get sweet => throw _privateConstructorUsedError;
+  int get spicy => throw _privateConstructorUsedError;
+  int get noflavour => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $CheeseCopyWith<Cheese> get copyWith => throw _privateConstructorUsedError;
+  $SauceSummaryCopyWith<SauceSummary> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $CheeseCopyWith<$Res> {
-  factory $CheeseCopyWith(Cheese value, $Res Function(Cheese) then) =
-      _$CheeseCopyWithImpl<$Res, Cheese>;
+abstract class $SauceSummaryCopyWith<$Res> {
+  factory $SauceSummaryCopyWith(
+          SauceSummary value, $Res Function(SauceSummary) then) =
+      _$SauceSummaryCopyWithImpl<$Res, SauceSummary>;
   @useResult
-  $Res call({int? cheeseGreat, int? cheeseEhh});
+  $Res call({int sweet, int spicy, int noflavour});
 }
 
 /// @nodoc
-class _$CheeseCopyWithImpl<$Res, $Val extends Cheese>
-    implements $CheeseCopyWith<$Res> {
-  _$CheeseCopyWithImpl(this._value, this._then);
+class _$SauceSummaryCopyWithImpl<$Res, $Val extends SauceSummary>
+    implements $SauceSummaryCopyWith<$Res> {
+  _$SauceSummaryCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -644,55 +738,66 @@ class _$CheeseCopyWithImpl<$Res, $Val extends Cheese>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? cheeseGreat = freezed,
-    Object? cheeseEhh = freezed,
+    Object? sweet = null,
+    Object? spicy = null,
+    Object? noflavour = null,
   }) {
     return _then(_value.copyWith(
-      cheeseGreat: freezed == cheeseGreat
-          ? _value.cheeseGreat
-          : cheeseGreat // ignore: cast_nullable_to_non_nullable
-              as int?,
-      cheeseEhh: freezed == cheeseEhh
-          ? _value.cheeseEhh
-          : cheeseEhh // ignore: cast_nullable_to_non_nullable
-              as int?,
+      sweet: null == sweet
+          ? _value.sweet
+          : sweet // ignore: cast_nullable_to_non_nullable
+              as int,
+      spicy: null == spicy
+          ? _value.spicy
+          : spicy // ignore: cast_nullable_to_non_nullable
+              as int,
+      noflavour: null == noflavour
+          ? _value.noflavour
+          : noflavour // ignore: cast_nullable_to_non_nullable
+              as int,
     ) as $Val);
   }
 }
 
 /// @nodoc
-abstract class _$$CheeseImplCopyWith<$Res> implements $CheeseCopyWith<$Res> {
-  factory _$$CheeseImplCopyWith(
-          _$CheeseImpl value, $Res Function(_$CheeseImpl) then) =
-      __$$CheeseImplCopyWithImpl<$Res>;
+abstract class _$$SauceSummaryImplCopyWith<$Res>
+    implements $SauceSummaryCopyWith<$Res> {
+  factory _$$SauceSummaryImplCopyWith(
+          _$SauceSummaryImpl value, $Res Function(_$SauceSummaryImpl) then) =
+      __$$SauceSummaryImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int? cheeseGreat, int? cheeseEhh});
+  $Res call({int sweet, int spicy, int noflavour});
 }
 
 /// @nodoc
-class __$$CheeseImplCopyWithImpl<$Res>
-    extends _$CheeseCopyWithImpl<$Res, _$CheeseImpl>
-    implements _$$CheeseImplCopyWith<$Res> {
-  __$$CheeseImplCopyWithImpl(
-      _$CheeseImpl _value, $Res Function(_$CheeseImpl) _then)
+class __$$SauceSummaryImplCopyWithImpl<$Res>
+    extends _$SauceSummaryCopyWithImpl<$Res, _$SauceSummaryImpl>
+    implements _$$SauceSummaryImplCopyWith<$Res> {
+  __$$SauceSummaryImplCopyWithImpl(
+      _$SauceSummaryImpl _value, $Res Function(_$SauceSummaryImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? cheeseGreat = freezed,
-    Object? cheeseEhh = freezed,
+    Object? sweet = null,
+    Object? spicy = null,
+    Object? noflavour = null,
   }) {
-    return _then(_$CheeseImpl(
-      cheeseGreat: freezed == cheeseGreat
-          ? _value.cheeseGreat
-          : cheeseGreat // ignore: cast_nullable_to_non_nullable
-              as int?,
-      cheeseEhh: freezed == cheeseEhh
-          ? _value.cheeseEhh
-          : cheeseEhh // ignore: cast_nullable_to_non_nullable
-              as int?,
+    return _then(_$SauceSummaryImpl(
+      sweet: null == sweet
+          ? _value.sweet
+          : sweet // ignore: cast_nullable_to_non_nullable
+              as int,
+      spicy: null == spicy
+          ? _value.spicy
+          : spicy // ignore: cast_nullable_to_non_nullable
+              as int,
+      noflavour: null == noflavour
+          ? _value.noflavour
+          : noflavour // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -700,95 +805,104 @@ class __$$CheeseImplCopyWithImpl<$Res>
 /// @nodoc
 
 @JsonSerializable(fieldRename: FieldRename.none)
-class _$CheeseImpl implements _Cheese {
-  const _$CheeseImpl({required this.cheeseGreat, required this.cheeseEhh});
+class _$SauceSummaryImpl implements _SauceSummary {
+  const _$SauceSummaryImpl(
+      {required this.sweet, required this.spicy, required this.noflavour});
 
-  factory _$CheeseImpl.fromJson(Map<String, dynamic> json) =>
-      _$$CheeseImplFromJson(json);
+  factory _$SauceSummaryImpl.fromJson(Map<String, dynamic> json) =>
+      _$$SauceSummaryImplFromJson(json);
 
   @override
-  final int? cheeseGreat;
+  final int sweet;
   @override
-  final int? cheeseEhh;
+  final int spicy;
+  @override
+  final int noflavour;
 
   @override
   String toString() {
-    return 'Cheese(cheeseGreat: $cheeseGreat, cheeseEhh: $cheeseEhh)';
+    return 'SauceSummary(sweet: $sweet, spicy: $spicy, noflavour: $noflavour)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$CheeseImpl &&
-            (identical(other.cheeseGreat, cheeseGreat) ||
-                other.cheeseGreat == cheeseGreat) &&
-            (identical(other.cheeseEhh, cheeseEhh) ||
-                other.cheeseEhh == cheeseEhh));
+            other is _$SauceSummaryImpl &&
+            (identical(other.sweet, sweet) || other.sweet == sweet) &&
+            (identical(other.spicy, spicy) || other.spicy == spicy) &&
+            (identical(other.noflavour, noflavour) ||
+                other.noflavour == noflavour));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, cheeseGreat, cheeseEhh);
+  int get hashCode => Object.hash(runtimeType, sweet, spicy, noflavour);
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$CheeseImplCopyWith<_$CheeseImpl> get copyWith =>
-      __$$CheeseImplCopyWithImpl<_$CheeseImpl>(this, _$identity);
+  _$$SauceSummaryImplCopyWith<_$SauceSummaryImpl> get copyWith =>
+      __$$SauceSummaryImplCopyWithImpl<_$SauceSummaryImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$CheeseImplToJson(
+    return _$$SauceSummaryImplToJson(
       this,
     );
   }
 }
 
-abstract class _Cheese implements Cheese {
-  const factory _Cheese(
-      {required final int? cheeseGreat,
-      required final int? cheeseEhh}) = _$CheeseImpl;
+abstract class _SauceSummary implements SauceSummary {
+  const factory _SauceSummary(
+      {required final int sweet,
+      required final int spicy,
+      required final int noflavour}) = _$SauceSummaryImpl;
 
-  factory _Cheese.fromJson(Map<String, dynamic> json) = _$CheeseImpl.fromJson;
+  factory _SauceSummary.fromJson(Map<String, dynamic> json) =
+      _$SauceSummaryImpl.fromJson;
 
   @override
-  int? get cheeseGreat;
+  int get sweet;
   @override
-  int? get cheeseEhh;
+  int get spicy;
+  @override
+  int get noflavour;
   @override
   @JsonKey(ignore: true)
-  _$$CheeseImplCopyWith<_$CheeseImpl> get copyWith =>
+  _$$SauceSummaryImplCopyWith<_$SauceSummaryImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
-Crust _$CrustFromJson(Map<String, dynamic> json) {
-  return _Crust.fromJson(json);
+CheeseSummary _$CheeseSummaryFromJson(Map<String, dynamic> json) {
+  return _CheeseSummary.fromJson(json);
 }
 
 /// @nodoc
-mixin _$Crust {
-  int? get crustAverage => throw _privateConstructorUsedError;
-  int? get crustThick => throw _privateConstructorUsedError;
-  int? get crustThin => throw _privateConstructorUsedError;
+mixin _$CheeseSummary {
+  int get heavy => throw _privateConstructorUsedError;
+  int get light => throw _privateConstructorUsedError;
+  int get average => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $CrustCopyWith<Crust> get copyWith => throw _privateConstructorUsedError;
+  $CheeseSummaryCopyWith<CheeseSummary> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $CrustCopyWith<$Res> {
-  factory $CrustCopyWith(Crust value, $Res Function(Crust) then) =
-      _$CrustCopyWithImpl<$Res, Crust>;
+abstract class $CheeseSummaryCopyWith<$Res> {
+  factory $CheeseSummaryCopyWith(
+          CheeseSummary value, $Res Function(CheeseSummary) then) =
+      _$CheeseSummaryCopyWithImpl<$Res, CheeseSummary>;
   @useResult
-  $Res call({int? crustAverage, int? crustThick, int? crustThin});
+  $Res call({int heavy, int light, int average});
 }
 
 /// @nodoc
-class _$CrustCopyWithImpl<$Res, $Val extends Crust>
-    implements $CrustCopyWith<$Res> {
-  _$CrustCopyWithImpl(this._value, this._then);
+class _$CheeseSummaryCopyWithImpl<$Res, $Val extends CheeseSummary>
+    implements $CheeseSummaryCopyWith<$Res> {
+  _$CheeseSummaryCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -798,65 +912,66 @@ class _$CrustCopyWithImpl<$Res, $Val extends Crust>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? crustAverage = freezed,
-    Object? crustThick = freezed,
-    Object? crustThin = freezed,
+    Object? heavy = null,
+    Object? light = null,
+    Object? average = null,
   }) {
     return _then(_value.copyWith(
-      crustAverage: freezed == crustAverage
-          ? _value.crustAverage
-          : crustAverage // ignore: cast_nullable_to_non_nullable
-              as int?,
-      crustThick: freezed == crustThick
-          ? _value.crustThick
-          : crustThick // ignore: cast_nullable_to_non_nullable
-              as int?,
-      crustThin: freezed == crustThin
-          ? _value.crustThin
-          : crustThin // ignore: cast_nullable_to_non_nullable
-              as int?,
+      heavy: null == heavy
+          ? _value.heavy
+          : heavy // ignore: cast_nullable_to_non_nullable
+              as int,
+      light: null == light
+          ? _value.light
+          : light // ignore: cast_nullable_to_non_nullable
+              as int,
+      average: null == average
+          ? _value.average
+          : average // ignore: cast_nullable_to_non_nullable
+              as int,
     ) as $Val);
   }
 }
 
 /// @nodoc
-abstract class _$$CrustImplCopyWith<$Res> implements $CrustCopyWith<$Res> {
-  factory _$$CrustImplCopyWith(
-          _$CrustImpl value, $Res Function(_$CrustImpl) then) =
-      __$$CrustImplCopyWithImpl<$Res>;
+abstract class _$$CheeseSummaryImplCopyWith<$Res>
+    implements $CheeseSummaryCopyWith<$Res> {
+  factory _$$CheeseSummaryImplCopyWith(
+          _$CheeseSummaryImpl value, $Res Function(_$CheeseSummaryImpl) then) =
+      __$$CheeseSummaryImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int? crustAverage, int? crustThick, int? crustThin});
+  $Res call({int heavy, int light, int average});
 }
 
 /// @nodoc
-class __$$CrustImplCopyWithImpl<$Res>
-    extends _$CrustCopyWithImpl<$Res, _$CrustImpl>
-    implements _$$CrustImplCopyWith<$Res> {
-  __$$CrustImplCopyWithImpl(
-      _$CrustImpl _value, $Res Function(_$CrustImpl) _then)
+class __$$CheeseSummaryImplCopyWithImpl<$Res>
+    extends _$CheeseSummaryCopyWithImpl<$Res, _$CheeseSummaryImpl>
+    implements _$$CheeseSummaryImplCopyWith<$Res> {
+  __$$CheeseSummaryImplCopyWithImpl(
+      _$CheeseSummaryImpl _value, $Res Function(_$CheeseSummaryImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? crustAverage = freezed,
-    Object? crustThick = freezed,
-    Object? crustThin = freezed,
+    Object? heavy = null,
+    Object? light = null,
+    Object? average = null,
   }) {
-    return _then(_$CrustImpl(
-      crustAverage: freezed == crustAverage
-          ? _value.crustAverage
-          : crustAverage // ignore: cast_nullable_to_non_nullable
-              as int?,
-      crustThick: freezed == crustThick
-          ? _value.crustThick
-          : crustThick // ignore: cast_nullable_to_non_nullable
-              as int?,
-      crustThin: freezed == crustThin
-          ? _value.crustThin
-          : crustThin // ignore: cast_nullable_to_non_nullable
-              as int?,
+    return _then(_$CheeseSummaryImpl(
+      heavy: null == heavy
+          ? _value.heavy
+          : heavy // ignore: cast_nullable_to_non_nullable
+              as int,
+      light: null == light
+          ? _value.light
+          : light // ignore: cast_nullable_to_non_nullable
+              as int,
+      average: null == average
+          ? _value.average
+          : average // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -864,76 +979,71 @@ class __$$CrustImplCopyWithImpl<$Res>
 /// @nodoc
 
 @JsonSerializable(fieldRename: FieldRename.none)
-class _$CrustImpl implements _Crust {
-  const _$CrustImpl(
-      {required this.crustAverage,
-      required this.crustThick,
-      required this.crustThin});
+class _$CheeseSummaryImpl implements _CheeseSummary {
+  const _$CheeseSummaryImpl(
+      {required this.heavy, required this.light, required this.average});
 
-  factory _$CrustImpl.fromJson(Map<String, dynamic> json) =>
-      _$$CrustImplFromJson(json);
+  factory _$CheeseSummaryImpl.fromJson(Map<String, dynamic> json) =>
+      _$$CheeseSummaryImplFromJson(json);
 
   @override
-  final int? crustAverage;
+  final int heavy;
   @override
-  final int? crustThick;
+  final int light;
   @override
-  final int? crustThin;
+  final int average;
 
   @override
   String toString() {
-    return 'Crust(crustAverage: $crustAverage, crustThick: $crustThick, crustThin: $crustThin)';
+    return 'CheeseSummary(heavy: $heavy, light: $light, average: $average)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$CrustImpl &&
-            (identical(other.crustAverage, crustAverage) ||
-                other.crustAverage == crustAverage) &&
-            (identical(other.crustThick, crustThick) ||
-                other.crustThick == crustThick) &&
-            (identical(other.crustThin, crustThin) ||
-                other.crustThin == crustThin));
+            other is _$CheeseSummaryImpl &&
+            (identical(other.heavy, heavy) || other.heavy == heavy) &&
+            (identical(other.light, light) || other.light == light) &&
+            (identical(other.average, average) || other.average == average));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, crustAverage, crustThick, crustThin);
+  int get hashCode => Object.hash(runtimeType, heavy, light, average);
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$CrustImplCopyWith<_$CrustImpl> get copyWith =>
-      __$$CrustImplCopyWithImpl<_$CrustImpl>(this, _$identity);
+  _$$CheeseSummaryImplCopyWith<_$CheeseSummaryImpl> get copyWith =>
+      __$$CheeseSummaryImplCopyWithImpl<_$CheeseSummaryImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$CrustImplToJson(
+    return _$$CheeseSummaryImplToJson(
       this,
     );
   }
 }
 
-abstract class _Crust implements Crust {
-  const factory _Crust(
-      {required final int? crustAverage,
-      required final int? crustThick,
-      required final int? crustThin}) = _$CrustImpl;
+abstract class _CheeseSummary implements CheeseSummary {
+  const factory _CheeseSummary(
+      {required final int heavy,
+      required final int light,
+      required final int average}) = _$CheeseSummaryImpl;
 
-  factory _Crust.fromJson(Map<String, dynamic> json) = _$CrustImpl.fromJson;
+  factory _CheeseSummary.fromJson(Map<String, dynamic> json) =
+      _$CheeseSummaryImpl.fromJson;
 
   @override
-  int? get crustAverage;
+  int get heavy;
   @override
-  int? get crustThick;
+  int get light;
   @override
-  int? get crustThin;
+  int get average;
   @override
   @JsonKey(ignore: true)
-  _$$CrustImplCopyWith<_$CrustImpl> get copyWith =>
+  _$$CheeseSummaryImplCopyWith<_$CheeseSummaryImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -1390,8 +1500,11 @@ CrustReview _$CrustReviewFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$CrustReview {
-  List<String?>? get thickness => throw _privateConstructorUsedError;
+  String? get thickness => throw _privateConstructorUsedError;
   bool get crispy => throw _privateConstructorUsedError;
+  bool? get dry =>
+      throw _privateConstructorUsedError; // ✅ Change from `required bool` to `bool?`
+  bool? get fluffy => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -1405,7 +1518,7 @@ abstract class $CrustReviewCopyWith<$Res> {
           CrustReview value, $Res Function(CrustReview) then) =
       _$CrustReviewCopyWithImpl<$Res, CrustReview>;
   @useResult
-  $Res call({List<String?>? thickness, bool crispy});
+  $Res call({String? thickness, bool crispy, bool? dry, bool? fluffy});
 }
 
 /// @nodoc
@@ -1423,16 +1536,26 @@ class _$CrustReviewCopyWithImpl<$Res, $Val extends CrustReview>
   $Res call({
     Object? thickness = freezed,
     Object? crispy = null,
+    Object? dry = freezed,
+    Object? fluffy = freezed,
   }) {
     return _then(_value.copyWith(
       thickness: freezed == thickness
           ? _value.thickness
           : thickness // ignore: cast_nullable_to_non_nullable
-              as List<String?>?,
+              as String?,
       crispy: null == crispy
           ? _value.crispy
           : crispy // ignore: cast_nullable_to_non_nullable
               as bool,
+      dry: freezed == dry
+          ? _value.dry
+          : dry // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      fluffy: freezed == fluffy
+          ? _value.fluffy
+          : fluffy // ignore: cast_nullable_to_non_nullable
+              as bool?,
     ) as $Val);
   }
 }
@@ -1445,7 +1568,7 @@ abstract class _$$CrustReviewImplCopyWith<$Res>
       __$$CrustReviewImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({List<String?>? thickness, bool crispy});
+  $Res call({String? thickness, bool crispy, bool? dry, bool? fluffy});
 }
 
 /// @nodoc
@@ -1461,16 +1584,26 @@ class __$$CrustReviewImplCopyWithImpl<$Res>
   $Res call({
     Object? thickness = freezed,
     Object? crispy = null,
+    Object? dry = freezed,
+    Object? fluffy = freezed,
   }) {
     return _then(_$CrustReviewImpl(
       thickness: freezed == thickness
-          ? _value._thickness
+          ? _value.thickness
           : thickness // ignore: cast_nullable_to_non_nullable
-              as List<String?>?,
+              as String?,
       crispy: null == crispy
           ? _value.crispy
           : crispy // ignore: cast_nullable_to_non_nullable
               as bool,
+      dry: freezed == dry
+          ? _value.dry
+          : dry // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      fluffy: freezed == fluffy
+          ? _value.fluffy
+          : fluffy // ignore: cast_nullable_to_non_nullable
+              as bool?,
     ));
   }
 }
@@ -1480,29 +1613,24 @@ class __$$CrustReviewImplCopyWithImpl<$Res>
 @JsonSerializable(fieldRename: FieldRename.none)
 class _$CrustReviewImpl implements _CrustReview {
   const _$CrustReviewImpl(
-      {final List<String?>? thickness = const [], required this.crispy})
-      : _thickness = thickness;
+      {required this.thickness, required this.crispy, this.dry, this.fluffy});
 
   factory _$CrustReviewImpl.fromJson(Map<String, dynamic> json) =>
       _$$CrustReviewImplFromJson(json);
 
-  final List<String?>? _thickness;
   @override
-  @JsonKey()
-  List<String?>? get thickness {
-    final value = _thickness;
-    if (value == null) return null;
-    if (_thickness is EqualUnmodifiableListView) return _thickness;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(value);
-  }
-
+  final String? thickness;
   @override
   final bool crispy;
+  @override
+  final bool? dry;
+// ✅ Change from `required bool` to `bool?`
+  @override
+  final bool? fluffy;
 
   @override
   String toString() {
-    return 'CrustReview(thickness: $thickness, crispy: $crispy)';
+    return 'CrustReview(thickness: $thickness, crispy: $crispy, dry: $dry, fluffy: $fluffy)';
   }
 
   @override
@@ -1510,15 +1638,16 @@ class _$CrustReviewImpl implements _CrustReview {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$CrustReviewImpl &&
-            const DeepCollectionEquality()
-                .equals(other._thickness, _thickness) &&
-            (identical(other.crispy, crispy) || other.crispy == crispy));
+            (identical(other.thickness, thickness) ||
+                other.thickness == thickness) &&
+            (identical(other.crispy, crispy) || other.crispy == crispy) &&
+            (identical(other.dry, dry) || other.dry == dry) &&
+            (identical(other.fluffy, fluffy) || other.fluffy == fluffy));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType, const DeepCollectionEquality().hash(_thickness), crispy);
+  int get hashCode => Object.hash(runtimeType, thickness, crispy, dry, fluffy);
 
   @JsonKey(ignore: true)
   @override
@@ -1536,16 +1665,22 @@ class _$CrustReviewImpl implements _CrustReview {
 
 abstract class _CrustReview implements CrustReview {
   const factory _CrustReview(
-      {final List<String?>? thickness,
-      required final bool crispy}) = _$CrustReviewImpl;
+      {required final String? thickness,
+      required final bool crispy,
+      final bool? dry,
+      final bool? fluffy}) = _$CrustReviewImpl;
 
   factory _CrustReview.fromJson(Map<String, dynamic> json) =
       _$CrustReviewImpl.fromJson;
 
   @override
-  List<String?>? get thickness;
+  String? get thickness;
   @override
   bool get crispy;
+  @override
+  bool? get dry;
+  @override // ✅ Change from `required bool` to `bool?`
+  bool? get fluffy;
   @override
   @JsonKey(ignore: true)
   _$$CrustReviewImplCopyWith<_$CrustReviewImpl> get copyWith =>

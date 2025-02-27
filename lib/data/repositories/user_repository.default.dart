@@ -17,6 +17,7 @@ import 'package:pizzajournals/utils/app_devices.dart';
 import 'package:pizzajournals/utils/extensions/future_extensions.dart';
 import 'package:pizzajournals/utils/validator_utils.dart';
 
+import '../source/network/models/placeDetails.dart';
 import '../source/network/models/place_suggestion.dart';
 import '../source/network/models/place_suggestion_model.dart';
 
@@ -59,6 +60,16 @@ class DefaultUserRepository extends UserRepository {
       return user;
     } catch (_) {
       print(_);
+      rethrow;
+    }
+  }
+
+  @override
+  Future<PlaceDetails> getPlaceDetails(String placeId) async {
+    try {
+      final response = await _userDataSource.getPlaceDetails(placeId);
+      return response;
+    } catch (_) {
       rethrow;
     }
   }
@@ -381,17 +392,16 @@ class DefaultUserRepository extends UserRepository {
   }
 
   @override
-  Future<void> addPizzaPlace({
+  Future<PizzaPlaceModel> addPizzaPlace({
     required Map<String, dynamic> data,
     required List<File?> files,
   }) async {
     try {
-      await <Future<void>>[
-        _userDataSource.addPizzaPlace(
-          data: data,
-          files: files,
-        ),
-      ].wait.suppressError();
+      var res = await _userDataSource.addPizzaPlace(
+        data: data,
+        files: files,
+      );
+      return res;
     } catch (_) {
       rethrow;
     }

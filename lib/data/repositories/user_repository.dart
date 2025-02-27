@@ -8,6 +8,7 @@ import 'package:pizzajournals/data/source/network/models/pizza_review_model.dart
 import 'package:pizzajournals/data/source/network/models/register_data.dart';
 import 'package:pizzajournals/data/source/network/models/user_model.dart';
 
+import '../source/network/models/placeDetails.dart';
 import '../source/network/models/place_suggestion.dart';
 import '../source/network/models/place_suggestion_model.dart';
 
@@ -18,6 +19,8 @@ abstract class UserRepository {
     required String email,
     required String password,
   });
+  Future<PlaceDetails> getPlaceDetails(String placeId);
+
 
   Future<List<PlaceSuggestion>> getSuggestions(String pizzaPlaceId);
 
@@ -25,7 +28,7 @@ abstract class UserRepository {
 
   Future<DataItem<UserModel>> updateProfile(Map<String, dynamic> data);
 
-  Future<void> addPizzaPlace({
+  Future<PizzaPlaceModel> addPizzaPlace({
     required Map<String, dynamic> data,
     required List<File?> files,
   });

@@ -73,7 +73,7 @@ class _WelcomePageState extends State<WelcomePage> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           CustomButton(
-            buttonTitle: "Login Or Signup",
+            buttonTitle: "Login/Signup",
             buttonColor: AppColors.white,
             splashColor: AppColors.grey2,
             textStyle: typographies.body,

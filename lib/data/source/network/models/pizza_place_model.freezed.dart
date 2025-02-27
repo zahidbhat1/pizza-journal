@@ -30,7 +30,8 @@ mixin _$PizzaPlaceModel {
   int? get averageRating => throw _privateConstructorUsedError;
   int? get ratings => throw _privateConstructorUsedError;
   AddressModel? get address => throw _privateConstructorUsedError;
-  Summary? get summary => throw _privateConstructorUsedError;
+  Map<String, PizzaTypeSummary>? get summary =>
+      throw _privateConstructorUsedError;
   List<dynamic> get photos => throw _privateConstructorUsedError;
   Links? get links => throw _privateConstructorUsedError;
 
@@ -55,12 +56,11 @@ abstract class $PizzaPlaceModelCopyWith<$Res> {
       int? averageRating,
       int? ratings,
       AddressModel? address,
-      Summary? summary,
+      Map<String, PizzaTypeSummary>? summary,
       List<dynamic> photos,
       Links? links});
 
   $AddressModelCopyWith<$Res>? get address;
-  $SummaryCopyWith<$Res>? get summary;
   $LinksCopyWith<$Res>? get links;
 }
 
@@ -125,7 +125,7 @@ class _$PizzaPlaceModelCopyWithImpl<$Res, $Val extends PizzaPlaceModel>
       summary: freezed == summary
           ? _value.summary
           : summary // ignore: cast_nullable_to_non_nullable
-              as Summary?,
+              as Map<String, PizzaTypeSummary>?,
       photos: null == photos
           ? _value.photos
           : photos // ignore: cast_nullable_to_non_nullable
@@ -146,18 +146,6 @@ class _$PizzaPlaceModelCopyWithImpl<$Res, $Val extends PizzaPlaceModel>
 
     return $AddressModelCopyWith<$Res>(_value.address!, (value) {
       return _then(_value.copyWith(address: value) as $Val);
-    });
-  }
-
-  @override
-  @pragma('vm:prefer-inline')
-  $SummaryCopyWith<$Res>? get summary {
-    if (_value.summary == null) {
-      return null;
-    }
-
-    return $SummaryCopyWith<$Res>(_value.summary!, (value) {
-      return _then(_value.copyWith(summary: value) as $Val);
     });
   }
 
@@ -191,14 +179,12 @@ abstract class _$$PizzaPlaceModelImplCopyWith<$Res>
       int? averageRating,
       int? ratings,
       AddressModel? address,
-      Summary? summary,
+      Map<String, PizzaTypeSummary>? summary,
       List<dynamic> photos,
       Links? links});
 
   @override
   $AddressModelCopyWith<$Res>? get address;
-  @override
-  $SummaryCopyWith<$Res>? get summary;
   @override
   $LinksCopyWith<$Res>? get links;
 }
@@ -260,9 +246,9 @@ class __$$PizzaPlaceModelImplCopyWithImpl<$Res>
           : address // ignore: cast_nullable_to_non_nullable
               as AddressModel?,
       summary: freezed == summary
-          ? _value.summary
+          ? _value._summary
           : summary // ignore: cast_nullable_to_non_nullable
-              as Summary?,
+              as Map<String, PizzaTypeSummary>?,
       photos: null == photos
           ? _value._photos
           : photos // ignore: cast_nullable_to_non_nullable
@@ -288,10 +274,11 @@ class _$PizzaPlaceModelImpl implements _PizzaPlaceModel {
       this.averageRating,
       this.ratings,
       this.address,
-      this.summary,
+      final Map<String, PizzaTypeSummary>? summary,
       final List<dynamic> photos = const [],
       this.links})
       : _hoursOpen = hoursOpen,
+        _summary = summary,
         _photos = photos;
 
   factory _$PizzaPlaceModelImpl.fromJson(Map<String, dynamic> json) =>
@@ -323,8 +310,16 @@ class _$PizzaPlaceModelImpl implements _PizzaPlaceModel {
   final int? ratings;
   @override
   final AddressModel? address;
+  final Map<String, PizzaTypeSummary>? _summary;
   @override
-  final Summary? summary;
+  Map<String, PizzaTypeSummary>? get summary {
+    final value = _summary;
+    if (value == null) return null;
+    if (_summary is EqualUnmodifiableMapView) return _summary;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(value);
+  }
+
   final List<dynamic> _photos;
   @override
   @JsonKey()
@@ -358,7 +353,7 @@ class _$PizzaPlaceModelImpl implements _PizzaPlaceModel {
                 other.averageRating == averageRating) &&
             (identical(other.ratings, ratings) || other.ratings == ratings) &&
             (identical(other.address, address) || other.address == address) &&
-            (identical(other.summary, summary) || other.summary == summary) &&
+            const DeepCollectionEquality().equals(other._summary, _summary) &&
             const DeepCollectionEquality().equals(other._photos, _photos) &&
             (identical(other.links, links) || other.links == links));
   }
@@ -375,7 +370,7 @@ class _$PizzaPlaceModelImpl implements _PizzaPlaceModel {
       averageRating,
       ratings,
       address,
-      summary,
+      const DeepCollectionEquality().hash(_summary),
       const DeepCollectionEquality().hash(_photos),
       links);
 
@@ -404,7 +399,7 @@ abstract class _PizzaPlaceModel implements PizzaPlaceModel {
       final int? averageRating,
       final int? ratings,
       final AddressModel? address,
-      final Summary? summary,
+      final Map<String, PizzaTypeSummary>? summary,
       final List<dynamic> photos,
       final Links? links}) = _$PizzaPlaceModelImpl;
 
@@ -430,7 +425,7 @@ abstract class _PizzaPlaceModel implements PizzaPlaceModel {
   @override
   AddressModel? get address;
   @override
-  Summary? get summary;
+  Map<String, PizzaTypeSummary>? get summary;
   @override
   List<dynamic> get photos;
   @override

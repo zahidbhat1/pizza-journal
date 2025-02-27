@@ -13,6 +13,7 @@ import 'package:pizzajournals/presenter/assets.gen.dart';
 import 'package:pizzajournals/presenter/modals/halal_info_modal.dart';
 import 'package:pizzajournals/presenter/pages/discover/place_detail_arguments.dart';
 import 'package:pizzajournals/presenter/pages/discover/widget/review_images.dart';
+import 'package:pizzajournals/presenter/pages/discover/widget/review_summary.dart';
 import 'package:pizzajournals/presenter/themes/colors.dart';
 import 'package:pizzajournals/presenter/widgets/cached_image.dart';
 import 'package:pizzajournals/utils/extensions/string_extensions.dart';
@@ -47,8 +48,18 @@ class PizzaPlacePage extends StatefulWidget {
   }
 }
 
-class _PizzaPlacePageState extends State<PizzaPlacePage> {
+class _PizzaPlacePageState extends State<PizzaPlacePage>
+    with TickerProviderStateMixin {
+  late TabController _tabController;
+  List<String> _pizzaTypes = [];
+  String _selectedPizzaType = "Traditional Round";
+
   DiscoverBloc get _discoverBloc => context.read<DiscoverBloc>();
+  List<Review?> _filterReviewsByType(String pizzaType) {
+    final reviews = _discoverBloc.state.reviews?.reviews ?? [];
+    return reviews.where((review) => review?.pizzaType == pizzaType).toList();
+  }
+
 
   void _handleSuggestionAction(bool isOwner) {
     if (isOwner) {
@@ -59,7 +70,7 @@ class _PizzaPlacePageState extends State<PizzaPlacePage> {
         ),
       );
     } else {
-      // Show suggestion modal for non-owners
+
       showModalBottomSheet(
         context: context,
         isScrollControlled: true,
@@ -93,15 +104,36 @@ class _PizzaPlacePageState extends State<PizzaPlacePage> {
   void initState() {
     super.initState();
     _initialize();
+
+    _pizzaTypes = [
+
+      'Traditional Round',
+      'Sicilian/Square',
+      'Personal',
+      'Grandma/Square',
+      'Deep Dish',
+    ];
+    _tabController = TabController(length: _pizzaTypes.length, vsync: this);
+    _tabController.addListener(() {
+      if (_tabController.index != _tabController.previousIndex) {
+        setState(() {
+          _selectedPizzaType = _pizzaTypes[_tabController.index];
+        });
+        // Dispatch the event to update the state
+        _discoverBloc.add(DiscoverSelectPizzaType(_selectedPizzaType));
+      }
+    });
+    _initialize();
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<DiscoverBloc, DiscoverState>(builder: (context, state) {
+      final filteredReviews = _filterReviewsByType(_selectedPizzaType);
       return Stack(
         children: [
           Scaffold(
-            body: _buildBody(),
+            body: _buildBody(filteredReviews),
           ),
           if (_discoverBloc.state.showLoading)
             Container(
@@ -152,13 +184,19 @@ class _PizzaPlacePageState extends State<PizzaPlacePage> {
     return ((crispyCount / totalReviews) * 100).toInt();
   }
 
-  Widget _buildBody() {
+  Widget _buildBody(List<Review?> filteredReviews){
     final userId = context.read<AuthBloc>().state.user?.id;
     // final bool isOwner = userId == widget.arguments?.pizzaPlaceModel?.ownerId;
     final pizzaReview = _discoverBloc.state.reviews;
     final ownerId = pizzaReview?.userId;
     final bool isOwner = userId == ownerId;
     print('User ID: $userId, Owner ID: $ownerId');
+    final myReviewForSelectedType = _discoverBloc.state.reviews?.reviews
+        ?.firstWhere(
+          (review) =>
+      review?.user?.id == userId && review?.pizzaType == _selectedPizzaType,
+      orElse: () => null,
+    );
 
     return SingleChildScrollView(
       child: Column(
@@ -307,21 +345,30 @@ class _PizzaPlacePageState extends State<PizzaPlacePage> {
             padding: const EdgeInsets.all(15.0),
             child: Row(
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      "Address",
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
-                    ),
-                    Text(
-                        "${widget.arguments?.pizzaPlaceModel?.address?.street} "),
-                    Text(
-                        "${widget.arguments?.pizzaPlaceModel?.address?.state} ${widget.arguments?.pizzaPlaceModel?.address?.zip}"),
-                  ],
+                // Use a fixed fraction of the width
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.5, // Half of screen width
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        "Address",
+                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+                      ),
+                      Text(
+                        "${widget.arguments?.pizzaPlaceModel?.address?.street}",
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                      ),
+                      Text(
+                        "${widget.arguments?.pizzaPlaceModel?.address?.city}",
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                      ),
+                      //${widget.arguments?.pizzaPlaceModel?.address?.zip}
+                    ],
+                  ),
                 ),
-                const Spacer(),
                 const Spacer(),
                 _buildSuggestionButton(isOwner),
               ],
@@ -330,470 +377,559 @@ class _PizzaPlacePageState extends State<PizzaPlacePage> {
           const Divider(
             height: 1,
           ),
+
+          DefaultTabController(
+            length: _pizzaTypes.length,
+            child: Column(
+              children: [
+                Container(
+                  color: AppColors.white,
+                  child: TabBar(
+                    controller: _tabController,
+                    isScrollable: true,
+                    labelColor: AppColors.main,
+                    unselectedLabelColor: AppColors.grey,
+                    indicatorColor: AppColors.main,
+                    padding: EdgeInsets.zero,
+                    tabs: _pizzaTypes.map((type) {
+                      return Tab(text: type);
+                    }).toList(),
+                    onTap: (index) {
+                      setState(() {
+                        _selectedPizzaType = _pizzaTypes[index];
+                      });
+                      _discoverBloc.add(DiscoverSelectPizzaType(_selectedPizzaType));
+                    },
+                  ),
+                ),
+
+                Builder(
+                  builder: (context) {
+
+                    final hasSummary = _discoverBloc.state.reviews?.summaries?[_selectedPizzaType] != null;
+
+                    final height = hasSummary ? 400.0 : 150.0;
+
+                    return SizedBox(
+                      height: height,
+                      child: TabBarView(
+                        controller: _tabController,
+                        children: _pizzaTypes.map((type) {
+                          return ReviewSummaryWidget(
+                            pizzaType: type,
+                            reviews: _discoverBloc.state.reviews,
+                            getCrispyPercentage: getCrispyPercentage,
+                          );
+                        }).toList(),
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
+          ),
+          
+          // reviews
+
           Padding(
             padding: const EdgeInsets.all(15),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  "Review Summary",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Row(
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text("Crust"),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 20.0),
-                          child: Column(
-                            children: [
-                              Row(
-                                children: [
-                                  const Column(
-                                    children: [
-                                      Text("Thick"),
-                                      Text("Thin"),
-                                      Text("Average"),
-                                    ],
-                                  ),
-                                  const SizedBox(
-                                    width: 20,
-                                  ),
-                                  Column(
-                                    children: [
-                                      Stack(
-                                        children: [
-                                          Container(
-                                            width: 80,
-                                            height: 8,
-                                            decoration: BoxDecoration(
-                                                color: AppColors.grey2,
-                                                borderRadius:
-                                                    BorderRadius.circular(4)),
-                                          ),
-                                          Container(
-                                            width: (((_discoverBloc
-                                                                    .state
-                                                                    .reviews
-                                                                    ?.summary
-                                                                    ?.crust!
-                                                                    .crustThick ??
-                                                                0)
-                                                            .toDouble() ??
-                                                        0.0) /
-                                                    100) *
-                                                80,
-                                            height: 8,
-                                            decoration: BoxDecoration(
-                                                color: AppColors.main,
-                                                borderRadius:
-                                                    BorderRadius.circular(4)),
-                                          ),
-                                        ],
-                                      ),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      Stack(
-                                        children: [
-                                          Container(
-                                            width: 80,
-                                            height: 8,
-                                            decoration: BoxDecoration(
-                                                color: AppColors.grey2,
-                                                borderRadius:
-                                                    BorderRadius.circular(4)),
-                                          ),
-                                          Container(
-                                            width: (((_discoverBloc
-                                                                    .state
-                                                                    .reviews
-                                                                    ?.summary
-                                                                    ?.crust!
-                                                                    .crustThin ??
-                                                                0)
-                                                            .toDouble() ??
-                                                        0.0) /
-                                                    100) *
-                                                80,
-                                            height: 8,
-                                            decoration: BoxDecoration(
-                                                color: AppColors.orange,
-                                                borderRadius:
-                                                    BorderRadius.circular(4)),
-                                          ),
-                                        ],
-                                      ),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      Stack(
-                                        children: [
-                                          Container(
-                                            width: 80,
-                                            height: 8,
-                                            decoration: BoxDecoration(
-                                                color: AppColors.grey2,
-                                                borderRadius:
-                                                    BorderRadius.circular(4)),
-                                          ),
-                                          Container(
-                                            width: (((_discoverBloc
-                                                                    .state
-                                                                    .reviews
-                                                                    ?.summary
-                                                                    ?.crust!
-                                                                    .crustAverage ??
-                                                                0)
-                                                            .toDouble() ??
-                                                        0.0) /
-                                                    100) *
-                                                80,
-                                            height: 8,
-                                            decoration: BoxDecoration(
-                                                color: AppColors.lightOrange,
-                                                borderRadius:
-                                                    BorderRadius.circular(4)),
-                                          ),
-                                        ],
-                                      )
-                                    ],
-                                  )
-                                ],
-                              )
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                    const Spacer(),
-                    Column(
-                      children: [
-                        const Text("Crispy"),
-                        Text("${getCrispyPercentage()}%")
-                      ],
-                    )
-                  ],
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text("Sauce"),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 20.0),
-                          child: Column(
-                            children: [
-                              Row(
-                                children: [
-                                  const Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text("Sweet"),
-                                      Text("Spicy"),
-                                      Text("No flavor"),
-                                    ],
-                                  ),
-                                  const SizedBox(
-                                    width: 20,
-                                  ),
-                                  Column(
-                                    children: [
-                                      Stack(
-                                        children: [
-                                          Container(
-                                            width: 80,
-                                            height: 8,
-                                            decoration: BoxDecoration(
-                                                color: AppColors.grey2,
-                                                borderRadius:
-                                                    BorderRadius.circular(4)),
-                                          ),
-                                          Container(
-                                            width: (((_discoverBloc
-                                                                    .state
-                                                                    .reviews
-                                                                    ?.summary
-                                                                    ?.sauce!
-                                                                    .sauceSweet ??
-                                                                0)
-                                                            .toDouble() ??
-                                                        0.0) /
-                                                    100) *
-                                                80,
-                                            height: 8,
-                                            decoration: BoxDecoration(
-                                                color: AppColors.main,
-                                                borderRadius:
-                                                    BorderRadius.circular(4)),
-                                          ),
-                                        ],
-                                      ),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      Stack(
-                                        children: [
-                                          Container(
-                                            width: 80,
-                                            height: 8,
-                                            decoration: BoxDecoration(
-                                                color: AppColors.grey2,
-                                                borderRadius:
-                                                    BorderRadius.circular(4)),
-                                          ),
-                                          Container(
-                                            width: (((_discoverBloc
-                                                                    .state
-                                                                    .reviews
-                                                                    ?.summary
-                                                                    ?.sauce!
-                                                                    .sauceSpicy ??
-                                                                0)
-                                                            .toDouble() ??
-                                                        0.0) /
-                                                    100) *
-                                                80,
-                                            height: 8,
-                                            decoration: BoxDecoration(
-                                                color: AppColors.orange,
-                                                borderRadius:
-                                                    BorderRadius.circular(4)),
-                                          ),
-                                        ],
-                                      ),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      Stack(
-                                        children: [
-                                          Container(
-                                            width: 80,
-                                            height: 8,
-                                            decoration: BoxDecoration(
-                                                color: AppColors.grey2,
-                                                borderRadius:
-                                                    BorderRadius.circular(4)),
-                                          ),
-                                          Container(
-                                            width: (((_discoverBloc
-                                                                    .state
-                                                                    .reviews
-                                                                    ?.summary
-                                                                    ?.sauce!
-                                                                    .sauceNoFlavour ??
-                                                                0)
-                                                            .toDouble() ??
-                                                        0.0) /
-                                                    100) *
-                                                80,
-                                            height: 8,
-                                            decoration: BoxDecoration(
-                                                color: AppColors.lightOrange,
-                                                borderRadius:
-                                                    BorderRadius.circular(4)),
-                                          ),
-                                        ],
-                                      )
-                                    ],
-                                  )
-                                ],
-                              )
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                    const Spacer(),
-                    const Column(
-                      children: [Text("Dry"), Text("80%")],
-                    )
-                  ],
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text("Cheese"),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 20.0),
-                          child: Column(
-                            children: [
-                              Row(
-                                children: [
-                                  const Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text("Great"),
-                                      Text("Ehh"),
-                                    ],
-                                  ),
-                                  const SizedBox(
-                                    width: 20,
-                                  ),
-                                  Column(
-                                    children: [
-                                      Stack(
-                                        children: [
-                                          Container(
-                                            width: 80,
-                                            height: 8,
-                                            decoration: BoxDecoration(
-                                                color: AppColors.grey2,
-                                                borderRadius:
-                                                    BorderRadius.circular(4)),
-                                          ),
-                                          Container(
-                                            width: (((_discoverBloc
-                                                                    .state
-                                                                    .reviews
-                                                                    ?.summary
-                                                                    ?.cheese!
-                                                                    .cheeseGreat ??
-                                                                0)
-                                                            .toDouble() ??
-                                                        0.0) /
-                                                    100) *
-                                                80,
-                                            height: 8,
-                                            decoration: BoxDecoration(
-                                                color: AppColors.main,
-                                                borderRadius:
-                                                    BorderRadius.circular(4)),
-                                          ),
-                                        ],
-                                      ),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      Stack(
-                                        children: [
-                                          Container(
-                                            width: 80,
-                                            height: 8,
-                                            decoration: BoxDecoration(
-                                                color: AppColors.grey2,
-                                                borderRadius:
-                                                    BorderRadius.circular(4)),
-                                          ),
-                                          Container(
-                                            width: (((_discoverBloc
-                                                                    .state
-                                                                    .reviews
-                                                                    ?.summary
-                                                                    ?.cheese!
-                                                                    .cheeseEhh ??
-                                                                0)
-                                                            .toDouble() ??
-                                                        0.0) /
-                                                    100) *
-                                                80,
-                                            height: 8,
-                                            decoration: BoxDecoration(
-                                                color: AppColors.orange,
-                                                borderRadius:
-                                                    BorderRadius.circular(4)),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  )
-                                ],
-                              )
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                    const Spacer(),
-                    const Column(
-                      children: [Text("Fluffy"), Text("80%")],
-                    )
-                  ],
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                if (_discoverBloc.state.myReview != null)
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          const Text("Your Review"),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          Icon(
-                            Icons.star,
-                            color:
-                                (_discoverBloc.state.myReview?.stars ?? 0) > 0
-                                    ? AppColors.green
-                                    : AppColors.grey2,
-                          ),
-                          Icon(
-                            Icons.star,
-                            color:
-                                (_discoverBloc.state.myReview?.stars ?? 0) > 1
-                                    ? AppColors.green
-                                    : AppColors.grey2,
-                          ),
-                          Icon(
-                            Icons.star,
-                            color:
-                                (_discoverBloc.state.myReview?.stars ?? 0) > 2
-                                    ? AppColors.green
-                                    : AppColors.grey2,
-                          ),
-                          Icon(
-                            Icons.star,
-                            color:
-                                (_discoverBloc.state.myReview?.stars ?? 0) > 3
-                                    ? AppColors.green
-                                    : AppColors.grey2,
-                          ),
-                          Icon(
-                            Icons.star,
-                            color:
-                                (_discoverBloc.state.myReview?.stars ?? 0) > 4
-                                    ? AppColors.green
-                                    : AppColors.grey2,
-                          ),
-                        ],
-                      ),
-                      Text(_discoverBloc.state.myReview?.description ?? '',
-                          style: const TextStyle(
-                              fontSize: 14, color: AppColors.grey)),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                    ],
-                  )
-                else
+                // const Text(
+                //   "Review Summary",
+                //   style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+                // ),
+                // const SizedBox(
+                //   height: 20,
+                // ),
+                // Row(
+                //   children: [
+                //     Column(
+                //       crossAxisAlignment: CrossAxisAlignment.start,
+                //       children: [
+                //         const Text("Crust"),
+                //         const SizedBox(
+                //           height: 10,
+                //         ),
+                //         Padding(
+                //           padding: const EdgeInsets.only(left: 20.0),
+                //           child: Column(
+                //             children: [
+                //               Row(
+                //                 children: [
+                //                   const Column(
+                //                     children: [
+                //                       Text("Thick"),
+                //                       Text("Thin"),
+                //                       Text("Average"),
+                //                     ],
+                //                   ),
+                //                   const SizedBox(
+                //                     width: 20,
+                //                   ),
+                //                   Column(
+                //                     children: [
+                //                       Stack(
+                //                         children: [
+                //                           Container(
+                //                             width: 80,
+                //                             height: 8,
+                //                             decoration: BoxDecoration(
+                //                                 color: AppColors.grey2,
+                //                                 borderRadius:
+                //                                     BorderRadius.circular(4)),
+                //                           ),
+                //                           Container(
+                //                             width: (((_discoverBloc
+                //                                                     .state
+                //                                                     .reviews
+                //                                                     ?.summaries?[
+                //                                                         _selectedPizzaType]
+                //                                                     ?.crust
+                //                                                     .thick ??
+                //                                                 0)
+                //                                             .toDouble() ??
+                //                                         0.0) /
+                //                                     100) *
+                //                                 80,
+                //                             height: 8,
+                //                             decoration: BoxDecoration(
+                //                                 color: AppColors.main,
+                //                                 borderRadius:
+                //                                     BorderRadius.circular(4)),
+                //                           ),
+                //                         ],
+                //                       ),
+                //                       const SizedBox(
+                //                         height: 10,
+                //                       ),
+                //                       Stack(
+                //                         children: [
+                //                           Container(
+                //                             width: 80,
+                //                             height: 8,
+                //                             decoration: BoxDecoration(
+                //                                 color: AppColors.grey2,
+                //                                 borderRadius:
+                //                                     BorderRadius.circular(4)),
+                //                           ),
+                //                           Container(
+                //                             width: (((_discoverBloc
+                //                                                     .state
+                //                                                     .reviews
+                //                                                     ?.summaries?[
+                //                                                         _selectedPizzaType]
+                //                                                     ?.crust
+                //                                                     .thin ??
+                //                                                 0)
+                //                                             .toDouble() ??
+                //                                         0.0) /
+                //                                     100) *
+                //                                 80,
+                //                             height: 8,
+                //                             decoration: BoxDecoration(
+                //                                 color: AppColors.orange,
+                //                                 borderRadius:
+                //                                     BorderRadius.circular(4)),
+                //                           ),
+                //                         ],
+                //                       ),
+                //                       const SizedBox(
+                //                         height: 10,
+                //                       ),
+                //                       Stack(
+                //                         children: [
+                //                           Container(
+                //                             width: 80,
+                //                             height: 8,
+                //                             decoration: BoxDecoration(
+                //                                 color: AppColors.grey2,
+                //                                 borderRadius:
+                //                                     BorderRadius.circular(4)),
+                //                           ),
+                //                           Container(
+                //                             width: (((_discoverBloc
+                //                                                     .state
+                //                                                     .reviews
+                //                                                     ?.summaries?[
+                //                                                         _selectedPizzaType]
+                //                                                     ?.crust
+                //                                                     .average ??
+                //                                                 0)
+                //                                             .toDouble() ??
+                //                                         0.0) /
+                //                                     100) *
+                //                                 80,
+                //                             height: 8,
+                //                             decoration: BoxDecoration(
+                //                                 color: AppColors.lightOrange,
+                //                                 borderRadius:
+                //                                     BorderRadius.circular(4)),
+                //                           ),
+                //                         ],
+                //                       )
+                //                     ],
+                //                   )
+                //                 ],
+                //               )
+                //             ],
+                //           ),
+                //         )
+                //       ],
+                //     ),
+                //     const Spacer(),
+                //     Column(
+                //       children: [
+                //         const Text("Crispy"),
+                //         Text("${getCrispyPercentage()}%")
+                //       ],
+                //     )
+                //   ],
+                // ),
+                // const SizedBox(
+                //   height: 10,
+                // ),
+                // Row(
+                //   children: [
+                //     Column(
+                //       crossAxisAlignment: CrossAxisAlignment.start,
+                //       children: [
+                //         const Text("Sauce"),
+                //         const SizedBox(
+                //           height: 10,
+                //         ),
+                //         Padding(
+                //           padding: const EdgeInsets.only(left: 20.0),
+                //           child: Column(
+                //             children: [
+                //               Row(
+                //                 children: [
+                //                   const Column(
+                //                     crossAxisAlignment:
+                //                         CrossAxisAlignment.start,
+                //                     children: [
+                //                       Text("Sweet"),
+                //                       Text("Spicy"),
+                //                       Text("No flavor"),
+                //                     ],
+                //                   ),
+                //                   const SizedBox(
+                //                     width: 20,
+                //                   ),
+                //                   Column(
+                //                     children: [
+                //                       Stack(
+                //                         children: [
+                //                           Container(
+                //                             width: 80,
+                //                             height: 8,
+                //                             decoration: BoxDecoration(
+                //                                 color: AppColors.grey2,
+                //                                 borderRadius:
+                //                                     BorderRadius.circular(4)),
+                //                           ),
+                //                           Container(
+                //                             width: (((_discoverBloc
+                //                                                     .state
+                //                                                     .reviews
+                //                                                     ?.summaries?[
+                //                                                         _selectedPizzaType]
+                //                                                     ?.sauce
+                //                                                     .sweet ??
+                //                                                 0)
+                //                                             .toDouble() ??
+                //                                         0.0) /
+                //                                     100) *
+                //                                 80,
+                //                             height: 8,
+                //                             decoration: BoxDecoration(
+                //                                 color: AppColors.main,
+                //                                 borderRadius:
+                //                                     BorderRadius.circular(4)),
+                //                           ),
+                //                         ],
+                //                       ),
+                //                       const SizedBox(
+                //                         height: 10,
+                //                       ),
+                //                       Stack(
+                //                         children: [
+                //                           Container(
+                //                             width: 80,
+                //                             height: 8,
+                //                             decoration: BoxDecoration(
+                //                                 color: AppColors.grey2,
+                //                                 borderRadius:
+                //                                     BorderRadius.circular(4)),
+                //                           ),
+                //                           Container(
+                //                             width: (((_discoverBloc
+                //                                                     .state
+                //                                                     .reviews
+                //                                                     ?.summaries?[_selectedPizzaType]
+                //                                                     ?.sauce!
+                //                                                     .spicy ??
+                //                                                 0)
+                //                                             .toDouble() ??
+                //                                         0.0) /
+                //                                     100) *
+                //                                 80,
+                //                             height: 8,
+                //                             decoration: BoxDecoration(
+                //                                 color: AppColors.orange,
+                //                                 borderRadius:
+                //                                     BorderRadius.circular(4)),
+                //                           ),
+                //                         ],
+                //                       ),
+                //                       const SizedBox(
+                //                         height: 10,
+                //                       ),
+                //                       Stack(
+                //                         children: [
+                //                           Container(
+                //                             width: 80,
+                //                             height: 8,
+                //                             decoration: BoxDecoration(
+                //                                 color: AppColors.grey2,
+                //                                 borderRadius:
+                //                                     BorderRadius.circular(4)),
+                //                           ),
+                //                           Container(
+                //                             width: (((_discoverBloc
+                //                                                     .state
+                //                                 .reviews
+                //                                 ?.summaries?[_selectedPizzaType]
+                //                                 ?.sauce!
+                //                                 .noflavour ??
+                //                                                 0)
+                //                                             .toDouble() ??
+                //                                         0.0) /
+                //                                     100) *
+                //                                 80,
+                //                             height: 8,
+                //                             decoration: BoxDecoration(
+                //                                 color: AppColors.lightOrange,
+                //                                 borderRadius:
+                //                                     BorderRadius.circular(4)),
+                //                           ),
+                //                         ],
+                //                       )
+                //                     ],
+                //                   )
+                //                 ],
+                //               )
+                //             ],
+                //           ),
+                //         )
+                //       ],
+                //     ),
+                //     const Spacer(),
+                //     const Column(
+                //       children: [Text("Dry"), Text("80%")],
+                //     )
+                //   ],
+                // ),
+                // const SizedBox(
+                //   height: 10,
+                // ),
+                // Row(
+                //   children: [
+                //     Column(
+                //       crossAxisAlignment: CrossAxisAlignment.start,
+                //       children: [
+                //         const Text("Cheese"),
+                //         const SizedBox(
+                //           height: 10,
+                //         ),
+                //         Padding(
+                //           padding: const EdgeInsets.only(left: 20.0),
+                //           child: Column(
+                //             children: [
+                //               Row(
+                //                 children: [
+                //                   const Column(
+                //                     crossAxisAlignment:
+                //                         CrossAxisAlignment.start,
+                //                     children: [
+                //                       Text("Great"),
+                //                       Text("Ehh"),
+                //                     ],
+                //                   ),
+                //                   const SizedBox(
+                //                     width: 20,
+                //                   ),
+                //                   Column(
+                //                     children: [
+                //                       Stack(
+                //                         children: [
+                //                           Container(
+                //                             width: 80,
+                //                             height: 8,
+                //                             decoration: BoxDecoration(
+                //                                 color: AppColors.grey2,
+                //                                 borderRadius:
+                //                                     BorderRadius.circular(4)),
+                //                           ),
+                //                           Container(
+                //                             width: (((_discoverBloc
+                //                                                     .state
+                //                                                     .reviews
+                //                                                     ?.summaries?[_selectedPizzaType]
+                //                                                     ?.cheese!
+                //                                                     .heavy ??
+                //                                                 0)
+                //                                             .toDouble() ??
+                //                                         0.0) /
+                //                                     100) *
+                //                                 80,
+                //                             height: 8,
+                //                             decoration: BoxDecoration(
+                //                                 color: AppColors.main,
+                //                                 borderRadius:
+                //                                     BorderRadius.circular(4)),
+                //                           ),
+                //                         ],
+                //                       ),
+                //                       const SizedBox(
+                //                         height: 10,
+                //                       ),
+                //                       Stack(
+                //                         children: [
+                //                           Container(
+                //                             width: 80,
+                //                             height: 8,
+                //                             decoration: BoxDecoration(
+                //                                 color: AppColors.grey2,
+                //                                 borderRadius:
+                //                                     BorderRadius.circular(4)),
+                //                           ),
+                //                           Container(
+                //                             width: (((_discoverBloc
+                //                                                     .state
+                //                                                     .reviews
+                //                                                     ?.summaries?[_selectedPizzaType]
+                //                                                     ?.cheese!
+                //                                                     .light ??
+                //                                                 0)
+                //                                             .toDouble() ??
+                //                                         0.0) /
+                //                                     100) *
+                //                                 80,
+                //                             height: 8,
+                //                             decoration: BoxDecoration(
+                //                                 color: AppColors.orange,
+                //                                 borderRadius:
+                //                                     BorderRadius.circular(4)),
+                //                           ),
+                //                         ],
+                //                       ),
+                //                     ],
+                //                   )
+                //                 ],
+                //               )
+                //             ],
+                //           ),
+                //         )
+                //       ],
+                //     ),
+                //     const Spacer(),
+                //     const Column(
+                //       children: [Text("Fluffy"), Text("80%")],
+                //     )
+                //   ],
+                // ),
+                // const SizedBox(
+                //   height: 10,
+                // ),
+                // if (_discoverBloc.state.myReview != null)
+                //   Column(
+                //     crossAxisAlignment: CrossAxisAlignment.start,
+                //     children: [
+                //       Row(
+                //         children: [
+                //           const Text("Your Review"),
+                //           const SizedBox(
+                //             width: 10,
+                //           ),
+                //           Icon(
+                //             Icons.star,
+                //             color:
+                //                 (_discoverBloc.state.myReview?.stars ?? 0) > 0
+                //                     ? AppColors.green
+                //                     : AppColors.grey2,
+                //           ),
+                //           Icon(
+                //             Icons.star,
+                //             color:
+                //                 (_discoverBloc.state.myReview?.stars ?? 0) > 1
+                //                     ? AppColors.green
+                //                     : AppColors.grey2,
+                //           ),
+                //           Icon(
+                //             Icons.star,
+                //             color:
+                //                 (_discoverBloc.state.myReview?.stars ?? 0) > 2
+                //                     ? AppColors.green
+                //                     : AppColors.grey2,
+                //           ),
+                //           Icon(
+                //             Icons.star,
+                //             color:
+                //                 (_discoverBloc.state.myReview?.stars ?? 0) > 3
+                //                     ? AppColors.green
+                //                     : AppColors.grey2,
+                //           ),
+                //           Icon(
+                //             Icons.star,
+                //             color:
+                //                 (_discoverBloc.state.myReview?.stars ?? 0) > 4
+                //                     ? AppColors.green
+                //                     : AppColors.grey2,
+                //           ),
+                //         ],
+                //       ),
+                //       Text(_discoverBloc.state.myReview?.description ?? '',
+                //           style: const TextStyle(
+                //               fontSize: 14, color: AppColors.grey)),
+                //       const SizedBox(
+                //         height: 10,
+                //       ),
+                //     ],
+                //   )
+                // else
+                //   Center(
+                //     child: GestureDetector(
+                //       onTap: () {
+                //         showDialog(
+                //           context: context,
+                //           builder: (BuildContext context) {
+                //             return HalalInfoModal(onSubmit: (data) {
+                //               data["pizzaPlaceId"] =
+                //                   widget.arguments?.pizzaPlaceModel?.id;
+                //               data["photos"] = [];
+                //               _discoverBloc.add(DiscoverAddPlaceReview(data));
+                //               Navigator.pop(context);
+                //             });
+                //           },
+                //         );
+                //       },
+                //       child: Container(
+                //         padding: const EdgeInsets.all(10),
+                //         margin: const EdgeInsets.all(10),
+                //         decoration: BoxDecoration(
+                //             color: AppColors.main,
+                //             borderRadius: BorderRadius.circular(10)),
+                //         child: const Text(
+                //           "Write A Review",
+                //           style: TextStyle(color: AppColors.white),
+                //         ),
+                //       ),
+                //     ),
+                //   ),
+
+                if (myReviewForSelectedType == null)
                   Center(
                     child: GestureDetector(
                       onTap: () {
@@ -804,6 +940,7 @@ class _PizzaPlacePageState extends State<PizzaPlacePage> {
                               data["pizzaPlaceId"] =
                                   widget.arguments?.pizzaPlaceModel?.id;
                               data["photos"] = [];
+                              data["pizzaType"] = _selectedPizzaType; // Add selected pizza type
                               _discoverBloc.add(DiscoverAddPlaceReview(data));
                               Navigator.pop(context);
                             });
@@ -814,8 +951,9 @@ class _PizzaPlacePageState extends State<PizzaPlacePage> {
                         padding: const EdgeInsets.all(10),
                         margin: const EdgeInsets.all(10),
                         decoration: BoxDecoration(
-                            color: AppColors.main,
-                            borderRadius: BorderRadius.circular(10)),
+                          color: AppColors.main,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                         child: const Text(
                           "Write A Review",
                           style: TextStyle(color: AppColors.white),
@@ -830,11 +968,16 @@ class _PizzaPlacePageState extends State<PizzaPlacePage> {
                 const SizedBox(
                   height: 10,
                 ),
-                const Row(
+                 Row(
                   children: [
-                    Text("Traditional Pizza",
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.w600)),
+                    Text(
+                      _selectedPizzaType, // Dynamic text based on selected pizza type
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+
                     Spacer(),
                     Text("3.1 miles away",
                         style: TextStyle(fontSize: 18, color: AppColors.grey)),
@@ -842,9 +985,8 @@ class _PizzaPlacePageState extends State<PizzaPlacePage> {
                 ),
                 if (_discoverBloc.state.reviews != null)
                   Column(
-                    children: _discoverBloc.state.reviews!.reviews!.map((item) {
-                      return buildItem(
-                          item); // Use parentheses instead of curly braces
+                    children: filteredReviews.map((item) {
+                      return buildItem(item);
                     }).toList(),
                   )
               ],

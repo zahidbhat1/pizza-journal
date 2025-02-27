@@ -8,9 +8,10 @@ part 'pizza_review_model.g.dart';
 class PizzaReviewModel with _$PizzaReviewModel {
   @JsonSerializable(fieldRename: FieldRename.none)
   const factory PizzaReviewModel({
-    required Summary? summary,
+    // Change from "summaries" to "summary" to match API
+    @JsonKey(name: 'summary') Map<String, PizzaTypeSummary>? summaries,
     @Default([]) List<Review?>? reviews,
-    required String? userId,
+    String? userId,
   }) = _PizzaReviewModel;
 
   factory PizzaReviewModel.fromJson(Map<String, Object?> json) =>
@@ -18,51 +19,59 @@ class PizzaReviewModel with _$PizzaReviewModel {
 }
 
 @freezed
-class Summary with _$Summary {
+class PizzaTypeSummary with _$PizzaTypeSummary {
   @JsonSerializable(fieldRename: FieldRename.none)
-  const factory Summary({
-    required Sauce? sauce,
-    required Cheese? cheese,
-    required Crust? crust,
-  }) = _Summary;
+  const factory PizzaTypeSummary({
+    required CrustSummary crust,
+    required SauceSummary sauce,
+    required CheeseSummary cheese,
+    required int count, // Number of reviews for this pizza type
+  }) = _PizzaTypeSummary;
 
-  factory Summary.fromJson(Map<String, Object?> json) =>
-      _$SummaryFromJson(json);
+  factory PizzaTypeSummary.fromJson(Map<String, Object?> json) =>
+      _$PizzaTypeSummaryFromJson(json);
 }
 
 @freezed
-class Sauce with _$Sauce {
+class CrustSummary with _$CrustSummary {
   @JsonSerializable(fieldRename: FieldRename.none)
-  const factory Sauce({
-    required int? sauceSweet,
-    required int? sauceSpicy,
-    required int? sauceNoFlavour,
-  }) = _Sauce;
+  const factory CrustSummary({
+    required int thin,
+    required int thick,
+    required int average,
+    required int crispy,  // Kept as int because it's a percentage (100 = fully crispy)
+    required int dry,     // Kept as int because it's a percentage
+    required int fluffy,
+  }) = _CrustSummary;
 
-  factory Sauce.fromJson(Map<String, Object?> json) => _$SauceFromJson(json);
+  factory CrustSummary.fromJson(Map<String, Object?> json) =>
+      _$CrustSummaryFromJson(json);
 }
 
 @freezed
-class Cheese with _$Cheese {
+class SauceSummary with _$SauceSummary {
   @JsonSerializable(fieldRename: FieldRename.none)
-  const factory Cheese({
-    required int? cheeseGreat,
-    required int? cheeseEhh,
-  }) = _Cheese;
+  const factory SauceSummary({
+    required int sweet,
+    required int spicy,
+    required int noflavour,
+  }) = _SauceSummary;
 
-  factory Cheese.fromJson(Map<String, Object?> json) => _$CheeseFromJson(json);
+  factory SauceSummary.fromJson(Map<String, Object?> json) =>
+      _$SauceSummaryFromJson(json);
 }
 
 @freezed
-class Crust with _$Crust {
+class CheeseSummary with _$CheeseSummary {
   @JsonSerializable(fieldRename: FieldRename.none)
-  const factory Crust({
-    required int? crustAverage,
-    required int? crustThick,
-    required int? crustThin,
-  }) = _Crust;
+  const factory CheeseSummary({
+    required int heavy,
+    required int light,
+    required int average,
+  }) = _CheeseSummary;
 
-  factory Crust.fromJson(Map<String, Object?> json) => _$CrustFromJson(json);
+  factory CheeseSummary.fromJson(Map<String, Object?> json) =>
+      _$CheeseSummaryFromJson(json);
 }
 
 @freezed
@@ -83,15 +92,18 @@ class Review with _$Review {
     required String? updatedAt,
   }) = _Review;
 
-  factory Review.fromJson(Map<String, Object?> json) => _$ReviewFromJson(json);
+  factory Review.fromJson(Map<String, Object?> json) =>
+      _$ReviewFromJson(json);
 }
 
 @freezed
 class CrustReview with _$CrustReview {
   @JsonSerializable(fieldRename: FieldRename.none)
   const factory CrustReview({
-    @Default([]) List<String?>? thickness,
+    required String? thickness,
     required bool crispy,
+    bool? dry,      // ✅ Change from `required bool` to `bool?`
+    bool? fluffy,
   }) = _CrustReview;
 
   factory CrustReview.fromJson(Map<String, Object?> json) =>

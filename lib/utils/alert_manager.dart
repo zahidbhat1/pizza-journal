@@ -57,6 +57,26 @@ class AlertManager {
     }
   }
 
+  void showValidation({
+    String? title,
+    String? message,
+  }) {
+    final titleIsNotEmpty = title?.isNotEmpty ?? false;
+    final messageIsNotEmpty = message?.isNotEmpty ?? false;
+    final showMessage = titleIsNotEmpty || messageIsNotEmpty;
+    if (context != null && showMessage) {
+      Flushbar(
+        title: title,
+        message: message,
+        backgroundColor: AppColors.orange,
+        duration: const Duration(seconds: 3),
+        flushbarPosition: FlushbarPosition.TOP,
+        margin: const EdgeInsets.symmetric(horizontal: 16),
+        borderRadius: const BorderRadius.all(Radius.circular(8)),
+      ).show(context!);
+    }
+  }
+
   void showFeatureNotAvailable({
     String? message,
   }) {

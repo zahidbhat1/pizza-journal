@@ -28,6 +28,7 @@ class _MapLocationPickerState extends State<MapLocationPicker> {
   LatLng? _selectedLocation;
   Set<Marker> _markers = {};
   bool _isManualUpdate = false;
+  //this.isInteractionEnabled = true,
 
   @override
   void initState() {
@@ -65,12 +66,12 @@ class _MapLocationPickerState extends State<MapLocationPicker> {
           markerId: const MarkerId('selected_location'),
           position: location,
           draggable: true,
-          onDragEnd: (newPosition) {
-            if (!_isManualUpdate) {
-              _updateLocation(newPosition, isManual: false);
-              widget.onLocationSelected(newPosition);
-            }
-          },
+          // onDragEnd: (newPosition) {
+          //   if (!_isManualUpdate) {
+          //     _updateLocation(newPosition, isManual: false);
+          //     widget.onLocationSelected(newPosition);
+          //   }
+          // },
         ),
       };
     });
@@ -82,7 +83,6 @@ class _MapLocationPickerState extends State<MapLocationPicker> {
     );
 
     if (!isManual) {
-      getAddressFromLatLng(location.latitude, location.longitude);
       widget.onLocationSelected(location);
     }
   }
@@ -99,13 +99,10 @@ class _MapLocationPickerState extends State<MapLocationPicker> {
         borderRadius: BorderRadius.circular(8),
         child: BlocListener<DiscoverBloc, DiscoverState>(
           listener: (context, state) {
-            if (state.fetchedLocation != null) {
-              final location = LatLng(
-                state.fetchedLocation!.latitude,
-                state.fetchedLocation!.longitude,
-              );
-              _updateLocation(location, isManual: true);
+            if (state.selectedMapLocation != null) {
+              _updateLocation(state.selectedMapLocation!, isManual: true);
             }
+            // You can remove this listener if you don't want to fetch the location when the state changes.
           },
           child: GoogleMap(
             initialCameraPosition: CameraPosition(
@@ -114,20 +111,20 @@ class _MapLocationPickerState extends State<MapLocationPicker> {
             ),
             onMapCreated: (controller) => _mapController = controller,
             markers: _markers,
-            onTap: (location) {
-              if (!_isManualUpdate) {
-                _updateLocation(location, isManual: false);
-              }
-              _isManualUpdate = false;
-            },
+            // onTap: (location) {
+            //   if (!_isManualUpdate) {
+            //     _updateLocation(location, isManual: false);
+            //   }
+            //   _isManualUpdate = false;
+            // },
             myLocationEnabled: true,
             myLocationButtonEnabled: true,
             gestureRecognizers: {}
               ..add(Factory<PanGestureRecognizer>(() => PanGestureRecognizer()))
               ..add(Factory<VerticalDragGestureRecognizer>(
-                  () => VerticalDragGestureRecognizer()))
+                      () => VerticalDragGestureRecognizer()))
               ..add(Factory<ScaleGestureRecognizer>(
-                  () => ScaleGestureRecognizer()))
+                      () => ScaleGestureRecognizer()))
               ..add(
                   Factory<TapGestureRecognizer>(() => TapGestureRecognizer())),
           ),
@@ -135,33 +132,35 @@ class _MapLocationPickerState extends State<MapLocationPicker> {
       ),
     );
   }
-
-  Future<void> getAddressFromLatLng(double latitude, double longitude) async {
-    try {
-      List<Placemark> placemarks =
-          await placemarkFromCoordinates(latitude, longitude);
-
-      if (placemarks.isNotEmpty) {
-        Placemark place = placemarks.first;
-        String street = [place.street?.trim(), place.subLocality?.trim()]
-            .where((s) => s != null && s.isNotEmpty)
-            .join(" ");
-
-        String pincode = place.postalCode ?? "";
-        String city = place.locality ?? "";
-        String state = place.administrativeArea ?? "";
-        String country = place.country ?? "";
-
-        context.read<DiscoverBloc>().add(LocationSelected(
-              street: street,
-              pincode: pincode,
-              city: city,
-              state: state,
-              country: country,
-            ));
-      }
-    } catch (e) {
-      print("Error fetching address: $e");
-    }
-  }
 }
+
+
+//   Future<void> getAddressFromLatLng(double latitude, double longitude) async {
+//     try {
+//       List<Placemark> placemarks =
+//           await placemarkFromCoordinates(latitude, longitude);
+//
+//       if (placemarks.isNotEmpty) {
+//         Placemark place = placemarks.first;
+//         String street = [place.street?.trim(), place.subLocality?.trim()]
+//             .where((s) => s != null && s.isNotEmpty)
+//             .join(" ");
+//
+//         String pincode = place.postalCode ?? "";
+//         String city = place.locality ?? "";
+//         String state = place.administrativeArea ?? "";
+//         String country = place.country ?? "";
+//
+//         context.read<DiscoverBloc>().add(LocationSelected(
+//               street: street,
+//               pincode: pincode,
+//               city: city,
+//               state: state,
+//               country: country,
+//             ));
+//       }
+//     } catch (e) {
+//       print("Error fetching address: $e");
+//     }
+//   }
+// }

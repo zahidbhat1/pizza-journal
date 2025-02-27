@@ -8,6 +8,7 @@ class LoginState with _$LoginState {
     String? email,
     String? password,
     @Default(false) bool isLoginLoading,
+    @Default(false) bool isEmailValid,
     @Default(false) bool isLoginEnable,
     @Default(false) bool isContinueWithAppleLoading,
     @Default(false) bool isContinueWithAppleShow,

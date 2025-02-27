@@ -7,6 +7,7 @@ import 'package:injectable/injectable.dart';
 import 'package:path/path.dart';
 import 'package:pizzajournals/data/source/network/api_path.dart';
 import 'package:pizzajournals/data/source/network/api_response_extensions.dart';
+import 'package:pizzajournals/data/source/network/extensions/app_error_extension.dart';
 import 'package:pizzajournals/data/source/network/models/data_item.dart';
 import 'package:pizzajournals/data/source/network/models/data_list.dart';
 import 'package:pizzajournals/data/source/network/models/login_model.dart';
@@ -16,12 +17,15 @@ import 'package:pizzajournals/data/source/network/models/user_model.dart';
 import 'package:pizzajournals/data/source/network/network.dart';
 import 'package:pizzajournals/utils/extensions/map_extensions.dart';
 
+import '../error/app_exception.dart';
+import 'models/placeDetails.dart';
 import 'models/place_suggestion.dart';
 import 'models/place_suggestion_model.dart';
 
 @singleton
 class UserDataSource {
   final NetworkManager _networkManager;
+
 
   const UserDataSource({
     required NetworkManager networkManager,
@@ -157,6 +161,21 @@ class UserDataSource {
       rethrow;
     }
   }
+  Future<PlaceDetails> getPlaceDetails(String placeId) async {
+
+    final url = 'https://maps.googleapis.com/maps/api/place/details/json?place_id=$placeId&fields=geometry&key=AIzaSyCfdv9Fo_Mxst5ASKrWXGh74YTskTlsHZ4';
+
+    final response = await Dio().get(url);
+
+    if (response.statusCode == 200) {
+      final data = response.data;
+      if (data['status'] == 'OK') {
+        return PlaceDetails.fromJson(data['result']);
+      }
+    }
+
+    throw Exception('Failed to fetch place details');
+  }
 
   Future<DataItem<dynamic>> editPizzaPlace({
     required Map<String, dynamic> data,
@@ -208,8 +227,7 @@ class UserDataSource {
       rethrow;
     }
   }
-
-  Future<void> addPizzaPlace({
+  Future<PizzaPlaceModel> addPizzaPlace({
     required Map<String, dynamic> data,
     required List<File?> files,
   }) async {
@@ -221,14 +239,25 @@ class UserDataSource {
       //   LoginModel.fromJsonModel,
       //   dataJsonKeyName: 'data',
       // );
-
-      print(response.responseData);
-      // return dataItem.data;
-    } catch (_) {
-      rethrow;
+      // if(response.statusCode==200){
+      //   return "Added";
+      // }else{
+      //   response.
+      // }
+      if (response.statusCode == 200) {
+        final pizzaPlaceData = response.responseData["data"];
+        if (pizzaPlaceData != null) {
+          return PizzaPlaceModel.fromJson(pizzaPlaceData); // ✅ Returning actual model
+        } else {
+          throw Exception("Failed to parse pizza place data.");
+        }
+      } else {
+        throw Exception(response.responseData["message"] ?? "Failed to add pizza place");
+      }
+    } catch (e) {
+      throw Exception("Error adding pizza place: ${e.toString()}");
     }
   }
-
   Future<bool> validateRegister({
     required String email,
     required String name,
@@ -329,26 +358,68 @@ class UserDataSource {
     }
   }
 
-  Future<DataList<PizzaPlaceModel>> getPizzaPlaces(
-      {required Map<String, dynamic> query}) async {
+  Future<DataList<PizzaPlaceModel>> getPizzaPlaces({required Map<String, dynamic> query}) async {
     try {
       final response = await _networkManager.request(
-          RequestMethod.get, ApiPath.searchPlaces,
-          queryParameters: query);
-      var data = DataList<PizzaPlaceModel>.fromJson(
+        RequestMethod.get,
+        ApiPath.searchPlaces,
+        queryParameters: query,
+      );
+
+      // Handle specific HTTP error responses
+      if (response.statusCode == 408) {
+        throw ServerException(
+          type: ServerExceptionType.timeOut,
+          message: 'The request timed out. Please try again later.',
+        );
+      }
+
+      if (response.statusCode == 500) {
+        throw ServerException(
+          type: ServerExceptionType.internal,
+          message: 'An internal server error occurred. Please try again later.',
+        );
+      }
+
+      if (response.data is Map<String, dynamic> && response.data['error'] != null) {
+        throw ServerException(
+          type: ServerExceptionType.general,
+          message: response.data['error'] as String,
+        );
+      }
+
+      return DataList<PizzaPlaceModel>.fromJson(
         response.responseData,
         PizzaPlaceModel.fromJsonModel,
         dataJsonKeyName: 'data',
       );
-      print("=====");
-      print(data);
-      print("=====");
-      return data;
-    } catch (_) {
-      return DataList(data: []);
-      rethrow;
+
+    } on DioException catch (e) {
+      // ✅ Ensure Dio errors are correctly classified
+      final type = switch (e.type) {
+        DioExceptionType.connectionTimeout ||
+        DioExceptionType.sendTimeout ||
+        DioExceptionType.receiveTimeout => ServerExceptionType.timeOut,
+        DioExceptionType.connectionError => ServerExceptionType.noInternet,
+        _ => ServerExceptionType.unknown,
+      };
+
+      throw ServerException(
+        type: type,
+        message: type == ServerExceptionType.noInternet
+            ? 'No internet connection. Please check your network and try again.'
+            : 'An unexpected network error occurred.',
+      );
+
+    } catch (e) {
+      // Catch all other unexpected errors
+      throw ServerException(
+        type: ServerExceptionType.unknown,
+        message: 'An unexpected error occurred.',
+      );
     }
   }
+
 
   Future<DataList<PizzaPlaceModel>> getUserPizzaPlaces() async {
     try {

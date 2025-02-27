@@ -19,6 +19,7 @@ mixin _$LoginState {
   String? get email => throw _privateConstructorUsedError;
   String? get password => throw _privateConstructorUsedError;
   bool get isLoginLoading => throw _privateConstructorUsedError;
+  bool get isEmailValid => throw _privateConstructorUsedError;
   bool get isLoginEnable => throw _privateConstructorUsedError;
   bool get isContinueWithAppleLoading => throw _privateConstructorUsedError;
   bool get isContinueWithAppleShow => throw _privateConstructorUsedError;
@@ -40,6 +41,7 @@ abstract class $LoginStateCopyWith<$Res> {
       {String? email,
       String? password,
       bool isLoginLoading,
+      bool isEmailValid,
       bool isLoginEnable,
       bool isContinueWithAppleLoading,
       bool isContinueWithAppleShow,
@@ -63,6 +65,7 @@ class _$LoginStateCopyWithImpl<$Res, $Val extends LoginState>
     Object? email = freezed,
     Object? password = freezed,
     Object? isLoginLoading = null,
+    Object? isEmailValid = null,
     Object? isLoginEnable = null,
     Object? isContinueWithAppleLoading = null,
     Object? isContinueWithAppleShow = null,
@@ -81,6 +84,10 @@ class _$LoginStateCopyWithImpl<$Res, $Val extends LoginState>
       isLoginLoading: null == isLoginLoading
           ? _value.isLoginLoading
           : isLoginLoading // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isEmailValid: null == isEmailValid
+          ? _value.isEmailValid
+          : isEmailValid // ignore: cast_nullable_to_non_nullable
               as bool,
       isLoginEnable: null == isLoginEnable
           ? _value.isLoginEnable
@@ -118,6 +125,7 @@ abstract class _$$LoginStateImplCopyWith<$Res>
       {String? email,
       String? password,
       bool isLoginLoading,
+      bool isEmailValid,
       bool isLoginEnable,
       bool isContinueWithAppleLoading,
       bool isContinueWithAppleShow,
@@ -139,6 +147,7 @@ class __$$LoginStateImplCopyWithImpl<$Res>
     Object? email = freezed,
     Object? password = freezed,
     Object? isLoginLoading = null,
+    Object? isEmailValid = null,
     Object? isLoginEnable = null,
     Object? isContinueWithAppleLoading = null,
     Object? isContinueWithAppleShow = null,
@@ -157,6 +166,10 @@ class __$$LoginStateImplCopyWithImpl<$Res>
       isLoginLoading: null == isLoginLoading
           ? _value.isLoginLoading
           : isLoginLoading // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isEmailValid: null == isEmailValid
+          ? _value.isEmailValid
+          : isEmailValid // ignore: cast_nullable_to_non_nullable
               as bool,
       isLoginEnable: null == isLoginEnable
           ? _value.isLoginEnable
@@ -189,6 +202,7 @@ class _$LoginStateImpl implements _LoginState {
       {this.email,
       this.password,
       this.isLoginLoading = false,
+      this.isEmailValid = false,
       this.isLoginEnable = false,
       this.isContinueWithAppleLoading = false,
       this.isContinueWithAppleShow = false,
@@ -202,6 +216,9 @@ class _$LoginStateImpl implements _LoginState {
   @override
   @JsonKey()
   final bool isLoginLoading;
+  @override
+  @JsonKey()
+  final bool isEmailValid;
   @override
   @JsonKey()
   final bool isLoginEnable;
@@ -220,7 +237,7 @@ class _$LoginStateImpl implements _LoginState {
 
   @override
   String toString() {
-    return 'LoginState(email: $email, password: $password, isLoginLoading: $isLoginLoading, isLoginEnable: $isLoginEnable, isContinueWithAppleLoading: $isContinueWithAppleLoading, isContinueWithAppleShow: $isContinueWithAppleShow, isContinueWithFacebookLoading: $isContinueWithFacebookLoading, isContinueWithGoogleLoading: $isContinueWithGoogleLoading)';
+    return 'LoginState(email: $email, password: $password, isLoginLoading: $isLoginLoading, isEmailValid: $isEmailValid, isLoginEnable: $isLoginEnable, isContinueWithAppleLoading: $isContinueWithAppleLoading, isContinueWithAppleShow: $isContinueWithAppleShow, isContinueWithFacebookLoading: $isContinueWithFacebookLoading, isContinueWithGoogleLoading: $isContinueWithGoogleLoading)';
   }
 
   @override
@@ -233,6 +250,8 @@ class _$LoginStateImpl implements _LoginState {
                 other.password == password) &&
             (identical(other.isLoginLoading, isLoginLoading) ||
                 other.isLoginLoading == isLoginLoading) &&
+            (identical(other.isEmailValid, isEmailValid) ||
+                other.isEmailValid == isEmailValid) &&
             (identical(other.isLoginEnable, isLoginEnable) ||
                 other.isLoginEnable == isLoginEnable) &&
             (identical(other.isContinueWithAppleLoading,
@@ -258,6 +277,7 @@ class _$LoginStateImpl implements _LoginState {
       email,
       password,
       isLoginLoading,
+      isEmailValid,
       isLoginEnable,
       isContinueWithAppleLoading,
       isContinueWithAppleShow,
@@ -276,6 +296,7 @@ abstract class _LoginState implements LoginState {
       {final String? email,
       final String? password,
       final bool isLoginLoading,
+      final bool isEmailValid,
       final bool isLoginEnable,
       final bool isContinueWithAppleLoading,
       final bool isContinueWithAppleShow,
@@ -288,6 +309,8 @@ abstract class _LoginState implements LoginState {
   String? get password;
   @override
   bool get isLoginLoading;
+  @override
+  bool get isEmailValid;
   @override
   bool get isLoginEnable;
   @override

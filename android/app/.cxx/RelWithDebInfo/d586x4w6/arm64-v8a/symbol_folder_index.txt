@@ -1,0 +1,1 @@
+D:\flutter\projects\pizza journal\build\app\intermediates\cxx\RelWithDebInfo\d586x4w6\obj\arm64-v8a

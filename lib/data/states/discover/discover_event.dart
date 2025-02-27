@@ -34,6 +34,8 @@ class DiscoverEvent with _$DiscoverEvent {
 
   const factory DiscoverEvent.updateMapLocation(LatLng location) =
       UpdateMapLocation;
+  const factory DiscoverEvent.fetchPlaceDetails(String placeId) = FetchPlaceDetails;
+  const factory DiscoverEvent.selectPizzaType(String pizzaType) = DiscoverSelectPizzaType;
 
   const factory DiscoverEvent.submitEdit({
     required Map<String, dynamic> data,

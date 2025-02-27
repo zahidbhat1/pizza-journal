@@ -17,7 +17,7 @@ class PizzaPlaceModel with _$PizzaPlaceModel {
     int? averageRating,
     int? ratings,
     AddressModel? address,
-    Summary? summary,
+    Map<String, PizzaTypeSummary>? summary,
     @Default([]) List photos,
     Links? links,
   }) = _PizzaPlaceModel;

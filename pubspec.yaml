@@ -45,7 +45,7 @@ dependencies:
 
   # Parsing
   freezed_annotation: ^2.4.1
-  json_annotation: ^4.8.1
+  json_annotation: ^4.9.0
 
   # Functional Programming
   stream_transform: ^2.1.0
@@ -77,13 +77,13 @@ dependencies:
   image: ^4.0.0
   path: ^1.8.0
 
-  device_info_plus: ^9.0.3
+  device_info_plus: ^11.3.0
   flutter_local_notifications: ^18.0.1
   timeago: ^3.6.1
   permission_handler: ^11.3.0
   android_id: ^0.3.6
-  flutter_timezone: ^1.0.8
-  package_info_plus: ^5.0.1
+  flutter_timezone: ^4.1.0
+  package_info_plus: ^8.2.1
   another_flushbar: ^1.12.30
   pull_to_refresh_flutter3: ^2.0.2
   flutter_platform_widgets: ^6.1.0

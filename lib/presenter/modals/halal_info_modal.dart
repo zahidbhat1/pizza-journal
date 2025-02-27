@@ -44,7 +44,7 @@ class _HalalInfoModalState extends State<HalalInfoModal> {
       source: ImageSource.gallery, // Use `ImageSource.camera` for camera
     );
     if (pickedFile != null) {
-      _discoverBloc.add(DiscoverAddImage(File(pickedFile.path), index));
+      _discoverBloc.add(DiscoverAddImage(File(pickedFile.path),   index));
     }
     // final XFile? pickedFile = await _picker.pickImage(
     //   source: ImageSource.gallery, // Use `ImageSource.camera` for camera
@@ -76,13 +76,18 @@ class _HalalInfoModalState extends State<HalalInfoModal> {
       maxChildSize: 0.92,
       builder: (_, scrollController) {
         return Material(
+
           // Wrap with Material widget
           child: Modal(
             title: 'Add Review',
             showRightExitButton: true,
             onRightExitButtonPressed: () => Navigator.of(context).pop(),
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom, // Padding for keyboard
+              ) + const EdgeInsets.symmetric(horizontal: 16.0),
+
+
               child: SingleChildScrollView(
                 controller: scrollController,
                 child: Column(
@@ -108,7 +113,7 @@ class _HalalInfoModalState extends State<HalalInfoModal> {
                       child: _buildSauceAmountDropDown(),
                     ),
                     const SizedBox(height: 16),
-                    const Text("Crust Type"), // Add spacing
+                    const Text("Crust Type"),
                     const SizedBox(height: 5),
                     Row(
                       children: [
@@ -411,13 +416,11 @@ class _HalalInfoModalState extends State<HalalInfoModal> {
                         hintText: "Enter your description here...",
                         contentPadding: const EdgeInsets.symmetric(
                             horizontal: 16.0, vertical: 12.0),
-                        // Inner padding
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8.0),
-                          // Rounded corners
                           borderSide: BorderSide(
-                            color: Colors.grey.shade400, // Border color
-                            width: 1.0, // Border width
+                            color: Colors.grey.shade400,
+                            width: 1.0,
                           ),
                         ),
                         enabledBorder: OutlineInputBorder(
@@ -430,7 +433,7 @@ class _HalalInfoModalState extends State<HalalInfoModal> {
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8.0),
                           borderSide: const BorderSide(
-                            color: AppColors.main, // Border color when focused
+                            color: AppColors.main,
                             width: 1.5,
                           ),
                         ),
@@ -440,14 +443,23 @@ class _HalalInfoModalState extends State<HalalInfoModal> {
                     Center(
                       child: GestureDetector(
                         onTap: () {
+
+
                           if (dropdownPizzaTypeValue == 'Select Pizza Type' ||
                               dropdownCrustTypeValue == 'Select Thickness' ||
                               dropdownSauceTypeValue == 'Select Taste' ||
                               dropdownCheeseTypeValue == 'Select Taste' ||
                               dropdownSauceAmountTypeValue == 'Select Amount' ||
                               dropdownCheeseAmountTypeValue ==
-                                  'Select Amount') {
-                            // Show validation snackbar
+                                  'Select Amount'||
+                              _discoverBloc.state.images.isEmpty
+
+
+                          )
+
+
+                          {
+
                             final overlay = Overlay.of(context);
                             final overlayEntry = OverlayEntry(
                               builder: (context) => Positioned(
@@ -480,6 +492,7 @@ class _HalalInfoModalState extends State<HalalInfoModal> {
                             });
                             return;
                           }
+
                           Map<String, dynamic> data = {
                             "stars": stars,
                             "pizzaType":
@@ -489,6 +502,8 @@ class _HalalInfoModalState extends State<HalalInfoModal> {
                             "description": description,
                             "thickness": dropdownCrustTypeValue.toLowerCase(),
                             "crispy": isCrispy ? 'yes' : 'no',
+                            "dry" : isDry ? 'yes' : 'no',
+                            "fluffy" : isFluffy ? 'yes' : 'no',
                             "sweetOrSpicy":
                                 dropdownSauceTypeValue.toLowerCase(),
                             "amount":
@@ -527,230 +542,189 @@ class _HalalInfoModalState extends State<HalalInfoModal> {
   }
 
   Widget _buildSauceAmountDropDown() {
-    return Row(
-      children: [
-        Expanded(
-          child: DropdownButton<String>(
-            value: dropdownPizzaTypeValue,
-            icon: Container(),
-            elevation: 16,
-            style: const TextStyle(color: AppColors.black),
-            underline: Container(
-              height: 0,
+    return DropdownButton<String>(
+      value: dropdownPizzaTypeValue,
+      icon: const Icon(Icons.arrow_drop_down), // Use built-in dropdown icon
+      elevation: 16,
+      style: const TextStyle(color: AppColors.black),
+      underline: Container(height: 0), // Hide underline
+      onChanged: (String? newValue) {
+        setState(() {
+          dropdownPizzaTypeValue = newValue!;
+        });
+      },
+      items: <String>[
+        'Select Pizza Type',
+        'Traditional Round',
+        'Sicilian/Square',
+        'Personal',
+        'Grandma/Square',
+        'Deep Dish',
+      ].map<DropdownMenuItem<String>>((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(
+            value,
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
+            style: TextStyle(
+              color: value == 'Select Pizza Type' ? AppColors.grey : AppColors.black,
             ),
-            onChanged: (String? newValue) {
-              setState(() {
-                dropdownPizzaTypeValue = newValue!;
-              });
-            },
-            items: <String>[
-              'Select Pizza Type',
-              'Traditional Round',
-              'Sicilian/Square',
-              'Personal'
-            ].map<DropdownMenuItem<String>>((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(
-                  value,
-                  style: TextStyle(
-                    color: value == 'Select Pizza Type'
-                        ? AppColors.grey
-                        : AppColors.black,
-                  ),
-                ),
-              );
-            }).toList(),
           ),
-        ),
-        const Spacer(),
-        const Icon(Icons.arrow_downward),
-      ],
+        );
+      }).toList(),
+      isExpanded: true,
     );
   }
 
   Widget _buildCrustTypeDropDown() {
-    return Row(
-      children: [
-        DropdownButton<String>(
-          value: dropdownCrustTypeValue,
-          icon: Container(),
-          elevation: 16,
-          style: const TextStyle(color: AppColors.black),
-          underline: Container(
-            height: 0,
+    return DropdownButton<String>(
+      value: dropdownCrustTypeValue,
+      icon: const Icon(Icons.arrow_drop_down),
+      elevation: 16,
+      style: const TextStyle(color: AppColors.black),
+      underline: Container(height: 0), //
+      onChanged: (String? newValue) {
+        setState(() {
+          dropdownCrustTypeValue = newValue!;
+        });
+      },
+      items: <String>['Select Thickness', 'Thick', 'Thin', 'Average']
+          .map<DropdownMenuItem<String>>((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(
+            value,
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
+            style: TextStyle(
+              color: value == 'Select Thickness' ? AppColors.grey : AppColors.black,
+            ),
           ),
-          onChanged: (String? newValue) {
-            setState(() {
-              dropdownCrustTypeValue = newValue!;
-            });
-          },
-          items: <String>['Select Thickness', 'Thick', 'Thin', 'Average']
-              .map<DropdownMenuItem<String>>((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(
-                value,
-                style: TextStyle(
-                  color: value == 'Select Thickness'
-                      ? AppColors.grey
-                      : AppColors.black,
-                ),
-              ),
-            );
-          }).toList(),
-        ),
-        const Spacer(),
-        const Icon(Icons.arrow_downward),
-      ],
+        );
+      }).toList(),
+      isExpanded: true,
     );
   }
 
   Widget _buildSauceDown() {
-    return Row(
-      children: [
-        DropdownButton<String>(
-          value: dropdownSauceTypeValue,
-          icon: Container(),
-          elevation: 16,
-          style: const TextStyle(color: AppColors.black),
-          underline: Container(
-            height: 0,
+    return DropdownButton<String>(
+      value: dropdownSauceTypeValue,
+      icon: const Icon(Icons.arrow_drop_down),
+      elevation: 16,
+      style: const TextStyle(color: AppColors.black),
+      underline: Container(height: 0),
+      onChanged: (String? newValue) {
+        setState(() {
+          dropdownSauceTypeValue = newValue!;
+        });
+      },
+      items: <String>['Select Taste', 'Sweet', 'Spicy', 'No Flavor', 'N/A']
+          .map<DropdownMenuItem<String>>((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(
+            value,
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
+            style: TextStyle(
+              color: value == 'Select Taste' ? AppColors.grey : AppColors.black,
+            ),
           ),
-          onChanged: (String? newValue) {
-            setState(() {
-              dropdownSauceTypeValue = newValue!;
-            });
-          },
-          items: <String>['Select Taste', 'Sweet', 'Spicy', 'No Flavor', 'N/A']
-              .map<DropdownMenuItem<String>>((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(
-                value,
-                style: TextStyle(
-                  color: value == 'Select Taste'
-                      ? AppColors.grey
-                      : AppColors.black,
-                ),
-              ),
-            );
-          }).toList(),
-        ),
-        const Spacer(),
-        const Icon(Icons.arrow_downward),
-      ],
+        );
+      }).toList(),
+      isExpanded: true,
     );
   }
 
   Widget _buildSauceAmountDown() {
-    return Row(
-      children: [
-        DropdownButton<String>(
-          value: dropdownSauceAmountTypeValue,
-          icon: Container(),
-          elevation: 16,
-          style: const TextStyle(color: AppColors.black),
-          underline: Container(
-            height: 0,
+    return DropdownButton<String>(
+      value: dropdownSauceAmountTypeValue,
+      icon: const Icon(Icons.arrow_drop_down),
+      elevation: 16,
+      style: const TextStyle(color: AppColors.black),
+      underline: Container(height: 0),
+      onChanged: (String? newValue) {
+        setState(() {
+          dropdownSauceAmountTypeValue = newValue!;
+        });
+      },
+      items: <String>['Select Amount', 'Light', 'Heavy', 'Average']
+          .map<DropdownMenuItem<String>>((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(
+            value,
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
+            style: TextStyle(
+              color: value == 'Select Amount' ? AppColors.grey : AppColors.black,
+            ),
           ),
-          onChanged: (String? newValue) {
-            setState(() {
-              dropdownSauceAmountTypeValue = newValue!;
-            });
-          },
-          items: <String>['Select Amount', 'Light', 'Heavy', 'Average']
-              .map<DropdownMenuItem<String>>((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(
-                value,
-                style: TextStyle(
-                  color: value == 'Select Amount'
-                      ? AppColors.grey
-                      : AppColors.black,
-                ),
-              ),
-            );
-          }).toList(),
-        ),
-        const Spacer(),
-        const Icon(Icons.arrow_downward),
-      ],
+        );
+      }).toList(),
+      isExpanded: true,
     );
   }
 
   Widget _buildCheeseAmountDown() {
-    return Row(
-      children: [
-        DropdownButton<String>(
-          value: dropdownCheeseAmountTypeValue,
-          icon: Container(),
-          elevation: 16,
-          style: const TextStyle(color: AppColors.black),
-          underline: Container(
-            height: 0,
+    return DropdownButton<String>(
+      value: dropdownCheeseAmountTypeValue,
+      icon: const Icon(Icons.arrow_drop_down),
+      elevation: 16,
+      style: const TextStyle(color: AppColors.black),
+      underline: Container(height: 0),
+      onChanged: (String? newValue) {
+        setState(() {
+          dropdownCheeseAmountTypeValue = newValue!;
+        });
+      },
+      items: <String>['Select Amount', 'Light', 'Heavy', 'Average']
+          .map<DropdownMenuItem<String>>((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(
+            value,
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
+            style: TextStyle(
+              color: value == 'Select Amount' ? AppColors.grey : AppColors.black,
+            ),
           ),
-          onChanged: (String? newValue) {
-            setState(() {
-              dropdownCheeseAmountTypeValue = newValue!;
-            });
-          },
-          items: <String>['Select Amount', 'Light', 'Heavy', 'Average']
-              .map<DropdownMenuItem<String>>((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(
-                value,
-                style: TextStyle(
-                  color: value == 'Select Amount'
-                      ? AppColors.grey
-                      : AppColors.black,
-                ),
-              ),
-            );
-          }).toList(),
-        ),
-        const Spacer(),
-        const Icon(Icons.arrow_downward),
-      ],
+        );
+      }).toList(),
+      isExpanded: true,
     );
   }
 
   Widget _buildCheeseTasteDown() {
-    return Row(
-      children: [
-        DropdownButton<String>(
-          value: dropdownCheeseTypeValue,
-          icon: Container(),
-          elevation: 16,
-          style: const TextStyle(color: AppColors.black),
-          underline: Container(
-            height: 0,
+    return DropdownButton<String>(
+      value: dropdownCheeseTypeValue,
+      icon: const Icon(Icons.arrow_drop_down),
+      elevation: 16,
+      style: const TextStyle(color: AppColors.black),
+      underline: Container(height: 0),
+      onChanged: (String? newValue) {
+        setState(() {
+          dropdownCheeseTypeValue = newValue!;
+        });
+      },
+      items: <String>['Select Taste', 'Great', 'Ok', 'Ehh']
+          .map<DropdownMenuItem<String>>((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(
+            value,
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
+            style: TextStyle(
+              color: value == 'Select Taste' ? AppColors.grey : AppColors.black,
+            ),
           ),
-          onChanged: (String? newValue) {
-            setState(() {
-              dropdownCheeseTypeValue = newValue!;
-            });
-          },
-          items: <String>['Select Taste', 'Great', 'Ok', 'Ehh']
-              .map<DropdownMenuItem<String>>((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(
-                value,
-                style: TextStyle(
-                  color: value == 'Select Taste'
-                      ? AppColors.grey
-                      : AppColors.black,
-                ),
-              ),
-            );
-          }).toList(),
-        ),
-        const Spacer(),
-        const Icon(Icons.arrow_downward),
-      ],
+        );
+      }).toList(),
+      isExpanded: true,
     );
   }
+
 }

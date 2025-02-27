@@ -13,15 +13,18 @@ import 'package:pizzajournals/data/states/discover/discover_event.dart';
 import 'package:pizzajournals/data/states/discover/discover_state.dart';
 import 'package:pizzajournals/di.dart';
 import 'package:pizzajournals/presenter/assets.gen.dart';
+import 'package:pizzajournals/presenter/pages/discover/place_detail_arguments.dart';
 import 'package:pizzajournals/presenter/pages/discover/widget/map_locator.dart';
 import 'package:pizzajournals/presenter/themes/colors.dart';
 import 'package:pizzajournals/presenter/widgets/cached_image.dart';
 
 import '../../../utils/alert_manager.dart';
+import '../../navigation/navigation.dart';
 
 @RoutePage()
 class DiscoverPage extends StatefulWidget {
-  const DiscoverPage({super.key});
+ // final AlertManager alertManager;
+  const DiscoverPage({super.key, });
 
   @override
   State<DiscoverPage> createState() => _DiscoverPageState();
@@ -46,6 +49,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
   void initState() {
     super.initState();
     _initialize();
+
   }
 
   String dropdownRatingValue = 'Rating';
@@ -55,6 +59,9 @@ class _DiscoverPageState extends State<DiscoverPage> {
   String dropdownCheeseTasteValue = 'Taste';
   String dropdownSauceAmountValue = 'Amount';
   String dropdownCheeseAmountValue = 'Amount';
+  String dropdownCrustCrispyValue = 'Crispy';
+  String dropdownDryValue = 'Dry (Y/N)';
+  String dropdownFluffyValue = 'Fluffy (Y/N)';
   String txtLocation = '';
   String txtPizzaPlace = '';
   String txtUsername = '';
@@ -71,11 +78,16 @@ class _DiscoverPageState extends State<DiscoverPage> {
   String socialLink = '';
   String mapLink = '';
   final TextEditingController _locationController = TextEditingController();
-  late final AlertManager _alertManager;
+  final TextEditingController _streetController = TextEditingController();
+
 
   DiscoverBloc get _discoverBloc => context.read<DiscoverBloc>();
 
   void _submitSearch() {
+    String mapYesNoToString(String value) {
+      if (value == 'Yes') return 'true';
+      if (value == 'No') return 'false';
+      return '';}
     Map<String, String> data = {
       'placeName': txtPizzaPlace,
       'minRating':
@@ -95,8 +107,18 @@ class _DiscoverPageState extends State<DiscoverPage> {
       'crustThickness': dropdownCrushValue != "Crush Type"
           ? dropdownCrushValue.toUpperCase()
           : '',
+      'crustCrispy': dropdownCrustCrispyValue != "Crispy"
+          ? mapYesNoToString(dropdownCrustCrispyValue)
+          : '',
+      'dry': dropdownDryValue != "Dry (Y/N)"
+          ? mapYesNoToString(dropdownDryValue)
+          : '',
+      'fluffy': dropdownFluffyValue != "Fluffy (Y/N)"
+          ? mapYesNoToString(dropdownFluffyValue)
+          : '',
       'screenName': txtUsername,
     };
+
 
     _discoverBloc.add(DiscoverEvent.load(data));
   }
@@ -336,6 +358,8 @@ class _DiscoverPageState extends State<DiscoverPage> {
                             ),
                           ),
                           const SizedBox(height: 10),
+
+
                           Row(
                             children: [
                               Expanded(
@@ -364,6 +388,53 @@ class _DiscoverPageState extends State<DiscoverPage> {
                                         color: AppColors.grey2, width: 1),
                                   ),
                                   child: _buildCheeseAmountDropDown(context),
+                                ),
+                              ),
+                            ],
+                          ),
+
+                          const SizedBox(height: 20),
+                          const Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 16.0),
+                            child: Align(
+                              alignment: Alignment.topLeft,
+                              child: Text('Crust Details'),
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Container(
+                                  margin: const EdgeInsets.symmetric(horizontal: 8),
+                                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8),
+                                    border: Border.all(color: AppColors.grey2, width: 1),
+                                  ),
+                                  child: _buildCrustCrispyDropDown(),
+                                ),
+                              ),
+                              Expanded(
+                                child: Container(
+                                  margin: const EdgeInsets.symmetric(horizontal: 8),
+                                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8),
+                                    border: Border.all(color: AppColors.grey2, width: 1),
+                                  ),
+                                  child: _buildDryDropDown(),
+                                ),
+                              ),
+                              Expanded(
+                                child: Container(
+                                  margin: const EdgeInsets.symmetric(horizontal: 8),
+                                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8),
+                                    border: Border.all(color: AppColors.grey2, width: 1),
+                                  ),
+                                  child: _buildFluffyDropDown(),
                                 ),
                               ),
                             ],
@@ -453,7 +524,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
                     const SizedBox(height: 12),
                   ],
                 ),
-                if (_discoverBloc.state.locationSuggestions.isNotEmpty)
+                if (_locationController.text.isNotEmpty && _discoverBloc.state.locationSuggestions.isNotEmpty)
                   Positioned(
                     top: 60, // Adjust this value based on your layout
                     left: 0,
@@ -500,6 +571,28 @@ class _DiscoverPageState extends State<DiscoverPage> {
                   ),
               ],
             ),
+            GestureDetector(
+              onTap: () {
+                showAddPizzaPlacePopup();
+              },
+              child: Container(
+                margin: const EdgeInsets.symmetric(vertical: 12),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                decoration: BoxDecoration(
+                  color: AppColors.main,
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: AppColors.lightOrange, width: 1),
+                ),
+                child: const Center(
+                  child: Text(
+                    'Add New Pizza Place',
+                    style: TextStyle(color: AppColors.white),
+                  ),
+                ),
+              ),
+            ),
+
             if (_discoverBloc.state.showLoading)
               const Center(child: CircularProgressIndicator())
             else if (_discoverBloc.state.pizzaPlaces.isNotEmpty)
@@ -514,28 +607,6 @@ class _DiscoverPageState extends State<DiscoverPage> {
                   const Text(
                     'No Pizza Places Found',
                     style: TextStyle(fontSize: 18),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      showAddPizzaPlacePopup();
-                    },
-                    child: Container(
-                      margin: const EdgeInsets.symmetric(vertical: 12),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 12),
-                      decoration: BoxDecoration(
-                        color: AppColors.main,
-                        borderRadius: BorderRadius.circular(8),
-                        border:
-                            Border.all(color: AppColors.lightOrange, width: 1),
-                      ),
-                      child: const Center(
-                        child: Text(
-                          'Add New Pizza Place',
-                          style: TextStyle(color: AppColors.white),
-                        ),
-                      ),
-                    ),
                   ),
                 ],
               ),
@@ -790,6 +861,120 @@ class _DiscoverPageState extends State<DiscoverPage> {
       ],
     );
   }
+  Widget _buildCrustCrispyDropDown() {
+    return Row(
+      children: [
+        Expanded(
+          child: DropdownButton<String>(
+            value: dropdownCrustCrispyValue == 'Crispy' ? null : dropdownCrustCrispyValue,
+            hint: const Text("Crispy"),
+            disabledHint: const Text("Crispy"),
+            icon: const Icon(Icons.arrow_drop_down),
+            elevation: 16,
+            style: const TextStyle(color: AppColors.black, fontSize: 14),
+            underline: Container(height: 0),
+            onChanged: (String? newValue) {
+              if (newValue != "Crispy") {
+                setState(() {
+                  dropdownCrustCrispyValue = newValue!;
+                });
+              }
+            },
+            items: <String>['Crispy', 'Yes', 'No']
+                .map<DropdownMenuItem<String>>((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                enabled: value != 'Crispy', // ✅ Disable 'Crispy'
+                child: Text(
+                  value,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: value == 'Crispy' ? AppColors.grey : AppColors.black,
+                  ),
+                ),
+              );
+            }).toList(),
+            isExpanded: true,
+          ),
+        ),
+      ],
+    );
+  }
+
+
+  Widget _buildDryDropDown() {
+    return Row(
+      children: [
+        Expanded(
+          child: DropdownButton<String>(
+            value: dropdownDryValue,
+            icon: const Icon(Icons.arrow_drop_down),
+            elevation: 16,
+            style: const TextStyle(color: AppColors.black, fontSize: 14),
+            underline: Container(height: 0),
+            onChanged: (String? newValue) {
+              setState(() {
+                dropdownDryValue = newValue!;
+              });
+            },
+            items: <String>['Dry (Y/N)', 'Yes', 'No']
+                .map<DropdownMenuItem<String>>((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(
+                  value,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: value == 'Dry (Y/N)'
+                        ? AppColors.grey
+                        : AppColors.black,
+                  ),
+                ),
+              );
+            }).toList(),
+            isExpanded: true,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildFluffyDropDown() {
+    return Row(
+      children: [
+        Expanded(
+          child: DropdownButton<String>(
+            value: dropdownFluffyValue,
+            icon: const Icon(Icons.arrow_drop_down),
+            elevation: 16,
+            style: const TextStyle(color: AppColors.black, fontSize: 14),
+            underline: Container(height: 0),
+            onChanged: (String? newValue) {
+              setState(() {
+                dropdownFluffyValue = newValue!;
+              });
+            },
+            items: <String>['Fluffy (Y/N)', 'Yes', 'No']
+                .map<DropdownMenuItem<String>>((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(
+                  value,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: value == 'Fluffy (Y/N)'
+                        ? AppColors.grey
+                        : AppColors.black,
+                  ),
+                ),
+              );
+            }).toList(),
+            isExpanded: true,
+          ),
+        ),
+      ],
+    );
+  }
 
   Widget _buildRadiusDropDown() {
     return Row(
@@ -870,7 +1055,6 @@ class _DiscoverPageState extends State<DiscoverPage> {
     return Row(
       children: [
         Expanded(
-          // Use Expanded to take available space
           child: DropdownButton<String>(
             value: dropdownSauceTypeValue,
             icon: const Icon(Icons.arrow_drop_down),
@@ -1062,7 +1246,6 @@ class _DiscoverPageState extends State<DiscoverPage> {
   }
 
   void showAddPizzaPlacePopup() {
-    final streetController = TextEditingController();
     final cityController = TextEditingController();
     final stateController = TextEditingController();
     final zipController = TextEditingController();
@@ -1070,24 +1253,50 @@ class _DiscoverPageState extends State<DiscoverPage> {
       context: context,
       builder: (BuildContext context) {
         return BlocListener<DiscoverBloc, DiscoverState>(
-            listener: (BuildContext context, DiscoverState state) {
-              streetController.text = state.street;
-              cityController.text = state.city;
-              stateController.text = state.stateName;
-              zipController.text = state.pincode;
-              if (state.isPlaceAdded) {
-                WidgetsBinding.instance.addPostFrameCallback((_) {
-                  _alertManager.showSuccess(
-                    title: 'Success',
-                    message: 'Place added successfully',
-                  );
-                  Future.delayed(Duration(milliseconds: 100), () {
-                    if (context.router.canPop()) {
-                      context.router.pop();
-                    }
-                  });
-                });
-              }
+            listener: (context, state) {
+              // streetController.text = state.street;
+              // cityController.text = state.city;
+              // stateController.text = state.stateName;
+              // zipController.text = state.pincode;
+             // if (state.isPlaceAdded) {
+              //   WidgetsBinding.instance.addPostFrameCallback((_) {
+              //     widget.alertManager.showSuccess(
+              //       title: 'Success',
+              //       message: 'Place added successfully',
+              //     );
+              //     Future.delayed(Duration(milliseconds: 100), () {
+              //       if (context.router.canPop()) {
+              //         context.router.pop();
+              //       }
+              //     }
+              //     );
+              //
+              //   });
+              // }
+
+              // if (state.isPlaceAdded) {
+              //   WidgetsBinding.instance.addPostFrameCallback((_) {
+              //     if (context.router.canPop()) {
+              //       context.router.pop();
+              //     }
+              //   });
+              //
+              //   setState(() {
+              //     pizzaPlace = '';
+              //     street = '';
+              //     city = '';
+              //
+              //     zip = '';
+              //     phone = '';
+              //     socialLink = '';
+              //     mapLink = '';
+              //     selectedLocation = null;
+              //     hoursOpen = {};
+              //   });
+              //
+              //   // _locationController.clear();
+              //   // _streetController.clear();
+              // }
               print(state);
             },
             child: Dialog(
@@ -1097,117 +1306,177 @@ class _DiscoverPageState extends State<DiscoverPage> {
                   borderRadius:
                       BorderRadius.circular(12.0), // Adjust corner radius
                 ),
-                child: Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: SingleChildScrollView(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Text(
-                            "Add a Pizza Place",
-                            style: TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.bold),
-                          ),
-                          const SizedBox(height: 16),
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 16),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                border: Border.all(
-                                    color: AppColors.grey2, width: 1)),
-                            child: TextField(
-                              onChanged: (value) {
-                                setState(() {
-                                  pizzaPlace = value;
-                                });
-                              },
-                              decoration: const InputDecoration(
-                                  hintText: 'Enter Place Name',
-                                  border: InputBorder.none),
+                child: BlocBuilder<DiscoverBloc, DiscoverState>(
+                    builder: (context, state) {
+                  return Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: SingleChildScrollView(
+                          child: Stack(children: [
+                        Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Text(
+                              "Add a Pizza Place",
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold),
                             ),
-                          ),
-                          const SizedBox(height: 16),
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 16),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                border: Border.all(
-                                    color: AppColors.grey2, width: 1)),
-                            child: TextField(
-                              controller: streetController,
-                              onChanged: (value) {
-                                setState(() {
-                                  street = value;
-                                });
-                              },
-                              decoration: const InputDecoration(
-                                  hintText: 'Enter Street',
-                                  border: InputBorder.none),
-                            ),
-                          ),
-                          const SizedBox(height: 16),
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 16),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                border: Border.all(
-                                    color: AppColors.grey2, width: 1)),
-                            child: TextField(
-                              controller: cityController,
-                              onChanged: (value) {
-                                setState(() {
-                                  city = value;
-                                });
-                              },
-                              decoration: const InputDecoration(
-                                  hintText: 'Enter City',
-                                  border: InputBorder.none),
-                            ),
-                          ),
-                          const SizedBox(height: 16),
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 16),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                border: Border.all(
-                                    color: AppColors.grey2, width: 1)),
-                            child: TextField(
-                              onChanged: (value) {
-                                setState(() {
-                                  state = value;
-                                });
-                              },
-                              decoration: const InputDecoration(
-                                  hintText: 'Enter State',
-                                  border: InputBorder.none),
-                            ),
-                          ),
-                          const SizedBox(height: 16),
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 16),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                border: Border.all(
-                                    color: AppColors.grey2, width: 1)),
-                            child: TextField(
-                              controller: zipController,
-                              onChanged: (value) {
-                                setState(() {
-                                  zip = value;
-                                });
-                                getLatLngFromAddress('$street, $city, $zip');
-                              },
-                              keyboardType: TextInputType.number,
-                              decoration: const InputDecoration(
-                                hintText: 'Enter Zip Code',
-                                border: InputBorder.none,
+                            const SizedBox(height: 16),
+                            Container(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8),
+                                  border: Border.all(
+                                      color: AppColors.grey2, width: 1)),
+                              child: TextField(
+                                onChanged: (value) {
+                                  setState(() {
+                                    pizzaPlace = value;
+                                  });
+                                },
+                                decoration: const InputDecoration(
+                                    hintText: 'Enter Place Name',
+                                    border: InputBorder.none),
                               ),
                             ),
-                          ),
-                          const SizedBox(height: 16),
-                          GestureDetector(
-                            onTap: _showHoursBottomSheet,
-                            child: Container(
+                            const SizedBox(height: 16),
+                            Container(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8),
+                                  border: Border.all(
+                                      color: AppColors.grey2, width: 1)),
+                              child: TextField(
+                                controller: _streetController,
+                                onChanged: (value) {
+                                  if (value.isEmpty) {
+
+                                    _discoverBloc.add(const DiscoverSearchLocations(''));
+                                    setState(() {});
+                                  } else {
+                                    _discoverBloc.add(DiscoverSearchLocations(value));
+                                  }
+                                  setState(() {
+                                    street = value;
+                                  });
+                                },
+                                decoration: const InputDecoration(
+                                    hintText: 'Enter Address',
+                                    border: InputBorder.none),
+                              ),
+                            ),
+
+                            const SizedBox(height: 16),
+                            // Container(
+                            //   padding: const EdgeInsets.symmetric(horizontal: 16),
+                            //   decoration: BoxDecoration(
+                            //       borderRadius: BorderRadius.circular(8),
+                            //       border: Border.all(
+                            //           color: AppColors.grey2, width: 1)),
+                            //   child: TextField(
+                            //     controller: cityController,
+                            //     onChanged: (value) {
+                            //       setState(() {
+                            //         city = value;
+                            //       });
+                            //     },
+                            //     decoration: const InputDecoration(
+                            //         hintText: 'Enter City',
+                            //         border: InputBorder.none),
+                            //   ),
+                            // ),
+                            // const SizedBox(height: 16),
+                            // Container(
+                            //   padding: const EdgeInsets.symmetric(horizontal: 16),
+                            //   decoration: BoxDecoration(
+                            //       borderRadius: BorderRadius.circular(8),
+                            //       border: Border.all(
+                            //           color: AppColors.grey2, width: 1)),
+                            //   child: TextField(
+                            //     onChanged: (value) {
+                            //       setState(() {
+                            //         state = value;
+                            //       });
+                            //     },
+                            //     decoration: const InputDecoration(
+                            //         hintText: 'Enter State',
+                            //         border: InputBorder.none),
+                            //   ),
+                            // ),
+                            // const SizedBox(height: 16),
+                            // Container(
+                            //   padding: const EdgeInsets.symmetric(horizontal: 16),
+                            //   decoration: BoxDecoration(
+                            //       borderRadius: BorderRadius.circular(8),
+                            //       border: Border.all(
+                            //           color: AppColors.grey2, width: 1)),
+                            //   child: TextField(
+                            //     controller: zipController,
+                            //     onChanged: (value) {
+                            //       setState(() {
+                            //         zip = value;
+                            //       });
+                            //       getLatLngFromAddress('$street, $city, $zip');
+                            //     },
+                            //     keyboardType: TextInputType.number,
+                            //     decoration: const InputDecoration(
+                            //       hintText: 'Enter Zip Code',
+                            //       border: InputBorder.none,
+                            //     ),
+                            //   ),
+                            // ),
+                            const SizedBox(height: 16),
+                            GestureDetector(
+                              onTap: _showHoursBottomSheet,
+                              child: Container(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 16),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8),
+                                  border: Border.all(
+                                      color: AppColors.grey2, width: 1),
+                                ),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: Text(
+                                        hoursOpen.isNotEmpty &&
+                                                hoursOpen.values.any((hours) =>
+                                                    hours != 'Closed')
+                                            ? 'Hours Selected'
+                                            : 'Select Business Hours',
+                                        style:
+                                            const TextStyle(color: Colors.grey),
+                                      ),
+                                    ),
+                                    const Icon(Icons.arrow_drop_down),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            Container(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8),
+                                  border: Border.all(
+                                      color: AppColors.grey2, width: 1)),
+                              child: TextField(
+                                onChanged: (value) {
+                                  setState(() {
+                                    phone = value;
+                                  });
+                                },
+                                keyboardType: TextInputType.number,
+                                decoration: const InputDecoration(
+                                    hintText: 'Enter Phone',
+                                    border: InputBorder.none),
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            Container(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 16),
                               decoration: BoxDecoration(
@@ -1215,285 +1484,336 @@ class _DiscoverPageState extends State<DiscoverPage> {
                                 border: Border.all(
                                     color: AppColors.grey2, width: 1),
                               ),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    child: Text(
-                                      hoursOpen.isNotEmpty &&
-                                              hoursOpen.values.any(
-                                                  (hours) => hours != 'Closed')
-                                          ? 'Hours Selected'
-                                          : 'Select Business Hours',
-                                      style:
-                                          const TextStyle(color: Colors.grey),
-                                    ),
-                                  ),
-                                  const Icon(Icons.arrow_drop_down),
-                                ],
+                              child: TextField(
+                                onChanged: (value) {
+                                  setState(() {
+                                    socialLink = value;
+                                  });
+                                },
+                                decoration: const InputDecoration(
+                                  hintText: 'Enter Social Media Link',
+                                  border: InputBorder.none,
+                                ),
                               ),
                             ),
-                          ),
-                          const SizedBox(height: 16),
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 16),
-                            decoration: BoxDecoration(
+                            const SizedBox(height: 16),
+                            Container(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16),
+                              decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(8),
                                 border: Border.all(
-                                    color: AppColors.grey2, width: 1)),
-                            child: TextField(
-                              onChanged: (value) {
-                                setState(() {
-                                  phone = value;
-                                });
-                              },
-                              keyboardType: TextInputType.number,
-                              decoration: const InputDecoration(
-                                  hintText: 'Enter Phone',
-                                  border: InputBorder.none),
-                            ),
-                          ),
-                          const SizedBox(height: 16),
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 16),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8),
-                              border:
-                                  Border.all(color: AppColors.grey2, width: 1),
-                            ),
-                            child: TextField(
-                              onChanged: (value) {
-                                setState(() {
-                                  socialLink = value;
-                                });
-                              },
-                              decoration: const InputDecoration(
-                                hintText: 'Enter Social Media Link',
-                                border: InputBorder.none,
+                                    color: AppColors.grey2, width: 1),
+                              ),
+                              child: TextField(
+                                // onChanged: (value) {
+                                //   setState(() {
+                                //     mapLink = value;
+                                //   });
+                                // },
+                                controller:
+                                    TextEditingController(text: state.mapLink),
+                                readOnly: true,
+                                decoration: const InputDecoration(
+                                  hintText: 'Enter Map Link',
+                                  border: InputBorder.none,
+                                ),
                               ),
                             ),
-                          ),
-                          const SizedBox(height: 16),
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 16),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8),
-                              border:
-                                  Border.all(color: AppColors.grey2, width: 1),
+                            const SizedBox(height: 16),
+                            const Align(
+                              child: Text("Location"),
+                              alignment: Alignment.centerLeft,
                             ),
-                            child: TextField(
-                              onChanged: (value) {
+                            const SizedBox(height: 10),
+                            MapLocationPicker(
+                              onLocationSelected: (LatLng location) {
                                 setState(() {
-                                  mapLink = value;
+                                  selectedLocation = location;
                                 });
                               },
-                              decoration: const InputDecoration(
-                                hintText: 'Enter Map Link',
-                                border: InputBorder.none,
-                              ),
                             ),
-                          ),
-                          const SizedBox(height: 16),
-                          const Align(
-                            child: Text("Location"),
-                            alignment: Alignment.centerLeft,
-                          ),
-                          const SizedBox(height: 10),
-                          MapLocationPicker(
-                            onLocationSelected: (LatLng location) {
-                              setState(() {
-                                selectedLocation = location;
-                              });
-                            },
-                          ),
-                          const SizedBox(height: 16),
-                          const Align(
-                            child: Text("Photos"),
-                            alignment: Alignment.centerLeft,
-                          ),
-                          const SizedBox(height: 10),
-                          SizedBox(
-                              height: 200,
-                              child: BlocBuilder<DiscoverBloc, DiscoverState>(
-                                  builder: (context, state) {
-                                return GridView.builder(
-                                  gridDelegate:
-                                      const SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 4, // 4 columns
-                                    crossAxisSpacing: 8,
-                                    mainAxisSpacing: 8,
-                                  ),
-                                  itemCount:
-                                      _discoverBloc.state.images.length + 1,
-                                  itemBuilder: (context, index) {
-                                    if (index ==
-                                        _discoverBloc.state.images.length) {
-                                      // Add new item button
+                            const SizedBox(height: 16),
+                            const Align(
+                              child: Text("Photos"),
+                              alignment: Alignment.centerLeft,
+                            ),
+                            const SizedBox(height: 10),
+                            SizedBox(
+                                height: 200,
+                                child: BlocBuilder<DiscoverBloc, DiscoverState>(
+                                    builder: (context, state) {
+                                  return GridView.builder(
+                                    gridDelegate:
+                                        const SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 4,
+                                      // 4 columns
+                                      crossAxisSpacing: 8,
+                                      mainAxisSpacing: 8,
+                                    ),
+                                    itemCount:
+                                        _discoverBloc.state.images.length + 1,
+                                    itemBuilder: (context, index) {
+                                      if (index ==
+                                          _discoverBloc.state.images.length) {
+                                        // Add new item button
+                                        return GestureDetector(
+                                          onTap: () {
+                                            _addNewItem();
+                                          },
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              color: Colors.grey[300],
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                            ),
+                                            child: Icon(Icons.add,
+                                                size: 40,
+                                                color: Colors.grey[700]),
+                                          ),
+                                        );
+                                      }
+
+                                      final image =
+                                          _discoverBloc.state.images[index];
                                       return GestureDetector(
                                         onTap: () {
-                                          _addNewItem();
+                                          _pickImage(index);
                                         },
                                         child: Container(
                                           decoration: BoxDecoration(
                                             color: Colors.grey[300],
                                             borderRadius:
                                                 BorderRadius.circular(8),
+                                            image: image != null
+                                                ? DecorationImage(
+                                                    image: FileImage(image),
+                                                    fit: BoxFit.cover)
+                                                : null,
                                           ),
-                                          child: Icon(Icons.add,
-                                              size: 40,
-                                              color: Colors.grey[700]),
-                                        ),
-                                      );
-                                    }
-
-                                    final image =
-                                        _discoverBloc.state.images[index];
-                                    return GestureDetector(
-                                      onTap: () {
-                                        _pickImage(index);
-                                      },
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          color: Colors.grey[300],
-                                          borderRadius:
-                                              BorderRadius.circular(8),
-                                          image: image != null
-                                              ? DecorationImage(
-                                                  image: FileImage(image),
-                                                  fit: BoxFit.cover)
+                                          child: image == null
+                                              ? Icon(Icons.upload,
+                                                  size: 40,
+                                                  color: Colors.grey[700])
                                               : null,
                                         ),
-                                        child: image == null
-                                            ? Icon(Icons.upload,
-                                                size: 40,
-                                                color: Colors.grey[700])
-                                            : null,
-                                      ),
-                                    );
+                                      );
+                                    },
+                                  );
+                                })),
+                            const SizedBox(height: 16),
+                            Row(
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.pop(context);
                                   },
-                                );
-                              })),
-                          const SizedBox(height: 16),
-                          Row(
-                            children: [
-                              GestureDetector(
-                                onTap: () {
-                                  Navigator.pop(context);
-                                },
-                                child: Container(
-                                  width: MediaQuery.sizeOf(context).width / 3,
-                                  margin:
-                                      const EdgeInsets.symmetric(vertical: 12),
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 16, vertical: 12),
-                                  decoration: BoxDecoration(
-                                      color: AppColors.grey2,
-                                      borderRadius: BorderRadius.circular(8),
-                                      border: Border.all(
-                                          color: AppColors.lightOrange,
-                                          width: 1)),
-                                  child: const Center(
-                                      child: Text(
-                                    'Cancel',
-                                    style: TextStyle(color: AppColors.black),
-                                  )),
-                                ),
-                              ),
-                              Spacer(),
-                              BlocBuilder<DiscoverBloc, DiscoverState>(
-                                builder: (context, blocState) {
-                                  return GestureDetector(
-                                    onTap: blocState.isAddingPlace
-                                        ? null
-                                        : () {
-                                            final days = [
-                                              "sunday",
-                                              "monday",
-                                              "tuesday",
-                                              "wednesday",
-                                              "thursday",
-                                              "friday",
-                                              "saturday"
-                                            ];
-
-                                            for (var day in days) {
-                                              if (!hoursOpen.containsKey(day) ||
-                                                  hoursOpen[day]!.isEmpty) {
-                                                hoursOpen[day] = "closed";
-                                              }
-                                            }
-                                            Map<String, dynamic> data = {
-                                              'name': pizzaPlace,
-                                              'address[street]': street,
-                                              'address[city]': city,
-                                              'address[zip]': zip,
-                                              'address[state]': state,
-                                              'phone': phone,
-                                              'hoursOpen': hoursOpen,
-                                              'Links[social]': socialLink,
-                                              'Links[maps]': mapLink,
-                                              'photos': "",
-                                              'location': {
-                                                'type': 'Point',
-                                                'coordinates':
-                                                    selectedLocation != null
-                                                        ? [
-                                                            selectedLocation!
-                                                                .longitude,
-                                                            selectedLocation!
-                                                                .latitude
-                                                          ]
-                                                        : null,
-                                              }
-                                            };
-                                            print(
-                                                'Submitting form with ${_discoverBloc.state.images.length} images');
-                                            _discoverBloc
-                                                .add(DiscoverAddPlace(data));
-                                          },
-                                    child: Container(
-                                      width:
-                                          MediaQuery.sizeOf(context).width / 3,
-                                      margin: const EdgeInsets.symmetric(
-                                          vertical: 12),
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 16, vertical: 12),
-                                      decoration: BoxDecoration(
-                                        color: AppColors.main,
+                                  child: Container(
+                                    width: MediaQuery.sizeOf(context).width / 3,
+                                    margin: const EdgeInsets.symmetric(
+                                        vertical: 12),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 16, vertical: 12),
+                                    decoration: BoxDecoration(
+                                        color: AppColors.grey2,
                                         borderRadius: BorderRadius.circular(8),
                                         border: Border.all(
                                             color: AppColors.lightOrange,
-                                            width: 1),
-                                      ),
-                                      child: Center(
-                                        child: blocState
-                                                .isAddingPlace // use blocState here too
-                                            ? const SizedBox(
-                                                height: 20,
-                                                width: 20,
-                                                child:
-                                                    CircularProgressIndicator(
-                                                  strokeWidth: 2,
-                                                  valueColor:
-                                                      AlwaysStoppedAnimation<
-                                                              Color>(
-                                                          AppColors.white),
+                                            width: 1)),
+                                    child: const Center(
+                                        child: Text(
+                                      'Cancel',
+                                      style: TextStyle(color: AppColors.black),
+                                    )),
+                                  ),
+                                ),
+                                Spacer(),
+                                BlocBuilder<DiscoverBloc, DiscoverState>(
+                                  builder: (context, blocState) {
+                                    return GestureDetector(
+                                      onTap: blocState.isAddingPlace
+                                          ? null
+                                          : () {
+                                        // if (blocState.images.isEmpty) {
+                                        //   widget.alertManager.showValidation(
+                                        //     title: 'Validation',
+                                        //     message: 'Please add at least one image.',
+                                        //   );
+                                        //   return;
+                                        // }
+                                              final days = [
+                                                "sunday",
+                                                "monday",
+                                                "tuesday",
+                                                "wednesday",
+                                                "thursday",
+                                                "friday",
+                                                "saturday"
+                                              ];
+
+                                              for (var day in days) {
+                                                if (!hoursOpen
+                                                        .containsKey(day) ||
+                                                    hoursOpen[day]!.isEmpty) {
+                                                  hoursOpen[day] = "closed";
+                                                }
+                                              }
+                                              Map<String, dynamic> data = {
+                                                'name': pizzaPlace,
+                                                'address[street]': street,
+                                                'address[city]': city,
+                                                'address[zip]': zip,
+                                               // 'address[state]': state,
+                                                'phone': phone,
+                                                'hoursOpen': hoursOpen,
+                                                'Links[social]': socialLink,
+                                                'Links[maps]': mapLink,
+                                                'photos': "",
+                                                'location': {
+                                                  'type': 'Point',
+                                                  'coordinates':
+                                                      selectedLocation != null
+                                                          ? [
+                                                              selectedLocation!
+                                                                  .longitude,
+                                                              selectedLocation!
+                                                                  .latitude
+                                                            ]
+                                                          : null,
+                                                }
+                                              };
+                                              print(
+                                                  'Submitting form with ${_discoverBloc.state.images.length} images');
+                                              _discoverBloc
+                                                  .add(DiscoverAddPlace(data));
+                                            },
+                                      child: Container(
+                                        width:
+                                            MediaQuery.sizeOf(context).width /
+                                                3,
+                                        margin: const EdgeInsets.symmetric(
+                                            vertical: 12),
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 16, vertical: 12),
+                                        decoration: BoxDecoration(
+                                          color: AppColors.main,
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                          border: Border.all(
+                                              color: AppColors.lightOrange,
+                                              width: 1),
+                                        ),
+                                        child: Center(
+                                          child: blocState
+                                                  .isAddingPlace // use blocState here too
+                                              ? const SizedBox(
+                                                  height: 20,
+                                                  width: 20,
+                                                  child:
+                                                      CircularProgressIndicator(
+                                                    strokeWidth: 2,
+                                                    valueColor:
+                                                        AlwaysStoppedAnimation<
+                                                                Color>(
+                                                            AppColors.white),
+                                                  ),
+                                                )
+                                              : const Text(
+                                                  'Submit',
+                                                  style: TextStyle(
+                                                      color: AppColors.white),
                                                 ),
-                                              )
-                                            : const Text(
-                                                'Submit',
-                                                style: TextStyle(
-                                                    color: AppColors.white),
-                                              ),
+                                        ),
                                       ),
+                                    );
+                                  },
+                                )
+                              ],
+                            ),
+                          ],
+                        ),
+
+
+                          BlocBuilder<DiscoverBloc, DiscoverState>(
+                            builder:(context,state){
+
+                              if (_streetController.text.isNotEmpty && _discoverBloc.state.locationSuggestions.isNotEmpty)
+                              {
+                                return  Positioned(
+                                  top: 158,
+                                  // Adjust this value based on your layout
+                                  left: 0,
+                                  right: 0,
+                                  // right: MediaQuery.of(context).size.width * .45,
+                                  child: Container(
+                                    constraints: BoxConstraints(
+                                      maxHeight:
+                                      MediaQuery.of(context).size.height * 0.3,
                                     ),
-                                  );
-                                },
-                              )
-                            ],
-                          ),
-                        ],
-                      ),
-                    ))));
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(8),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black.withOpacity(0.1),
+                                          spreadRadius: 1,
+                                          blurRadius: 3,
+                                          offset: const Offset(0, 3),
+                                        ),
+                                      ],
+                                    ),
+                                    child: ListView.builder(
+                                      shrinkWrap: true,
+                                      physics: const BouncingScrollPhysics(),
+                                      itemCount: _discoverBloc
+                                          .state.locationSuggestions.length,
+                                      itemBuilder: (context, index) {
+                                        final suggestion = _discoverBloc
+                                            .state.locationSuggestions[index];
+                                        return ListTile(
+                                          title: Text(suggestion.mainText),
+                                          subtitle: Text(suggestion.secondaryText),
+                                          onTap: () {
+                                            _discoverBloc.add(FetchPlaceDetails(
+                                                suggestion.placeId));
+
+                                            _streetController.text = suggestion.description;
+                                            // Secondary text format is usually "City, State, Country"
+                                            final addressParts =
+                                            suggestion.secondaryText.split(',');
+                                            if (addressParts.isNotEmpty) {
+                                              final cityName = addressParts[0].trim();
+
+
+
+                                              setState(() {
+                                                print('tapped on location');
+                                                print('city name = $cityName');
+                                                city = cityName;
+                                                street=suggestion.mainText;
+                                                _streetController.text =
+                                                    suggestion.description;
+                                                _discoverBloc.add(
+                                                    const DiscoverSearchLocations(
+                                                        ''));
+                                              });
+                                            }
+
+                                          },
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                );
+
+
+                              }
+                              return const SizedBox.shrink();
+                            }
+                          )
+
+                      ])));
+                })));
       },
     );
   }
@@ -1621,4 +1941,5 @@ class _DiscoverPageState extends State<DiscoverPage> {
       print("Error: $e");
     }
   }
+
 }

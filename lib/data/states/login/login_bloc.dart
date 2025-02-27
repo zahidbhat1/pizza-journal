@@ -9,6 +9,7 @@ import 'package:pizzajournals/data/states/login/login_event.dart';
 import 'package:pizzajournals/data/states/login/login_state.dart';
 import 'package:pizzajournals/presenter/navigation/navigation.dart';
 import 'package:pizzajournals/utils/alert_manager.dart';
+import 'package:pizzajournals/utils/validator_utils.dart'; // Add this import
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final AppRouter _router;
@@ -38,46 +39,59 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   }
 
   bool get emailIsNotEmpty => state.email?.isNotEmpty ?? false;
+  bool get emailIsValid => state.email != null && ValidatorUtils.isEmailValid(state.email!);
   bool get passwordIsNotEmpty => state.password?.isNotEmpty ?? false;
-  bool get isLoginEnable => emailIsNotEmpty && passwordIsNotEmpty;
+  bool get isLoginEnable => emailIsNotEmpty && emailIsValid && passwordIsNotEmpty;
 
   bool get isContinueWithAppleShow => Platform.isIOS;
 
   void _onLoad(
-    LoginLoad event,
-    Emitter<LoginState> emit,
-  ) async {
+      LoginLoad event,
+      Emitter<LoginState> emit,
+      ) async {
     emit(state.copyWith(isContinueWithAppleShow: isContinueWithAppleShow));
   }
 
   void _onEmailOnChanged(
-    LoginEmailOnChanged event,
-    Emitter<LoginState> emit,
-  ) async {
-    emit(state.copyWith(email: event.email));
+      LoginEmailOnChanged event,
+      Emitter<LoginState> emit,
+      ) async {
+    final email = event.email;
+    final isValid = email.isNotEmpty ? ValidatorUtils.isEmailValid(email) : false;
+
+    emit(state.copyWith(
+      email: email,
+      isEmailValid: isValid,
+    ));
     emit(state.copyWith(isLoginEnable: isLoginEnable));
   }
 
   void _onPasswordOnChanged(
-    LoginPasswordOnChanged event,
-    Emitter<LoginState> emit,
-  ) async {
+      LoginPasswordOnChanged event,
+      Emitter<LoginState> emit,
+      ) async {
     emit(state.copyWith(password: event.password));
     emit(state.copyWith(isLoginEnable: isLoginEnable));
   }
 
   void _onForgotPassword(
-    LoginForgotPassword event,
-    Emitter<LoginState> emit,
-  ) async {
+      LoginForgotPassword event,
+      Emitter<LoginState> emit,
+      ) async {
     // TODO
     _alertManager.showFeatureNotAvailable();
   }
 
   void _onLogin(
-    LoginLogin event,
-    Emitter<LoginState> emit,
-  ) async {
+      LoginLogin event,
+      Emitter<LoginState> emit,
+      ) async {
+    // Validate email before attempting login
+    if (!emailIsValid) {
+      _alertManager.showError(message: "Please enter a valid email address");
+      return;
+    }
+
     try {
       emit(state.copyWith(isLoginLoading: true));
 
@@ -95,33 +109,33 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   }
 
   void _onContinueWithApple(
-    LoginContinueWithApple event,
-    Emitter<LoginState> emit,
-  ) async {
+      LoginContinueWithApple event,
+      Emitter<LoginState> emit,
+      ) async {
     // TODO
     _alertManager.showFeatureNotAvailable();
   }
 
   void _onContinueWithFacebook(
-    LoginContinueWithFacebook event,
-    Emitter<LoginState> emit,
-  ) async {
+      LoginContinueWithFacebook event,
+      Emitter<LoginState> emit,
+      ) async {
     // TODO
     _alertManager.showFeatureNotAvailable();
   }
 
   void _onContinueWithGoogle(
-    LoginContinueWithGoogle event,
-    Emitter<LoginState> emit,
-  ) async {
+      LoginContinueWithGoogle event,
+      Emitter<LoginState> emit,
+      ) async {
     // TODO
     _alertManager.showFeatureNotAvailable();
   }
 
   void _onSignUp(
-    LoginSignUp event,
-    Emitter<LoginState> emit,
-  ) async {
+      LoginSignUp event,
+      Emitter<LoginState> emit,
+      ) async {
     await _router.replace(const RegisterRoute());
   }
 }

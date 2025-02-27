@@ -9,9 +9,10 @@ part of 'pizza_review_model.dart';
 _$PizzaReviewModelImpl _$$PizzaReviewModelImplFromJson(
         Map<String, dynamic> json) =>
     _$PizzaReviewModelImpl(
-      summary: json['summary'] == null
-          ? null
-          : Summary.fromJson(json['summary'] as Map<String, dynamic>),
+      summaries: (json['summary'] as Map<String, dynamic>?)?.map(
+        (k, e) =>
+            MapEntry(k, PizzaTypeSummary.fromJson(e as Map<String, dynamic>)),
+      ),
       reviews: (json['reviews'] as List<dynamic>?)
               ?.map((e) =>
                   e == null ? null : Review.fromJson(e as Map<String, dynamic>))
@@ -23,66 +24,75 @@ _$PizzaReviewModelImpl _$$PizzaReviewModelImplFromJson(
 Map<String, dynamic> _$$PizzaReviewModelImplToJson(
         _$PizzaReviewModelImpl instance) =>
     <String, dynamic>{
-      'summary': instance.summary,
+      'summary': instance.summaries,
       'reviews': instance.reviews,
       'userId': instance.userId,
     };
 
-_$SummaryImpl _$$SummaryImplFromJson(Map<String, dynamic> json) =>
-    _$SummaryImpl(
-      sauce: json['sauce'] == null
-          ? null
-          : Sauce.fromJson(json['sauce'] as Map<String, dynamic>),
-      cheese: json['cheese'] == null
-          ? null
-          : Cheese.fromJson(json['cheese'] as Map<String, dynamic>),
-      crust: json['crust'] == null
-          ? null
-          : Crust.fromJson(json['crust'] as Map<String, dynamic>),
+_$PizzaTypeSummaryImpl _$$PizzaTypeSummaryImplFromJson(
+        Map<String, dynamic> json) =>
+    _$PizzaTypeSummaryImpl(
+      crust: CrustSummary.fromJson(json['crust'] as Map<String, dynamic>),
+      sauce: SauceSummary.fromJson(json['sauce'] as Map<String, dynamic>),
+      cheese: CheeseSummary.fromJson(json['cheese'] as Map<String, dynamic>),
+      count: (json['count'] as num).toInt(),
     );
 
-Map<String, dynamic> _$$SummaryImplToJson(_$SummaryImpl instance) =>
+Map<String, dynamic> _$$PizzaTypeSummaryImplToJson(
+        _$PizzaTypeSummaryImpl instance) =>
     <String, dynamic>{
+      'crust': instance.crust,
       'sauce': instance.sauce,
       'cheese': instance.cheese,
-      'crust': instance.crust,
+      'count': instance.count,
     };
 
-_$SauceImpl _$$SauceImplFromJson(Map<String, dynamic> json) => _$SauceImpl(
-      sauceSweet: (json['sauceSweet'] as num?)?.toInt(),
-      sauceSpicy: (json['sauceSpicy'] as num?)?.toInt(),
-      sauceNoFlavour: (json['sauceNoFlavour'] as num?)?.toInt(),
+_$CrustSummaryImpl _$$CrustSummaryImplFromJson(Map<String, dynamic> json) =>
+    _$CrustSummaryImpl(
+      thin: (json['thin'] as num).toInt(),
+      thick: (json['thick'] as num).toInt(),
+      average: (json['average'] as num).toInt(),
+      crispy: (json['crispy'] as num).toInt(),
+      dry: (json['dry'] as num).toInt(),
+      fluffy: (json['fluffy'] as num).toInt(),
     );
 
-Map<String, dynamic> _$$SauceImplToJson(_$SauceImpl instance) =>
+Map<String, dynamic> _$$CrustSummaryImplToJson(_$CrustSummaryImpl instance) =>
     <String, dynamic>{
-      'sauceSweet': instance.sauceSweet,
-      'sauceSpicy': instance.sauceSpicy,
-      'sauceNoFlavour': instance.sauceNoFlavour,
+      'thin': instance.thin,
+      'thick': instance.thick,
+      'average': instance.average,
+      'crispy': instance.crispy,
+      'dry': instance.dry,
+      'fluffy': instance.fluffy,
     };
 
-_$CheeseImpl _$$CheeseImplFromJson(Map<String, dynamic> json) => _$CheeseImpl(
-      cheeseGreat: (json['cheeseGreat'] as num?)?.toInt(),
-      cheeseEhh: (json['cheeseEhh'] as num?)?.toInt(),
+_$SauceSummaryImpl _$$SauceSummaryImplFromJson(Map<String, dynamic> json) =>
+    _$SauceSummaryImpl(
+      sweet: (json['sweet'] as num).toInt(),
+      spicy: (json['spicy'] as num).toInt(),
+      noflavour: (json['noflavour'] as num).toInt(),
     );
 
-Map<String, dynamic> _$$CheeseImplToJson(_$CheeseImpl instance) =>
+Map<String, dynamic> _$$SauceSummaryImplToJson(_$SauceSummaryImpl instance) =>
     <String, dynamic>{
-      'cheeseGreat': instance.cheeseGreat,
-      'cheeseEhh': instance.cheeseEhh,
+      'sweet': instance.sweet,
+      'spicy': instance.spicy,
+      'noflavour': instance.noflavour,
     };
 
-_$CrustImpl _$$CrustImplFromJson(Map<String, dynamic> json) => _$CrustImpl(
-      crustAverage: (json['crustAverage'] as num?)?.toInt(),
-      crustThick: (json['crustThick'] as num?)?.toInt(),
-      crustThin: (json['crustThin'] as num?)?.toInt(),
+_$CheeseSummaryImpl _$$CheeseSummaryImplFromJson(Map<String, dynamic> json) =>
+    _$CheeseSummaryImpl(
+      heavy: (json['heavy'] as num).toInt(),
+      light: (json['light'] as num).toInt(),
+      average: (json['average'] as num).toInt(),
     );
 
-Map<String, dynamic> _$$CrustImplToJson(_$CrustImpl instance) =>
+Map<String, dynamic> _$$CheeseSummaryImplToJson(_$CheeseSummaryImpl instance) =>
     <String, dynamic>{
-      'crustAverage': instance.crustAverage,
-      'crustThick': instance.crustThick,
-      'crustThin': instance.crustThin,
+      'heavy': instance.heavy,
+      'light': instance.light,
+      'average': instance.average,
     };
 
 _$ReviewImpl _$$ReviewImplFromJson(Map<String, dynamic> json) => _$ReviewImpl(
@@ -129,17 +139,18 @@ Map<String, dynamic> _$$ReviewImplToJson(_$ReviewImpl instance) =>
 
 _$CrustReviewImpl _$$CrustReviewImplFromJson(Map<String, dynamic> json) =>
     _$CrustReviewImpl(
-      thickness: (json['thickness'] as List<dynamic>?)
-              ?.map((e) => e as String?)
-              .toList() ??
-          const [],
+      thickness: json['thickness'] as String?,
       crispy: json['crispy'] as bool,
+      dry: json['dry'] as bool?,
+      fluffy: json['fluffy'] as bool?,
     );
 
 Map<String, dynamic> _$$CrustReviewImplToJson(_$CrustReviewImpl instance) =>
     <String, dynamic>{
       'thickness': instance.thickness,
       'crispy': instance.crispy,
+      'dry': instance.dry,
+      'fluffy': instance.fluffy,
     };
 
 _$SauceReviewImpl _$$SauceReviewImplFromJson(Map<String, dynamic> json) =>
