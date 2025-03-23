@@ -16,9 +16,14 @@ abstract class _$AppRouter extends RootStackRouter {
   @override
   final Map<String, PageFactory> pagesMap = {
     DiscoverRoute.name: (routeData) {
+      final args = routeData.argsAs<DiscoverRouteArgs>(
+          orElse: () => const DiscoverRouteArgs());
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const DiscoverPage(),
+        child: DiscoverPage(
+          key: args.key,
+          searchData: args.searchData,
+        ),
       );
     },
     EditProfileRoute.name: (routeData) {
@@ -82,6 +87,12 @@ abstract class _$AppRouter extends RootStackRouter {
         child: WrappedRoute(child: const RegisterPage()),
       );
     },
+    SearchRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const SearchPage(),
+      );
+    },
     SplashRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -109,16 +120,40 @@ abstract class _$AppRouter extends RootStackRouter {
 
 /// generated route for
 /// [DiscoverPage]
-class DiscoverRoute extends PageRouteInfo<void> {
-  const DiscoverRoute({List<PageRouteInfo>? children})
-      : super(
+class DiscoverRoute extends PageRouteInfo<DiscoverRouteArgs> {
+  DiscoverRoute({
+    Key? key,
+    Map<String, String>? searchData,
+    List<PageRouteInfo>? children,
+  }) : super(
           DiscoverRoute.name,
+          args: DiscoverRouteArgs(
+            key: key,
+            searchData: searchData,
+          ),
           initialChildren: children,
         );
 
   static const String name = 'DiscoverRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static const PageInfo<DiscoverRouteArgs> page =
+      PageInfo<DiscoverRouteArgs>(name);
+}
+
+class DiscoverRouteArgs {
+  const DiscoverRouteArgs({
+    this.key,
+    this.searchData,
+  });
+
+  final Key? key;
+
+  final Map<String, String>? searchData;
+
+  @override
+  String toString() {
+    return 'DiscoverRouteArgs{key: $key, searchData: $searchData}';
+  }
 }
 
 /// generated route for
@@ -268,6 +303,20 @@ class RegisterRoute extends PageRouteInfo<void> {
         );
 
   static const String name = 'RegisterRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [SearchPage]
+class SearchRoute extends PageRouteInfo<void> {
+  const SearchRoute({List<PageRouteInfo>? children})
+      : super(
+          SearchRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'SearchRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }

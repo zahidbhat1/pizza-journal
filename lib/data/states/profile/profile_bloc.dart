@@ -8,16 +8,22 @@ import 'package:pizzajournals/data/states/profile/profile_event.dart';
 import 'package:pizzajournals/data/states/profile/profile_state.dart';
 import 'package:pizzajournals/presenter/navigation/navigation.dart';
 
+import '../../../utils/alert_manager.dart';
+import '../../../utils/error_types.dart';
+import '../../source/error/app_exception.dart';
+
 @singleton
 class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   final AppRouter _router;
   final UserRepository _userRepository;
   final AuthBloc _authBloc;
+  final AlertManager _alertManager;
 
-  ProfileBloc({
+  ProfileBloc(this._alertManager, {
     required AppRouter router,
     required UserRepository userRepository,
     required AuthBloc authBloc,
+    required AlertManager alertManager,
   })  : _router = router,
         _userRepository = userRepository,
         _authBloc = authBloc,
@@ -25,7 +31,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     // Listen to auth state changes
     _authBloc.stream.listen((authState) {
       if (authState.status == AuthStateStatus.unauthenticated) {
-        // Clear the state when user logs out
+
         add(const ProfileEvent.load());
       }
     });
@@ -35,7 +41,62 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     on<AddProfileImage>(_onAddImage);
     on<UpdateProfile>(_onUpdateProfile);
     on<ProfileRefresh>(_onRefresh);
+    on<LoadSearches>(_onLoadSearches);
+    on<DeleteSearch>(_onDeleteSearch);
   }
+
+  Future<void> _onLoadSearches(LoadSearches event, Emitter<ProfileState> emit) async {
+    if (_authBloc.state.status == AuthStateStatus.unauthenticated) {
+      await _actionIfNotLoggedIn();
+      return;
+    }
+
+    emit(state.copyWith(isLoadingSearches: true, error: null));
+
+    try {
+      print("Fetching user searches...");
+      final response = await _userRepository.getSearches();
+      print("Searches response: ${response.data}");
+
+      emit(state.copyWith(
+        searches: response.data,
+        isLoadingSearches: false,
+        error: null,
+      ));
+    } catch (e) {
+      print("Error fetching searches: $e");
+
+      // Convert to ServerException if it's not already
+      final serverException = e is ServerException ? e : ServerException(
+        type: ServerExceptionType.unknown,
+        message: "An unexpected error occurred.",
+      );
+
+      print("ServerException type: ${serverException.type}, message: ${serverException.message}");
+
+      _alertManager.showError(
+        title: 'Error',
+        message: getErrorMessage(serverException), // Using the clean message
+      );
+
+      emit(state.copyWith(
+        isLoadingSearches: false,
+        searches: [], // Clear searches on error
+        error: serverException.message, // Store the clean error message
+      ));
+    }
+  }
+  Future<void> _onDeleteSearch(DeleteSearch event, Emitter<ProfileState> emit) async {
+    try {
+      await _userRepository.delSearch(event.searchId); // Call API to delete search
+      final updatedSearches = state.searches.where((s) => s.id != event.searchId).toList();
+
+      emit(state.copyWith(searches: updatedSearches)); // Update state after deletion
+    } catch (e) {
+      emit(state.copyWith(error: 'Failed to delete search: $e'));
+    }
+  }
+
 
   void _onAddImage(AddProfileImage event, Emitter<ProfileState> emit) async {
     if (event.image != null) {

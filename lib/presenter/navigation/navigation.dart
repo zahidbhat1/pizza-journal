@@ -15,6 +15,7 @@ import 'package:pizzajournals/presenter/pages/welcome/welcome_page.dart';
 import '../../di.dart';
 import '../../utils/alert_manager.dart';
 import '../pages/discover/my_places.dart';
+import '../pages/profile/my searches.dart';
 import '../pages/profile/widgets/update_profile.dart';
 import '../pages/suggestions/suggestion_list.dart';
 
@@ -44,10 +45,13 @@ class AppRouter extends _$AppRouter {
             // Profile
             AutoRoute(path: 'profile', page: ProfileRoute.page),
 
+
+
             // Error
             AutoRoute(path: 'error', page: ErrorRoute.page),
           ],
         ),
+    AutoRoute(path: '/search', page: SearchRoute.page),
         AutoRoute(path: '/pizza_place', page: PizzaPlaceRoute.page),
         //  AutoRoute(path: '/my-places', page: MyPlacesRoute.page),
         AutoRoute(path: '/edit-profile', page: EditProfileRoute.page),

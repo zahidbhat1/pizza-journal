@@ -31,6 +31,6 @@ class WelcomeBloc extends Bloc<WelcomeEvent, WelcomeState> {
     WelcomeSkip event,
     Emitter<WelcomeState> emit,
   ) async {
-    await _router.replaceAll([const DiscoverRoute()]);
+    await _router.replaceAll([ DiscoverRoute()]);
   }
 }

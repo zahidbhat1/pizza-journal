@@ -17,6 +17,7 @@ class DiscoverEvent with _$DiscoverEvent {
   const factory DiscoverEvent.pizzaPlace(PizzaPlaceModel pizzaPlaceModel) =
       DiscoverPizzaPlace;
 
+
   const factory DiscoverEvent.pizzaPlaceReviews(
       PizzaPlaceModel? pizzaPlaceModel) = DiscoverPizzaPlaceReviews;
 
@@ -28,6 +29,12 @@ class DiscoverEvent with _$DiscoverEvent {
 
   const factory DiscoverEvent.addPizzaPlaceReview(Map<String, dynamic> data) =
       DiscoverAddPlaceReview;
+  const factory DiscoverEvent.updatePizzaPlaceReview({
+    required String reviewId,
+    required Map<String, dynamic> data,
+  }) = DiscoverUpdatePlaceReview;
+
+
 
   const factory DiscoverEvent.suggestEdit(PizzaPlaceModel pizzaPlace) =
       DiscoverSuggestEdit;

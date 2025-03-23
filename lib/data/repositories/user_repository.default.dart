@@ -12,6 +12,7 @@ import 'package:pizzajournals/data/source/network/models/pizza_place_model.dart'
 import 'package:pizzajournals/data/source/network/models/pizza_review_model.dart';
 import 'package:pizzajournals/data/source/network/models/register_data.dart';
 import 'package:pizzajournals/data/source/network/models/user_model.dart';
+import 'package:pizzajournals/data/source/network/models/user_search_response.dart';
 import 'package:pizzajournals/data/source/network/user_datasource.dart';
 import 'package:pizzajournals/utils/app_devices.dart';
 import 'package:pizzajournals/utils/extensions/future_extensions.dart';
@@ -60,6 +61,29 @@ class DefaultUserRepository extends UserRepository {
       return user;
     } catch (_) {
       print(_);
+      rethrow;
+    }
+  }
+
+  @override
+
+
+  @override
+  Future<UserSearchesResponse> getSearches() async {
+    try {
+      final response = await _userDataSource.getSearches();
+      return response;
+    }
+    catch (_) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void>delSearch(String searchId) async{
+    try {
+      await _userDataSource.delSearch(searchId);
+    } catch (_) {
       rethrow;
     }
   }
@@ -439,6 +463,25 @@ class DefaultUserRepository extends UserRepository {
 
       return response;
     } catch (_) {
+      rethrow;
+    }
+  }
+  @override
+  Future<DataItem<void>> updatePizzaPlaceReview({
+    required Map<String, dynamic> data,
+    required String reviewId,
+  }) async {
+    try {
+      // Add the reviewId to the data
+      final reviewData = {
+        ...data,
+        'reviewId': reviewId,
+      };
+
+      final result = await _userDataSource.updatePizzaPlaceReview(data: reviewData,reviewId: reviewId);
+      return result;
+    } catch (_) {
+      print(_);
       rethrow;
     }
   }

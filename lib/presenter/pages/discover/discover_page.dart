@@ -23,8 +23,9 @@ import '../../navigation/navigation.dart';
 
 @RoutePage()
 class DiscoverPage extends StatefulWidget {
- // final AlertManager alertManager;
-  const DiscoverPage({super.key, });
+  final Map<String, String>? searchData;
+
+  const DiscoverPage({super.key, this.searchData });
 
   @override
   State<DiscoverPage> createState() => _DiscoverPageState();
@@ -45,14 +46,117 @@ class DiscoverPage extends StatefulWidget {
 }
 
 class _DiscoverPageState extends State<DiscoverPage> {
+
   @override
   void initState() {
     super.initState();
-    _initialize();
+    _pizzaPlaceController.text = txtPizzaPlace;
+    if (widget.searchData != null) {
 
+      _prefillForm(widget.searchData!);
+
+      _submitSearch();
+    }
+    _initialize();
   }
 
+  void _prefillForm(Map<String, String> searchData) {
+    print('Search Data: $searchData');
+    setState(() {
+      // Handle min rating
+      dropdownRatingValue = _normalizeDropdownValue(
+          searchData['minRating'] != null ? '${searchData['minRating']} Star' : 'Rating',
+          'Rating',
+          ['Rating', '5 Star', '4 Star', '3 Star', '2 Star', '1 Star']
+      );
+
+      dropdownCheeseAmountValue = _normalizeDropdownValue(
+          searchData['cheeseAmount'],
+          'Amount',
+          ['Amount', 'Light', 'Heavy', 'Average']
+      );
+
+      dropdownSauceAmountValue = _normalizeDropdownValue(
+          searchData['sauceAmount'],
+          'Amount',
+          ['Amount', 'Light', 'Heavy', 'Average']
+      );
+
+      dropdownSauceTypeValue = _normalizeDropdownValue(
+          searchData['sauceSweetOrSpicy'],
+          'Sweet/Spicy',
+          ['Sweet/Spicy', 'Sweet', 'Spicy', 'No Flavor', 'N/A']
+      );
+      dropdownPizzaTypeValue = _normalizeDropdownValue(
+          searchData['pizzaType'],
+          'Select Pizza Type',
+          ['Select Pizza Type', 'Traditional Round', ' Sicilian/Square', 'Personal', 'Grandma?Square', 'Deep dish']
+      );
+
+      dropdownCheeseTasteValue = _normalizeDropdownValue(
+          searchData['cheeseTaste'],
+          'Taste',
+          ['Taste', 'Great', 'OK', 'Ehh']
+      );
+
+      dropdownCrushValue = _normalizeDropdownValue(
+          searchData['crustThickness'],
+          'Crush Type',
+          ['Crush Type', 'Thick', 'Thin', 'Average']
+      );
+
+      dropdownCrustCrispyValue = _normalizeDropdownValue(
+          searchData['crustCrispy'] == 'true' ? 'Yes' : 'No',
+          'Crispy',
+          ['Crispy', 'Yes', 'No']
+      );
+
+      dropdownDryValue = _normalizeDropdownValue(
+          searchData['crustDry'] == 'true' ? 'Yes' : 'No',
+          'Dry (Y/N)',
+          ['Dry (Y/N)', 'Yes', 'No']
+      );
+
+      dropdownFluffyValue = _normalizeDropdownValue(
+          searchData['CrustFluffy'] == 'true' ? 'Yes' : 'No',
+          'Fluffy (Y/N)',
+          ['Fluffy (Y/N)', 'Yes', 'No']
+      );
+      _pizzaPlaceController.text = searchData['placeName'] ?? '';
+
+      txtPizzaPlace = searchData['placeName'] ?? '';
+      txtPizzaType = searchData['pizzaType'] ?? '';
+      print('pizzatype = $txtPizzaType');
+    });
+  }
+
+  String _normalizeDropdownValue(String? value, String defaultValue, List<String> validOptions) {
+    if (value == null) return defaultValue;
+
+
+    String normalizedValue = value.split(' ').map((word) =>
+    word.isEmpty ? '' : '${word[0].toUpperCase()}${word.substring(1).toLowerCase()}'
+    ).join(' ');
+
+
+    if (validOptions.contains(normalizedValue)) {
+      return normalizedValue;
+    }
+
+
+    for (var option in validOptions) {
+      if (option.toLowerCase() == value.toLowerCase()) {
+        return option;
+      }
+    }
+
+    return defaultValue;
+  }
+
+
+
   String dropdownRatingValue = 'Rating';
+  String dropdownPizzaTypeValue= 'Select Pizza Type';
   String dropdownRadiusValue = 'Radius';
   String dropdownCrushValue = 'Crush Type';
   String dropdownSauceTypeValue = 'Sweet/Spicy';
@@ -65,6 +169,10 @@ class _DiscoverPageState extends State<DiscoverPage> {
   String txtLocation = '';
   String txtPizzaPlace = '';
   String txtUsername = '';
+  final TextEditingController _pizzaPlaceController = TextEditingController();
+
+  String txtSearchName= '';
+  String txtPizzaType= '';
 
   String pizzaPlace = '';
   String street = '';
@@ -83,45 +191,58 @@ class _DiscoverPageState extends State<DiscoverPage> {
 
   DiscoverBloc get _discoverBloc => context.read<DiscoverBloc>();
 
-  void _submitSearch() {
-    String mapYesNoToString(String value) {
+  void _submitSearch({bool saveSearch = false}) {
+    String? mapYesNoToString(String value) {
       if (value == 'Yes') return 'true';
       if (value == 'No') return 'false';
-      return '';}
-    Map<String, String> data = {
-      'placeName': txtPizzaPlace,
-      'minRating':
-          dropdownRatingValue != "Rating" ? dropdownRatingValue[0] : '',
-      'sauceSweetOrSpicy': dropdownSauceTypeValue != "Sweet/Spicy"
-          ? dropdownSauceTypeValue.toLowerCase()
-          : '',
-      'sauceAmount': dropdownSauceAmountValue != "Amount"
-          ? dropdownSauceAmountValue.toLowerCase()
-          : '',
-      'cheeseAmount': dropdownCheeseAmountValue != "Amount"
-          ? dropdownCheeseAmountValue.toLowerCase()
-          : '',
-      'cheeseTaste': dropdownCheeseTasteValue != "Taste"
-          ? dropdownCheeseTasteValue.toLowerCase()
-          : '',
-      'crustThickness': dropdownCrushValue != "Crush Type"
-          ? dropdownCrushValue.toUpperCase()
-          : '',
-      'crustCrispy': dropdownCrustCrispyValue != "Crispy"
-          ? mapYesNoToString(dropdownCrustCrispyValue)
-          : '',
-      'dry': dropdownDryValue != "Dry (Y/N)"
-          ? mapYesNoToString(dropdownDryValue)
-          : '',
-      'fluffy': dropdownFluffyValue != "Fluffy (Y/N)"
-          ? mapYesNoToString(dropdownFluffyValue)
-          : '',
-      'screenName': txtUsername,
-    };
+      return null;
+    }
+
+    Map<String, String> data = {}; // Start with an empty map
+
+    if (txtPizzaPlace.isNotEmpty) data['placeName'] = txtPizzaPlace;
+    if (dropdownPizzaTypeValue != "Select Pizza Type") {
+      data['pizzaType'] = dropdownPizzaTypeValue;
+    }
+    if (dropdownRatingValue != "Rating") data['minRating'] = dropdownRatingValue[0];
+    if (dropdownSauceTypeValue != "Sweet/Spicy") data['sauceSweetOrSpicy'] = dropdownSauceTypeValue.toLowerCase();
+    if (dropdownSauceAmountValue != "Amount") data['sauceAmount'] = dropdownSauceAmountValue.toLowerCase();
+    if (dropdownCheeseAmountValue != "Amount") data['cheeseAmount'] = dropdownCheeseAmountValue.toLowerCase();
+    if (dropdownCheeseTasteValue != "Taste") data['cheeseTaste'] = dropdownCheeseTasteValue.toLowerCase();
+    if (dropdownCrushValue != "Crush Type") data['crustThickness'] = dropdownCrushValue.toLowerCase();
+
+    final crustCrispyValue = mapYesNoToString(dropdownCrustCrispyValue);
+    if (crustCrispyValue != null) data['crustCrispy'] = crustCrispyValue;
+
+  //  if (txtUsername.isNotEmpty) data['screenName'] = txtUsername;
+
+    final dryValue = mapYesNoToString(dropdownDryValue);
+    if (dryValue != null) data[' crustDry'] = dryValue;
+
+    final fluffyValue = mapYesNoToString(dropdownFluffyValue);
+    if (fluffyValue != null) data['crustFluffy'] = fluffyValue;
 
 
+    if (saveSearch) {
+      if (txtSearchName.isEmpty) {
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Please provide a name for the search.'),
+            backgroundColor: Colors.red,
+          ),
+        );
+        return; // Exit the function if searchName is not provided
+      }
+      data['searchName'] = txtSearchName;
+      data['saveSearch'] = 'true';
+    }
+
+    // Dispatch the event to load data
     _discoverBloc.add(DiscoverEvent.load(data));
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -218,6 +339,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
                         ),
                       ],
                     ),
+
                     Container(
                       decoration: BoxDecoration(
                         color: AppColors.white,
@@ -234,6 +356,18 @@ class _DiscoverPageState extends State<DiscoverPage> {
                       ),
                       child: Column(
                         children: [
+
+                          Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 17, vertical: 12), // ✅ Same margin as input fields
+                            padding: const EdgeInsets.symmetric(horizontal: 16), // ✅ Same padding
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(color: AppColors.grey2, width: 1),
+                            ),
+                            width: double.infinity, // ✅ Full width
+                            child: _buildPizzaTypeDropdown(),
+                          ),
+
                           const SizedBox(height: 17),
                           Container(
                             margin: const EdgeInsets.symmetric(horizontal: 17),
@@ -244,6 +378,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
                                   Border.all(color: AppColors.grey2, width: 1),
                             ),
                             child: TextField(
+                              controller: _pizzaPlaceController,
                               onChanged: (value) {
                                 setState(() {
                                   txtPizzaPlace = value;
@@ -255,6 +390,28 @@ class _DiscoverPageState extends State<DiscoverPage> {
                               ),
                             ),
                           ),
+                          // Container(
+                          //   margin: const EdgeInsets.symmetric(
+                          //       horizontal: 17, vertical: 12),
+                          //   padding: const EdgeInsets.symmetric(horizontal: 16),
+                          //   decoration: BoxDecoration(
+                          //     borderRadius: BorderRadius.circular(8),
+                          //     border:
+                          //         Border.all(color: AppColors.grey2, width: 1),
+                          //   ),
+                          //   child: TextField(
+                          //     onChanged: (value) {
+                          //       setState(() {
+                          //         txtUsername = value;
+                          //       });
+                          //     },
+                          //     decoration: const InputDecoration(
+                          //       hintText: 'Enter Username',
+                          //       border: InputBorder.none,
+                          //     ),
+                          //   ),
+                          // ),
+
                           Container(
                             margin: const EdgeInsets.symmetric(
                                 horizontal: 17, vertical: 12),
@@ -262,16 +419,16 @@ class _DiscoverPageState extends State<DiscoverPage> {
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(8),
                               border:
-                                  Border.all(color: AppColors.grey2, width: 1),
+                              Border.all(color: AppColors.grey2, width: 1),
                             ),
                             child: TextField(
                               onChanged: (value) {
                                 setState(() {
-                                  txtUsername = value;
+                                  txtSearchName = value;
                                 });
                               },
                               decoration: const InputDecoration(
-                                hintText: 'Enter Username',
+                                hintText: 'Enter Search Name',
                                 border: InputBorder.none,
                               ),
                             ),
@@ -304,6 +461,52 @@ class _DiscoverPageState extends State<DiscoverPage> {
                                         color: AppColors.grey2, width: 1),
                                   ),
                                   child: _buildCrushDropDown(),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 20),
+                          const Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 16.0),
+                            child: Align(
+                              alignment: Alignment.topLeft,
+                              child: Text('Crust Details'),
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Container(
+                                  margin: const EdgeInsets.symmetric(horizontal: 8),
+                                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8),
+                                    border: Border.all(color: AppColors.grey2, width: 1),
+                                  ),
+                                  child: _buildCrustCrispyDropDown(),
+                                ),
+                              ),
+                              Expanded(
+                                child: Container(
+                                  margin: const EdgeInsets.symmetric(horizontal: 8),
+                                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8),
+                                    border: Border.all(color: AppColors.grey2, width: 1),
+                                  ),
+                                  child: _buildDryDropDown(),
+                                ),
+                              ),
+                              Expanded(
+                                child: Container(
+                                  margin: const EdgeInsets.symmetric(horizontal: 8),
+                                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8),
+                                    border: Border.all(color: AppColors.grey2, width: 1),
+                                  ),
+                                  child: _buildFluffyDropDown(),
                                 ),
                               ),
                             ],
@@ -393,52 +596,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
                             ],
                           ),
 
-                          const SizedBox(height: 20),
-                          const Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 16.0),
-                            child: Align(
-                              alignment: Alignment.topLeft,
-                              child: Text('Crust Details'),
-                            ),
-                          ),
-                          const SizedBox(height: 10),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Container(
-                                  margin: const EdgeInsets.symmetric(horizontal: 8),
-                                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(8),
-                                    border: Border.all(color: AppColors.grey2, width: 1),
-                                  ),
-                                  child: _buildCrustCrispyDropDown(),
-                                ),
-                              ),
-                              Expanded(
-                                child: Container(
-                                  margin: const EdgeInsets.symmetric(horizontal: 8),
-                                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(8),
-                                    border: Border.all(color: AppColors.grey2, width: 1),
-                                  ),
-                                  child: _buildDryDropDown(),
-                                ),
-                              ),
-                              Expanded(
-                                child: Container(
-                                  margin: const EdgeInsets.symmetric(horizontal: 8),
-                                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(8),
-                                    border: Border.all(color: AppColors.grey2, width: 1),
-                                  ),
-                                  child: _buildFluffyDropDown(),
-                                ),
-                              ),
-                            ],
-                          ),
+
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             // Distribute space evenly
@@ -467,7 +625,9 @@ class _DiscoverPageState extends State<DiscoverPage> {
                                 ),
                               ),
                               GestureDetector(
-                                onTap: () {},
+                                onTap: () {
+                                  _submitSearch(saveSearch: true);
+                                },
                                 child: Container(
                                   margin: const EdgeInsets.symmetric(
                                       vertical: 12, horizontal: 15),
@@ -488,24 +648,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
                                 ),
                               ),
 
-                              // GestureDetector(
-                              //   onTap: () {},
-                              //   child: Container(
-                              //     margin: const EdgeInsets.symmetric(vertical: 12),
-                              //     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                              //     decoration: BoxDecoration(
-                              //       color: AppColors.main,
-                              //       borderRadius: BorderRadius.circular(8),
-                              //       border: Border.all(color: AppColors.lightOrange, width: 1),
-                              //     ),
-                              //     child: const Center(
-                              //       child: Text(
-                              //         'Save by new name',
-                              //         style: TextStyle(color: AppColors.white),
-                              //       ),
-                              //     ),
-                              //   ),
-                              // ),
+
                             ],
                           ),
                         ],
@@ -674,35 +817,36 @@ class _DiscoverPageState extends State<DiscoverPage> {
             const SizedBox(
               width: 16,
             ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  item.name ?? '',
-                  style: const TextStyle(fontSize: 16),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                // const Text(
-                //   'Traditional Round',
-                //   style: TextStyle(color: AppColors.grey),
-                // ),
-                Row(
-                  children: [
-                    Text('Rating: ${item.averageRating ?? 0} / 5',
-                        style: const TextStyle(color: AppColors.grey)),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 4.0),
-                      child: Icon(Icons.star, size: 18, color: AppColors.main),
+            Container( width: 200,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    width: double.infinity, // Constrained by the parent Container
+                    child: Text(
+                      item.name ?? '',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(fontSize: 16),
                     ),
-                    Text('(${item.ratings ?? 0})',
-                        style: const TextStyle(color: AppColors.grey)),
-                  ],
-                ),
-                const Text('3.1 km away',
-                    style: TextStyle(color: AppColors.grey)),
-              ],
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    children: [
+                      Text('Rating: ${item.averageRating ?? 0} / 5',
+                          style: const TextStyle(color: AppColors.grey)),
+                      const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 4.0),
+                        child: Icon(Icons.star, size: 18, color: AppColors.main),
+                      ),
+                      Text('(${item.ratings ?? 0})',
+                          style: const TextStyle(color: AppColors.grey)),
+                    ],
+                  ),
+                  const Text('3.1 km away',
+                      style: TextStyle(color: AppColors.grey)),
+                ],
+              ),
             ),
             const Spacer(),
             // Row(
@@ -816,6 +960,41 @@ class _DiscoverPageState extends State<DiscoverPage> {
     );
   }
 
+  Widget _buildPizzaTypeDropdown() {
+    return DropdownButton<String>(
+      value: dropdownPizzaTypeValue,
+      icon: const Icon(Icons.arrow_drop_down),
+      elevation: 16,
+      style: const TextStyle(color: AppColors.black),
+      underline: Container(height: 0),
+      onChanged: (String? newValue) {
+        setState(() {
+          dropdownPizzaTypeValue = newValue!;
+        });
+      },
+      items: <String>[
+        'Select Pizza Type',
+        'Traditional Round',
+        'Sicilian/Square',
+        'Personal',
+        'Grandma/Square',
+        'Deep Dish',
+      ].map<DropdownMenuItem<String>>((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(
+            value,
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
+            style: TextStyle(
+              color: value == 'Select Pizza Type' ? AppColors.grey : AppColors.black,
+            ),
+          ),
+        );
+      }).toList(),
+      isExpanded: true,
+    );
+  }
   Widget _buildRatingDropDown() {
     return Row(
       children: [
@@ -867,24 +1046,20 @@ class _DiscoverPageState extends State<DiscoverPage> {
         Expanded(
           child: DropdownButton<String>(
             value: dropdownCrustCrispyValue == 'Crispy' ? null : dropdownCrustCrispyValue,
-            hint: const Text("Crispy"),
-            disabledHint: const Text("Crispy"),
+            hint: const Text("Crispy"), // ✅ Placeholder when null
             icon: const Icon(Icons.arrow_drop_down),
             elevation: 16,
             style: const TextStyle(color: AppColors.black, fontSize: 14),
             underline: Container(height: 0),
             onChanged: (String? newValue) {
-              if (newValue != "Crispy") {
-                setState(() {
-                  dropdownCrustCrispyValue = newValue!;
-                });
-              }
+              setState(() {
+                dropdownCrustCrispyValue = (newValue == dropdownCrustCrispyValue ? null : newValue)!;
+              });
             },
             items: <String>['Crispy', 'Yes', 'No']
                 .map<DropdownMenuItem<String>>((String value) {
               return DropdownMenuItem<String>(
                 value: value,
-                enabled: value != 'Crispy', // ✅ Disable 'Crispy'
                 child: Text(
                   value,
                   overflow: TextOverflow.ellipsis,
@@ -900,6 +1075,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
       ],
     );
   }
+
 
 
   Widget _buildDryDropDown() {
@@ -1274,29 +1450,25 @@ class _DiscoverPageState extends State<DiscoverPage> {
               //   });
               // }
 
-              // if (state.isPlaceAdded) {
-              //   WidgetsBinding.instance.addPostFrameCallback((_) {
-              //     if (context.router.canPop()) {
-              //       context.router.pop();
-              //     }
-              //   });
-              //
-              //   setState(() {
-              //     pizzaPlace = '';
-              //     street = '';
-              //     city = '';
-              //
-              //     zip = '';
-              //     phone = '';
-              //     socialLink = '';
-              //     mapLink = '';
-              //     selectedLocation = null;
-              //     hoursOpen = {};
-              //   });
-              //
-              //   // _locationController.clear();
-              //   // _streetController.clear();
-              // }
+              if (state.isPlaceAdded) {
+
+
+                setState(() {
+                  pizzaPlace = '';
+                  street = '';
+                  city = '';
+
+                  zip = '';
+                  phone = '';
+                  socialLink = '';
+                  mapLink = '';
+                  selectedLocation = null;
+                  hoursOpen = {};
+                });
+
+                _locationController.clear();
+                _streetController.clear();
+              }
               print(state);
             },
             child: Dialog(
@@ -1405,27 +1577,27 @@ class _DiscoverPageState extends State<DiscoverPage> {
                             //   ),
                             // ),
                             // const SizedBox(height: 16),
-                            // Container(
-                            //   padding: const EdgeInsets.symmetric(horizontal: 16),
-                            //   decoration: BoxDecoration(
-                            //       borderRadius: BorderRadius.circular(8),
-                            //       border: Border.all(
-                            //           color: AppColors.grey2, width: 1)),
-                            //   child: TextField(
-                            //     controller: zipController,
-                            //     onChanged: (value) {
-                            //       setState(() {
-                            //         zip = value;
-                            //       });
-                            //       getLatLngFromAddress('$street, $city, $zip');
-                            //     },
-                            //     keyboardType: TextInputType.number,
-                            //     decoration: const InputDecoration(
-                            //       hintText: 'Enter Zip Code',
-                            //       border: InputBorder.none,
-                            //     ),
-                            //   ),
-                            // ),
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 16),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8),
+                                  border: Border.all(
+                                      color: AppColors.grey2, width: 1)),
+                              child: TextField(
+                                controller: zipController,
+                                onChanged: (value) {
+                                  setState(() {
+                                    zip = value;
+                                  });
+
+                                },
+                                keyboardType: TextInputType.number,
+                                decoration: const InputDecoration(
+                                  hintText: 'Enter Zip Code',
+                                  border: InputBorder.none,
+                                ),
+                              ),
+                            ),
                             const SizedBox(height: 16),
                             GestureDetector(
                               onTap: _showHoursBottomSheet,
@@ -1866,11 +2038,14 @@ class _DiscoverPageState extends State<DiscoverPage> {
   void _showHoursBottomSheet() {
     showModalBottomSheet(
       context: context,
+      isScrollControlled: true, // Makes the modal take up more space
       builder: (context) {
         return StatefulBuilder(
           builder: (context, setModalState) {
             return Container(
               padding: const EdgeInsets.all(16),
+              // Make the bottom sheet taller to accommodate the new option
+              height: MediaQuery.of(context).size.height * 0.7,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -1884,10 +2059,36 @@ class _DiscoverPageState extends State<DiscoverPage> {
                       ),
                       IconButton(
                         icon: const Icon(Icons.close),
+                        padding: EdgeInsets.zero, // Reduce padding
+                        constraints: BoxConstraints(), // Remove constraints
                         onPressed: () => Navigator.pop(context),
                       ),
                     ],
                   ),
+                  // New section for "Set for all days"
+                  Container(
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    decoration: BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(color: Colors.grey.shade300),
+                      ),
+                    ),
+                    child: Row(
+                      children: [
+
+                        TextButton(
+                          child: Text(
+                            'Set Default Hours ',
+                            style: TextStyle(
+                              color: AppColors.main,
+                            ),
+                          ),
+                          onPressed: () => _setDefaultHoursForAllDays(setModalState),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 8),
                   Expanded(
                     child: ListView(
                       children: [
@@ -1901,20 +2102,41 @@ class _DiscoverPageState extends State<DiscoverPage> {
                       ].map((day) {
                         final hours = hoursOpen[day.toLowerCase()] ?? 'Closed';
 
-                        return ListTile(
-                          title: Text(day),
-                          trailing: Row(
-                            mainAxisSize: MainAxisSize.min,
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 4.0),
+                          child: Row(
                             children: [
-                              Text(hours),
+                              // Day name
+                              Expanded(
+                                flex: 3,
+                                child: Text(
+                                  day,
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                              ),
+                              // Hours text with fixed width
+                              Expanded(
+                                flex: 4,
+                                child: Text(
+                                  hours,
+                                  textAlign: TextAlign.end,
+                                ),
+                              ),
+                              // Edit button with minimal spacing
                               IconButton(
                                 icon: const Icon(Icons.edit),
-                                onPressed: () =>
-                                    _showTimePickerDialog(day, setModalState),
+                                padding: EdgeInsets.zero,
+                                constraints: BoxConstraints(),
+                                iconSize: 20,
+                                onPressed: () => _showTimePickerDialog(day, setModalState),
                               ),
+                              SizedBox(width: 8),
+                              // Close button with minimal spacing
                               IconButton(
-                                icon:
-                                    const Icon(Icons.cancel, color: Colors.red),
+                                icon: const Icon(Icons.cancel, color: Colors.red),
+                                padding: EdgeInsets.zero,
+                                constraints: BoxConstraints(),
+                                iconSize: 20,
                                 onPressed: () {
                                   setState(() {
                                     hoursOpen[day.toLowerCase()] = 'Closed';
@@ -1937,6 +2159,52 @@ class _DiscoverPageState extends State<DiscoverPage> {
     ).then((_) {
       setState(() {}); // Refresh the main UI when bottom sheet is closed
     });
+  }
+
+// New method to set default hours for all days
+  void _setDefaultHoursForAllDays(void Function(void Function()) setModalState) async {
+    // Show a dialog to set the default hours
+    TimeOfDay? openTime = await showTimePicker(
+      context: context,
+      initialTime: const TimeOfDay(hour: 10, minute: 0),
+      helpText: 'Select opening time for all days',
+    );
+
+    if (openTime != null) {
+      TimeOfDay? closeTime = await showTimePicker(
+        context: context,
+        initialTime: const TimeOfDay(hour: 21, minute: 0),
+        helpText: 'Select closing time for all days',
+      );
+
+      if (closeTime != null) {
+        final days = [
+          'sunday', 'monday', 'tuesday', 'wednesday',
+          'thursday', 'friday', 'saturday'
+        ];
+
+        // Format the time string
+        final formattedHours = '${openTime.format(context)} - ${closeTime.format(context)}';
+
+        setState(() {
+          // Apply the same hours to all days
+          for (var day in days) {
+            hoursOpen[day] = formattedHours;
+          }
+        });
+
+        setModalState(() {}); // Refresh the bottom sheet UI
+
+        // Show a confirmation snackbar
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Default hours set for all days'),
+            duration: Duration(seconds: 2),
+            backgroundColor: AppColors.main,
+          ),
+        );
+      }
+    }
   }
 
   void _showTimePickerDialog(

@@ -53,6 +53,7 @@ extension GetItInjectableX on _i174.GetIt {
     gh.singleton<_i194.SettingsBloc>(() => _i194.SettingsBloc());
     gh.singleton<_i361.Dio>(() => registerModule.dio);
     gh.singleton<_i1052.AppRouter>(() => registerModule.router);
+
     gh.singleton<_i768.UserLocalDataSource>(() =>
         _i768.UserLocalDataSource(storage: gh<_i558.FlutterSecureStorage>()));
     gh.singleton<_i425.NetworkManager>(
@@ -80,18 +81,10 @@ extension GetItInjectableX on _i174.GetIt {
           router: gh<_i1052.AppRouter>(),
           permissionService: gh<_i615.PermissionService>(),
         ));
-    gh.singleton<_i974.SuggestionsBloc>(() => _i974.SuggestionsBloc(
-          userRepository: gh<_i2.UserRepository>(),
-          alertManager: gh<_i651.AlertManager>(),
-        ));
+
     gh.singleton<_i982.AuthBloc>(() => _i982.AuthBloc(
           router: gh<_i1052.AppRouter>(),
           userRepository: gh<_i2.UserRepository>(),
-        ));
-    gh.singleton<_i441.ProfileBloc>(() => _i441.ProfileBloc(
-          router: gh<_i1052.AppRouter>(),
-          userRepository: gh<_i2.UserRepository>(),
-          authBloc: gh<_i982.AuthBloc>(),
         ));
     gh.singleton<_i310.DiscoverBloc>(() => _i310.DiscoverBloc(
           router: gh<_i1052.AppRouter>(),
@@ -99,6 +92,18 @@ extension GetItInjectableX on _i174.GetIt {
           alertManager: gh<_i651.AlertManager>(),
           userRepository: gh<_i2.UserRepository>(),
           actionBloc: gh<_i344.ActionBloc>(),
+        ));
+    gh.singleton<_i974.SuggestionsBloc>(() => _i974.SuggestionsBloc(
+      userRepository: gh<_i2.UserRepository>(),
+      alertManager: gh<_i651.AlertManager>(),
+      discoverBloc: gh<_i310.DiscoverBloc>(),
+    ));
+    gh.singleton<_i441.ProfileBloc>(() => _i441.ProfileBloc(
+          gh<_i651.AlertManager>(),
+          router: gh<_i1052.AppRouter>(),
+          userRepository: gh<_i2.UserRepository>(),
+          authBloc: gh<_i982.AuthBloc>(),
+          alertManager: gh<_i651.AlertManager>(),
         ));
     return this;
   }

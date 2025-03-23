@@ -5,16 +5,21 @@ import 'package:pizzajournals/data/states/suggestion/suggestions_event.dart';
 import 'package:pizzajournals/data/states/suggestion/suggestions_state.dart';
 import 'package:pizzajournals/utils/alert_manager.dart';
 
+import '../discover/discover_bloc.dart';
+
 @singleton
 class SuggestionsBloc extends Bloc<SuggestionsEvent, SuggestionsState> {
   final UserRepository _userRepository;
   final AlertManager _alertManager;
+  final DiscoverBloc _discoverBloc;
 
   SuggestionsBloc({
     required UserRepository userRepository,
     required AlertManager alertManager,
+    required DiscoverBloc discoverBloc,
   })  : _userRepository = userRepository,
         _alertManager = alertManager,
+        _discoverBloc = discoverBloc,
         super(const SuggestionsState()) {
     on<LoadSuggestions>(_onLoadSuggestions);
     on<ApproveSuggestion>(_onApproveSuggestion);

@@ -9,12 +9,15 @@ import 'package:pizzajournals/presenter/themes/extensions.dart';
 import 'package:pizzajournals/presenter/widgets/single_checkbox.dart';
 import 'package:pizzajournals/presenter/widgets/start_rating.dart';
 
+import '../../data/source/network/models/pizza_review_model.dart';
 import '../../data/states/discover/discover_bloc.dart';
 import '../../data/states/discover/discover_event.dart';
 import '../../data/states/discover/discover_state.dart';
 
 class HalalInfoModal extends StatefulWidget {
-  const HalalInfoModal({super.key, required this.onSubmit});
+  final Review? reviewData;
+  final String pizzaType;
+  const HalalInfoModal({super.key, required this.onSubmit,this.reviewData,required this.pizzaType});
 
   final Function(Map<String, dynamic> data) onSubmit;
 
@@ -29,11 +32,70 @@ class _HalalInfoModalState extends State<HalalInfoModal> {
   String dropdownCheeseTypeValue = 'Select Taste';
   String dropdownSauceAmountTypeValue = 'Select Amount';
   String dropdownCheeseAmountTypeValue = 'Select Amount';
+  final TextEditingController _descriptionController = TextEditingController();
   String description = '';
   int stars = 0;
   bool isCrispy = true;
   bool isDry = true;
   bool isFluffy = true;
+
+  @override
+  void initState() {
+    super.initState();
+
+    if (widget.reviewData != null) {
+      // Prefill fields for editing
+      stars = widget.reviewData!.stars!;
+
+      // Properly capitalize the values to match dropdown items
+      String capitalize(String s) => s[0].toUpperCase() + s.substring(1).toLowerCase();
+
+      // // Handle pizza type
+      // if (widget.reviewData!.pizzaType != null) {
+      //   dropdownPizzaTypeValue = widget.reviewData!.pizzaType!;
+      // }
+
+      // Handle crust thickness
+      if (widget.reviewData!.crust?.thickness != null) {
+        String thickness = capitalize(widget.reviewData!.crust!.thickness!);
+        dropdownCrustTypeValue = ['Select Thickness', 'Thick', 'Thin', 'Average']
+            .contains(thickness) ? thickness : 'Select Thickness';
+      }
+
+      // Handle sauce taste
+      if (widget.reviewData!.sauce?.sweetOrSpicy != null) {
+        String taste = capitalize(widget.reviewData!.sauce!.sweetOrSpicy!);
+        dropdownSauceTypeValue = ['Select Taste', 'Sweet', 'Spicy', 'No Flavor', 'N/A']
+            .contains(taste) ? taste : 'Select Taste';
+      }
+
+      // Handle cheese taste
+      if (widget.reviewData!.cheese?.taste != null) {
+        String taste = capitalize(widget.reviewData!.cheese!.taste!);
+        dropdownCheeseTypeValue = ['Select Taste', 'Great', 'Ok', 'Ehh']
+            .contains(taste) ? taste : 'Select Taste';
+      }
+
+      // Handle amounts
+      if (widget.reviewData!.sauce?.amount != null) {
+        String amount = capitalize(widget.reviewData!.sauce!.amount!);
+        dropdownSauceAmountTypeValue = ['Select Amount', 'Light', 'Heavy', 'Average']
+            .contains(amount) ? amount : 'Select Amount';
+      }
+
+      if (widget.reviewData!.cheese?.amount != null) {
+        String amount = capitalize(widget.reviewData!.cheese!.amount!);
+        dropdownCheeseAmountTypeValue = ['Select Amount', 'Light', 'Heavy', 'Average']
+            .contains(amount) ? amount : 'Select Amount';
+      }
+
+     _descriptionController.text= description = widget.reviewData!.description ?? '';
+      isCrispy = widget.reviewData!.crust?.crispy ?? false;
+      isDry = widget.reviewData!.crust?.dry ?? false;
+      isFluffy = widget.reviewData!.crust?.fluffy ?? false;
+    }
+  }
+
 
   DiscoverBloc get _discoverBloc => context.read<DiscoverBloc>();
 
@@ -79,7 +141,8 @@ class _HalalInfoModalState extends State<HalalInfoModal> {
 
           // Wrap with Material widget
           child: Modal(
-            title: 'Add Review',
+            title: widget.reviewData != null ? 'Update Review' : 'Add Review',
+
             showRightExitButton: true,
             onRightExitButtonPressed: () => Navigator.of(context).pop(),
             child: Padding(
@@ -94,26 +157,27 @@ class _HalalInfoModalState extends State<HalalInfoModal> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     StarRating(
-                      initialRating: 0,
+                      initialRating: stars, // Use stars instead of 0
                       onRatingSelected: (rating) {
                         setState(() {
                           stars = rating;
                         });
                       },
                     ),
+
                     const SizedBox(height: 16),
-                    const Text("Pizza Type"), // Add spacing
-                    const SizedBox(height: 5), // Add spacing
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        border: Border.all(color: AppColors.grey2, width: 1),
-                      ),
-                      child: _buildSauceAmountDropDown(),
-                    ),
-                    const SizedBox(height: 16),
-                    const Text("Crust Type"),
+                    // const Text("Pizza Type"), // Add spacing
+                    // const SizedBox(height: 5), // Add spacing
+                    // Container(
+                    //   padding: const EdgeInsets.symmetric(horizontal: 16),
+                    //   decoration: BoxDecoration(
+                    //     borderRadius: BorderRadius.circular(8),
+                    //     border: Border.all(color: AppColors.grey2, width: 1),
+                    //   ),
+                    //   child: _buildSauceAmountDropDown(),
+                    // ),
+                    // const SizedBox(height: 16),
+                    const Text("Crust Type",style: TextStyle(fontWeight: FontWeight.w500),),
                     const SizedBox(height: 5),
                     Row(
                       children: [
@@ -407,7 +471,8 @@ class _HalalInfoModalState extends State<HalalInfoModal> {
 
                     TextField(
                       maxLines: 4,
-                      onChanged: (value) {
+                      controller:  _descriptionController,
+                        onChanged: (value) {
                         setState(() {
                           description = value;
                         });
@@ -442,78 +507,101 @@ class _HalalInfoModalState extends State<HalalInfoModal> {
                     const SizedBox(height: 16),
                     Center(
                       child: GestureDetector(
-                        onTap: () {
-
-
-                          if (dropdownPizzaTypeValue == 'Select Pizza Type' ||
-                              dropdownCrustTypeValue == 'Select Thickness' ||
-                              dropdownSauceTypeValue == 'Select Taste' ||
-                              dropdownCheeseTypeValue == 'Select Taste' ||
-                              dropdownSauceAmountTypeValue == 'Select Amount' ||
-                              dropdownCheeseAmountTypeValue ==
-                                  'Select Amount'||
-                              _discoverBloc.state.images.isEmpty
-
-
-                          )
-
-
-                          {
-
-                            final overlay = Overlay.of(context);
-                            final overlayEntry = OverlayEntry(
-                              builder: (context) => Positioned(
-                                top: MediaQuery.of(context).padding.top +
-                                    10, // Adjust for status bar
-                                left: 20,
-                                right: 20,
-                                child: Material(
-                                  color: Colors.transparent,
-                                  child: Container(
-                                    padding: EdgeInsets.all(10),
-                                    decoration: BoxDecoration(
-                                      color: Colors.redAccent,
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                    child: Text(
-                                      "Please select all required options.",
-                                      style: TextStyle(
-                                          color: Colors.white, fontSize: 16),
+                          onTap: () {
+                            // Validation logic
+                            if (stars == 0) {
+                              final overlay = Overlay.of(context);
+                              final overlayEntry = OverlayEntry(
+                                builder: (context) => Positioned(
+                                  top: MediaQuery.of(context).padding.top + 10, // Adjust for status bar
+                                  left: 20,
+                                  right: 20,
+                                  child: Material(
+                                    color: Colors.transparent,
+                                    child: Container(
+                                      padding: const EdgeInsets.all(10),
+                                      decoration: BoxDecoration(
+                                        color: Colors.redAccent,
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      child: const Text(
+                                        "Please select a star rating.",
+                                        style: TextStyle(color: Colors.white, fontSize: 16),
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            );
+                              );
 
-                            overlay.insert(overlayEntry);
+                              overlay.insert(overlayEntry);
 
-                            Future.delayed(Duration(seconds: 2), () {
-                              overlayEntry.remove();
-                            });
-                            return;
-                          }
+                              Future.delayed(const Duration(seconds: 2), () {
+                                overlayEntry.remove();
+                              });
+                              return;
+                            }
 
-                          Map<String, dynamic> data = {
-                            "stars": stars,
-                            "pizzaType":
-                                dropdownPizzaTypeValue != 'Select Pizza Type'
-                                    ? dropdownPizzaTypeValue
-                                    : '',
-                            "description": description,
-                            "thickness": dropdownCrustTypeValue.toLowerCase(),
-                            "crispy": isCrispy ? 'yes' : 'no',
-                            "dry" : isDry ? 'yes' : 'no',
-                            "fluffy" : isFluffy ? 'yes' : 'no',
-                            "sweetOrSpicy":
-                                dropdownSauceTypeValue.toLowerCase(),
-                            "amount":
-                                dropdownSauceAmountTypeValue.toLowerCase(),
-                            "cheeseAmount":
-                                dropdownCheeseAmountTypeValue.toLowerCase(),
-                            "taste": dropdownCheeseTypeValue.toLowerCase(),
-                          };
-                          widget.onSubmit(data);
-                        },
+                            // Check other required fields
+                            if (
+
+                                //dropdownCrustTypeValue == 'Select Thickness' ||
+                                dropdownSauceTypeValue == 'Select Taste' ||
+                                dropdownCheeseTypeValue == 'Select Taste' ||
+                                dropdownSauceAmountTypeValue == 'Select Amount' ||
+                                dropdownCheeseAmountTypeValue == 'Select Amount' )
+                              // || _discoverBloc.state.images.isEmpty)
+                            {
+
+                              final overlay = Overlay.of(context);
+                              final overlayEntry = OverlayEntry(
+                                builder: (context) => Positioned(
+                                  top: MediaQuery.of(context).padding.top + 10,
+                                  left: 20,
+                                  right: 20,
+                                  child: Material(
+                                    color: Colors.transparent,
+                                    child: Container(
+                                      padding: const EdgeInsets.all(10),
+                                      decoration: BoxDecoration(
+                                        color: Colors.redAccent,
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      child: const Text(
+                                        "Please select all required options.",
+                                        style: TextStyle(color: Colors.white, fontSize: 16),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              );
+
+                              overlay.insert(overlayEntry);
+
+                              Future.delayed(const Duration(seconds: 2), () {
+                                overlayEntry.remove();
+                              });
+                              return;
+                            }
+
+                            // If validation passes, prepare data
+                            Map<String, dynamic> data = {
+                              "stars": stars,
+                              "pizzaType":widget.pizzaType,
+                             // dropdownPizzaTypeValue != 'Select Pizza Type' ? dropdownPizzaTypeValue : '',
+                              "description": description,
+                              "thickness": dropdownCrustTypeValue.toLowerCase(),
+                              "crispy": isCrispy ? 'yes' : 'no',
+                              "dry": isDry ? 'yes' : 'no',
+                              "fluffy": isFluffy ? 'yes' : 'no',
+                              "sweetOrSpicy": dropdownSauceTypeValue.toLowerCase(),
+                              "amount": dropdownSauceAmountTypeValue.toLowerCase(),
+                              "cheeseAmount": dropdownCheeseAmountTypeValue.toLowerCase(),
+                              "taste": dropdownCheeseTypeValue.toLowerCase(),
+                            };
+
+                            widget.onSubmit(data);
+                          },
+
                         child: Container(
                           width: double.infinity,
                           padding: const EdgeInsets.all(10),
@@ -521,12 +609,13 @@ class _HalalInfoModalState extends State<HalalInfoModal> {
                           decoration: BoxDecoration(
                               color: AppColors.main,
                               borderRadius: BorderRadius.circular(10)),
-                          child: const Center(
+                          child: Center(
                             child: Text(
-                              "Submit",
+                              widget.reviewData != null ? "Update" : "Submit",
                               style: TextStyle(color: AppColors.white),
                             ),
                           ),
+
                         ),
                       ),
                     ),
@@ -541,41 +630,41 @@ class _HalalInfoModalState extends State<HalalInfoModal> {
     );
   }
 
-  Widget _buildSauceAmountDropDown() {
-    return DropdownButton<String>(
-      value: dropdownPizzaTypeValue,
-      icon: const Icon(Icons.arrow_drop_down), // Use built-in dropdown icon
-      elevation: 16,
-      style: const TextStyle(color: AppColors.black),
-      underline: Container(height: 0), // Hide underline
-      onChanged: (String? newValue) {
-        setState(() {
-          dropdownPizzaTypeValue = newValue!;
-        });
-      },
-      items: <String>[
-        'Select Pizza Type',
-        'Traditional Round',
-        'Sicilian/Square',
-        'Personal',
-        'Grandma/Square',
-        'Deep Dish',
-      ].map<DropdownMenuItem<String>>((String value) {
-        return DropdownMenuItem<String>(
-          value: value,
-          child: Text(
-            value,
-            overflow: TextOverflow.ellipsis,
-            maxLines: 1,
-            style: TextStyle(
-              color: value == 'Select Pizza Type' ? AppColors.grey : AppColors.black,
-            ),
-          ),
-        );
-      }).toList(),
-      isExpanded: true,
-    );
-  }
+  // Widget _buildSauceAmountDropDown() {
+  //   return DropdownButton<String>(
+  //     value: dropdownPizzaTypeValue,
+  //     icon: const Icon(Icons.arrow_drop_down), // Use built-in dropdown icon
+  //     elevation: 16,
+  //     style: const TextStyle(color: AppColors.black),
+  //     underline: Container(height: 0), // Hide underline
+  //     onChanged: (String? newValue) {
+  //       setState(() {
+  //         dropdownPizzaTypeValue = newValue!;
+  //       });
+  //     },
+  //     items: <String>[
+  //       'Select Pizza Type',
+  //       'Traditional Round',
+  //       'Sicilian/Square',
+  //       'Personal',
+  //       'Grandma/Square',
+  //       'Deep Dish',
+  //     ].map<DropdownMenuItem<String>>((String value) {
+  //       return DropdownMenuItem<String>(
+  //         value: value,
+  //         child: Text(
+  //           value,
+  //           overflow: TextOverflow.ellipsis,
+  //           maxLines: 1,
+  //           style: TextStyle(
+  //             color: value == 'Select Pizza Type' ? AppColors.grey : AppColors.black,
+  //           ),
+  //         ),
+  //       );
+  //     }).toList(),
+  //     isExpanded: true,
+  //   );
+  // }
 
   Widget _buildCrustTypeDropDown() {
     return DropdownButton<String>(

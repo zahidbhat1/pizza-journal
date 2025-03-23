@@ -28,7 +28,7 @@ enum TabItem {
   PageRouteInfo get pageRouteInfo {
     return switch (this) {
       TabItem.MyPlaces => const MyPlacesRoute(),
-      TabItem.home => const DiscoverRoute(),
+      TabItem.home =>  DiscoverRoute(),
       TabItem.profile => const ProfileRoute(),
     };
   }

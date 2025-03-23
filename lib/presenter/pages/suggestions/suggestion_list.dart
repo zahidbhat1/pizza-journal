@@ -109,8 +109,11 @@ class _SuggestionCardState extends State<SuggestionCard> {
           children: [
             // Basic Information
             buildInfoRow('Update Name', suggestion.name),
-            buildInfoRow('Update Location', suggestion.address?.city),
+            buildInfoRow('Update street', suggestion.address?.street),
+            buildInfoRow('update city', suggestion.address?.city),
             buildInfoRow('By', suggestion.user?.screenName),
+            buildInfoRow('zip', suggestion.address?.zip),
+
 
             // View More Button
             Align(

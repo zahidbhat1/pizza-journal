@@ -237,6 +237,8 @@ mixin _$PizzaTypeSummary {
   SauceSummary get sauce => throw _privateConstructorUsedError;
   CheeseSummary get cheese => throw _privateConstructorUsedError;
   int get count => throw _privateConstructorUsedError;
+  int get totalStars => throw _privateConstructorUsedError;
+  double get averageRating => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -254,7 +256,9 @@ abstract class $PizzaTypeSummaryCopyWith<$Res> {
       {CrustSummary crust,
       SauceSummary sauce,
       CheeseSummary cheese,
-      int count});
+      int count,
+      int totalStars,
+      double averageRating});
 
   $CrustSummaryCopyWith<$Res> get crust;
   $SauceSummaryCopyWith<$Res> get sauce;
@@ -278,6 +282,8 @@ class _$PizzaTypeSummaryCopyWithImpl<$Res, $Val extends PizzaTypeSummary>
     Object? sauce = null,
     Object? cheese = null,
     Object? count = null,
+    Object? totalStars = null,
+    Object? averageRating = null,
   }) {
     return _then(_value.copyWith(
       crust: null == crust
@@ -296,6 +302,14 @@ class _$PizzaTypeSummaryCopyWithImpl<$Res, $Val extends PizzaTypeSummary>
           ? _value.count
           : count // ignore: cast_nullable_to_non_nullable
               as int,
+      totalStars: null == totalStars
+          ? _value.totalStars
+          : totalStars // ignore: cast_nullable_to_non_nullable
+              as int,
+      averageRating: null == averageRating
+          ? _value.averageRating
+          : averageRating // ignore: cast_nullable_to_non_nullable
+              as double,
     ) as $Val);
   }
 
@@ -336,7 +350,9 @@ abstract class _$$PizzaTypeSummaryImplCopyWith<$Res>
       {CrustSummary crust,
       SauceSummary sauce,
       CheeseSummary cheese,
-      int count});
+      int count,
+      int totalStars,
+      double averageRating});
 
   @override
   $CrustSummaryCopyWith<$Res> get crust;
@@ -361,6 +377,8 @@ class __$$PizzaTypeSummaryImplCopyWithImpl<$Res>
     Object? sauce = null,
     Object? cheese = null,
     Object? count = null,
+    Object? totalStars = null,
+    Object? averageRating = null,
   }) {
     return _then(_$PizzaTypeSummaryImpl(
       crust: null == crust
@@ -379,6 +397,14 @@ class __$$PizzaTypeSummaryImplCopyWithImpl<$Res>
           ? _value.count
           : count // ignore: cast_nullable_to_non_nullable
               as int,
+      totalStars: null == totalStars
+          ? _value.totalStars
+          : totalStars // ignore: cast_nullable_to_non_nullable
+              as int,
+      averageRating: null == averageRating
+          ? _value.averageRating
+          : averageRating // ignore: cast_nullable_to_non_nullable
+              as double,
     ));
   }
 }
@@ -391,7 +417,9 @@ class _$PizzaTypeSummaryImpl implements _PizzaTypeSummary {
       {required this.crust,
       required this.sauce,
       required this.cheese,
-      required this.count});
+      required this.count,
+      required this.totalStars,
+      required this.averageRating});
 
   factory _$PizzaTypeSummaryImpl.fromJson(Map<String, dynamic> json) =>
       _$$PizzaTypeSummaryImplFromJson(json);
@@ -404,10 +432,14 @@ class _$PizzaTypeSummaryImpl implements _PizzaTypeSummary {
   final CheeseSummary cheese;
   @override
   final int count;
+  @override
+  final int totalStars;
+  @override
+  final double averageRating;
 
   @override
   String toString() {
-    return 'PizzaTypeSummary(crust: $crust, sauce: $sauce, cheese: $cheese, count: $count)';
+    return 'PizzaTypeSummary(crust: $crust, sauce: $sauce, cheese: $cheese, count: $count, totalStars: $totalStars, averageRating: $averageRating)';
   }
 
   @override
@@ -418,12 +450,17 @@ class _$PizzaTypeSummaryImpl implements _PizzaTypeSummary {
             (identical(other.crust, crust) || other.crust == crust) &&
             (identical(other.sauce, sauce) || other.sauce == sauce) &&
             (identical(other.cheese, cheese) || other.cheese == cheese) &&
-            (identical(other.count, count) || other.count == count));
+            (identical(other.count, count) || other.count == count) &&
+            (identical(other.totalStars, totalStars) ||
+                other.totalStars == totalStars) &&
+            (identical(other.averageRating, averageRating) ||
+                other.averageRating == averageRating));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, crust, sauce, cheese, count);
+  int get hashCode => Object.hash(
+      runtimeType, crust, sauce, cheese, count, totalStars, averageRating);
 
   @JsonKey(ignore: true)
   @override
@@ -445,7 +482,9 @@ abstract class _PizzaTypeSummary implements PizzaTypeSummary {
       {required final CrustSummary crust,
       required final SauceSummary sauce,
       required final CheeseSummary cheese,
-      required final int count}) = _$PizzaTypeSummaryImpl;
+      required final int count,
+      required final int totalStars,
+      required final double averageRating}) = _$PizzaTypeSummaryImpl;
 
   factory _PizzaTypeSummary.fromJson(Map<String, dynamic> json) =
       _$PizzaTypeSummaryImpl.fromJson;
@@ -458,6 +497,10 @@ abstract class _PizzaTypeSummary implements PizzaTypeSummary {
   CheeseSummary get cheese;
   @override
   int get count;
+  @override
+  int get totalStars;
+  @override
+  double get averageRating;
   @override
   @JsonKey(ignore: true)
   _$$PizzaTypeSummaryImplCopyWith<_$PizzaTypeSummaryImpl> get copyWith =>
@@ -1056,6 +1099,7 @@ mixin _$Review {
   CrustReview? get crust => throw _privateConstructorUsedError;
   SauceReview? get sauce => throw _privateConstructorUsedError;
   CheeseReview? get cheese => throw _privateConstructorUsedError;
+  @JsonKey(name: '_id')
   String? get id => throw _privateConstructorUsedError;
   int? get stars => throw _privateConstructorUsedError;
   String? get pizzaType => throw _privateConstructorUsedError;
@@ -1080,7 +1124,7 @@ abstract class $ReviewCopyWith<$Res> {
       {CrustReview? crust,
       SauceReview? sauce,
       CheeseReview? cheese,
-      String? id,
+      @JsonKey(name: '_id') String? id,
       int? stars,
       String? pizzaType,
       String? description,
@@ -1234,7 +1278,7 @@ abstract class _$$ReviewImplCopyWith<$Res> implements $ReviewCopyWith<$Res> {
       {CrustReview? crust,
       SauceReview? sauce,
       CheeseReview? cheese,
-      String? id,
+      @JsonKey(name: '_id') String? id,
       int? stars,
       String? pizzaType,
       String? description,
@@ -1339,7 +1383,7 @@ class _$ReviewImpl implements _Review {
       {required this.crust,
       required this.sauce,
       required this.cheese,
-      required this.id,
+      @JsonKey(name: '_id') required this.id,
       required this.stars,
       required this.pizzaType,
       required this.description,
@@ -1360,6 +1404,7 @@ class _$ReviewImpl implements _Review {
   @override
   final CheeseReview? cheese;
   @override
+  @JsonKey(name: '_id')
   final String? id;
   @override
   final int? stars;
@@ -1452,7 +1497,7 @@ abstract class _Review implements Review {
       {required final CrustReview? crust,
       required final SauceReview? sauce,
       required final CheeseReview? cheese,
-      required final String? id,
+      @JsonKey(name: '_id') required final String? id,
       required final int? stars,
       required final String? pizzaType,
       required final String? description,
@@ -1471,6 +1516,7 @@ abstract class _Review implements Review {
   @override
   CheeseReview? get cheese;
   @override
+  @JsonKey(name: '_id')
   String? get id;
   @override
   int? get stars;

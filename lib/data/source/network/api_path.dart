@@ -4,11 +4,15 @@ class ApiPath {
   // User
   static const String userPath = '$_apiPath/user';
   static const String photoUpload = '$_apiPath/uploads';
+  static const String updateReview = '$_apiPath/reviews/update';
+
   static const String suggestEdit = '$_apiPath/suggestion';
   static const String approveSuggestion = '$_apiPath/suggestion/approve';
   static const String rejectSuggestion = '$_apiPath/suggestion/reject';
   static const String suggestions = '$_apiPath/suggestion/pizzaPlace';
   static const String userProfile = '$_apiPath/user/profile';
+  static const String getSearches = '$_apiPath/user/searches';
+  static const String deleteSearch = '$_apiPath/user/searches';
 
   static const String userAccessTokenPath = '$_apiPath/auth/login';
   static const String userRegisterPath = '$_apiPath/auth/signUp';

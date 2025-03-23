@@ -36,6 +36,8 @@ _$PizzaTypeSummaryImpl _$$PizzaTypeSummaryImplFromJson(
       sauce: SauceSummary.fromJson(json['sauce'] as Map<String, dynamic>),
       cheese: CheeseSummary.fromJson(json['cheese'] as Map<String, dynamic>),
       count: (json['count'] as num).toInt(),
+      totalStars: (json['totalStars'] as num).toInt(),
+      averageRating: (json['averageRating'] as num).toDouble(),
     );
 
 Map<String, dynamic> _$$PizzaTypeSummaryImplToJson(
@@ -45,6 +47,8 @@ Map<String, dynamic> _$$PizzaTypeSummaryImplToJson(
       'sauce': instance.sauce,
       'cheese': instance.cheese,
       'count': instance.count,
+      'totalStars': instance.totalStars,
+      'averageRating': instance.averageRating,
     };
 
 _$CrustSummaryImpl _$$CrustSummaryImplFromJson(Map<String, dynamic> json) =>
@@ -105,7 +109,7 @@ _$ReviewImpl _$$ReviewImplFromJson(Map<String, dynamic> json) => _$ReviewImpl(
       cheese: json['cheese'] == null
           ? null
           : CheeseReview.fromJson(json['cheese'] as Map<String, dynamic>),
-      id: json['id'] as String?,
+      id: json['_id'] as String?,
       stars: (json['stars'] as num?)?.toInt(),
       pizzaType: json['pizzaType'] as String?,
       description: json['description'] as String?,
@@ -126,7 +130,7 @@ Map<String, dynamic> _$$ReviewImplToJson(_$ReviewImpl instance) =>
       'crust': instance.crust,
       'sauce': instance.sauce,
       'cheese': instance.cheese,
-      'id': instance.id,
+      '_id': instance.id,
       'stars': instance.stars,
       'pizzaType': instance.pizzaType,
       'description': instance.description,

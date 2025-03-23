@@ -64,6 +64,81 @@ class DiscoverBloc extends Bloc<DiscoverEvent, DiscoverState> {
     on<LocationSelected>(_onLocationSelected);
     on<DiscoverSelectPizzaType>(_onSelectPizzaType);
     on<FetchPlaceDetails>(_onFetchPlaceDetails);
+    on<DiscoverUpdatePlaceReview>(_onUpdatePizzaPlaceReview);
+  }
+
+
+
+  void _onUpdatePizzaPlaceReview(
+      DiscoverUpdatePlaceReview event,
+      Emitter<DiscoverState> emit,
+      ) async {
+    if (_authBloc.state.status == AuthStateStatus.unauthenticated) {
+      _actionIfNotLoggedIn();
+      return;
+    }
+
+    emit(state.copyWith(showLoading: true));
+
+    try {
+      List<String> photoUrls = [];
+      if (state.images != null && state.images!.isNotEmpty) {
+        final uploadResponse = await _userRepository.uploadPhotos(
+          files: state.images ?? [],
+        );
+
+        if (uploadResponse.data == null || uploadResponse.data!.isEmpty) {
+          throw Exception('Failed to upload images: No URLs returned');
+        }
+        photoUrls = uploadResponse.data!;
+      }
+
+      Map<String, dynamic> data = Map.from(event.data);
+     // data["userId"] = _authBloc.state.user?.id;
+      if (photoUrls.isNotEmpty) {
+        data['photos'] = jsonEncode(photoUrls);
+      }
+
+      var response = await _userRepository.updatePizzaPlaceReview(
+        data: data,
+        reviewId: event.reviewId,
+      );
+
+      if (response.success) {
+        _alertManager.showSuccess(message: "Review Updated Successfully!");
+
+        // Refresh the reviews to show the updated one
+        var dataList = await _userRepository.getPizzaPlaceReviews(
+          placeId: data["pizzaPlaceId"] ?? '',
+        );
+
+        emit(state.copyWith(reviews: dataList));
+
+        try {
+          var myReview = dataList.reviews?.firstWhere(
+                (review) =>
+            review?.user?.id == _authBloc.state.user?.id &&
+                review?.pizzaType == data["pizzaType"],
+          );
+          emit(state.copyWith(myReview: myReview));
+        } catch (e) {
+          emit(state.copyWith(myReview: null));
+        }
+      } else {
+        _alertManager.showError(message: "Failed to update review");
+      }
+    } catch (e, stackTrace) {
+      print('Error in _onUpdatePizzaPlaceReview:');
+      print('Error: $e');
+      print('Stack trace: $stackTrace');
+
+      _alertManager.showError(
+        title: 'Error',
+        message: e.toString(),
+      );
+    } finally {
+      emit(state.copyWith(showLoading: false));
+    }
   }
   void _onLoad(
       DiscoverLoad event,
@@ -291,21 +366,26 @@ class DiscoverBloc extends Bloc<DiscoverEvent, DiscoverState> {
     }
 
     try {
+      List<String> photoUrls = [];
       emit(state.copyWith(isAddingPlace: true));
 
 
-      final uploadResponse = await _userRepository.uploadPhotos(
-        files: state.images ?? [],
-      );
+      if (state.images != null && state.images!.isNotEmpty) {
+        final uploadResponse = await _userRepository.uploadPhotos(
+          files: state.images ?? [],
+        );
 
-      if (uploadResponse.data == null || uploadResponse.data!.isEmpty) {
-        throw Exception('Failed to upload images: No URLs returned');
+        if (uploadResponse.data == null || uploadResponse.data!.isEmpty) {
+          throw Exception('Failed to upload images: No URLs returned');
+        }
+
+        photoUrls = uploadResponse.data!;
       }
-
       // Prepare form data
       Map<String, dynamic> formData = Map<String, dynamic>.from(event.data);
-      formData['photos'] = jsonEncode(uploadResponse.data);
-
+      if (photoUrls.isNotEmpty) {
+        formData['photos'] = jsonEncode(photoUrls);
+      }
       // Add new place - this will return PizzaPlaceModel on success or throw exception on failure
       final newPlace = await _userRepository.addPizzaPlace(
         data: formData,
@@ -368,28 +448,34 @@ class DiscoverBloc extends Bloc<DiscoverEvent, DiscoverState> {
       _actionIfNotLoggedIn();
       return;
     }
-
-    if (state.images == null || state.images!.isEmpty) {
-      _alertManager.showValidation(
-          message: "Please select at least one image"
-      );
-      return;
-    }
+    //
+    // if (state.images == null || state.images!.isEmpty) {
+    //   _alertManager.showValidation(
+    //       message: "Please select at least one image"
+    //   );
+    //   return;
+    // }
 
     emit(state.copyWith(showLoading: true));
 
     try {
-      final uploadResponse = await _userRepository.uploadPhotos(
-        files: state.images ?? [],
-      );
+      List<String> photoUrls = [];
+      if (state.images != null && state.images!.isNotEmpty) {
+        final uploadResponse = await _userRepository.uploadPhotos(
+          files: state.images ?? [],
+        );
 
-      if (uploadResponse.data == null || uploadResponse.data!.isEmpty) {
-        throw Exception('Failed to upload images: No URLs returned');
+        if (uploadResponse.data == null || uploadResponse.data!.isEmpty) {
+          throw Exception('Failed to upload images: No URLs returned');
+        }
+        photoUrls = uploadResponse.data!;
       }
 
       Map<String, dynamic> data = Map.from(event.data);
       data["userId"] = _authBloc.state.user?.id;
-      data['photos'] = jsonEncode(uploadResponse.data);
+      if (photoUrls.isNotEmpty) {
+        data['photos'] = jsonEncode(photoUrls);
+      }
 
       var response = await _userRepository.addPizzaPlaceReview(data: data);
 
@@ -458,6 +544,8 @@ class DiscoverBloc extends Bloc<DiscoverEvent, DiscoverState> {
         message:
             "Place updated successfully! Changes will be visible after admin approval.",
       );
+
+
     } catch (e) {
       _alertManager.showError(message: "Failed to update place details");
     } finally {
@@ -466,28 +554,28 @@ class DiscoverBloc extends Bloc<DiscoverEvent, DiscoverState> {
   }
 
   void _onFetchPlaceDetails(
-    FetchPlaceDetails event,
-    Emitter<DiscoverState> emit,
-  ) async {
+      FetchPlaceDetails event,
+      Emitter<DiscoverState> emit,
+      ) async {
     try {
-      // Show loading state if needed
       emit(state.copyWith(showLoading: true));
 
-      // Call your API to get place details
       final placeDetails = await _userRepository.getPlaceDetails(event.placeId);
 
-      // Extract coordinates
       final lat = placeDetails.geometry?.location.lat ?? 0.0;
       final lng = placeDetails.geometry?.location.lng ?? 0.0;
       final newLocation = LatLng(lat, lng);
       final mapLink = "https://www.google.com/maps?q=$lat,$lng";
-      print('map link = $mapLink');
+      final pinCode= placeDetails.pincode;
 
-      // Update state with the new location and disable map interaction
+      print('Map Link: $mapLink');
+      print("Pincode: $pinCode"); // ✅ Debug pincode
+
       emit(state.copyWith(
         selectedMapLocation: newLocation,
         isMapInteractionEnabled: false,
         mapLink: mapLink,
+        pincode: placeDetails.pincode.toString(), // ✅ Store pincode in state
         showLoading: false,
       ));
     } catch (e) {
@@ -495,6 +583,7 @@ class DiscoverBloc extends Bloc<DiscoverEvent, DiscoverState> {
       emit(state.copyWith(showLoading: false));
     }
   }
+
 
   void _onSearchLocations(
     DiscoverSearchLocations event,

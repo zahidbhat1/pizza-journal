@@ -14,6 +14,7 @@ import 'package:pizzajournals/data/source/network/models/login_model.dart';
 import 'package:pizzajournals/data/source/network/models/pizza_place_model.dart';
 import 'package:pizzajournals/data/source/network/models/pizza_review_model.dart';
 import 'package:pizzajournals/data/source/network/models/user_model.dart';
+import 'package:pizzajournals/data/source/network/models/user_search_response.dart';
 import 'package:pizzajournals/data/source/network/network.dart';
 import 'package:pizzajournals/utils/extensions/map_extensions.dart';
 
@@ -82,6 +83,57 @@ class UserDataSource {
     }
     return null;
   }
+
+  Future<UserSearchesResponse> getSearches() async {
+    try {
+      final response = await _networkManager.request(
+        RequestMethod.get,
+        ApiPath.getSearches,
+      );
+
+      if (response.statusCode != 200) {
+        final errorMessage = response.responseData["error"] ??
+            response.responseData["message"] ??
+            "Failed to fetch searches";
+
+        throw ServerException(
+          type: ServerExceptionType.general,
+          message: errorMessage,
+        );
+      }
+
+      return UserSearchesResponse.fromJson(response.responseData);
+
+    } on DioException catch (e) {
+      final type = switch (e.type) {
+        DioExceptionType.connectionTimeout ||
+        DioExceptionType.sendTimeout ||
+        DioExceptionType.receiveTimeout => ServerExceptionType.timeOut,
+        DioExceptionType.connectionError => ServerExceptionType.noInternet,
+        _ => ServerExceptionType.unknown,
+      };
+
+      throw ServerException(
+        type: type,
+        message: e.message ?? (type == ServerExceptionType.noInternet
+            ? 'No internet connection. Please check your network and try again.'
+            : 'A network error occurred.'),
+      );
+    } catch (_) {
+      rethrow;
+    }
+  }
+  Future<void> delSearch(String searchId) async {
+    try {
+      await _networkManager.request(
+        RequestMethod.delete,
+        '${ApiPath.deleteSearch}/$searchId', // Append searchId to the URL
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
 
   Future<void> approveSuggestion(String suggestionId) async {
     try {
@@ -163,9 +215,12 @@ class UserDataSource {
   }
   Future<PlaceDetails> getPlaceDetails(String placeId) async {
 
-    final url = 'https://maps.googleapis.com/maps/api/place/details/json?place_id=$placeId&fields=geometry&key=AIzaSyCfdv9Fo_Mxst5ASKrWXGh74YTskTlsHZ4';
-
+    final url = 'https://maps.googleapis.com/maps/api/place/details/json'
+        '?place_id=$placeId'
+        '&fields=geometry,address_component' //
+        '&key=AIzaSyCfdv9Fo_Mxst5ASKrWXGh74YTskTlsHZ4';
     final response = await Dio().get(url);
+
 
     if (response.statusCode == 200) {
       final data = response.data;
@@ -176,6 +231,7 @@ class UserDataSource {
 
     throw Exception('Failed to fetch place details');
   }
+
 
   Future<DataItem<dynamic>> editPizzaPlace({
     required Map<String, dynamic> data,
@@ -522,6 +578,30 @@ class UserDataSource {
       rethrow;
     }
   }
+  Future<DataItem<dynamic>> updatePizzaPlaceReview({
+    required Map<String, dynamic> data,
+    required String reviewId, // Pass the review ID
+  }) async {
+    try {
+      final response = await _networkManager.request(
+        RequestMethod.patch,
+        "${ApiPath.updateReview}/$reviewId", // Append reviewId to the URL
+        data: data,
+      );
+
+      var res = DataItem<dynamic>.fromJson(
+        response.responseData,
+            (json) => '$json',
+        dataJsonKeyName: '',
+      );
+
+      print(res);
+      return res;
+    } catch (_) {
+      rethrow;
+    }
+  }
+
 
   Future<DataItem<dynamic>> addPizzaPlaceReview(
       {required Map<String, dynamic> data}) async {

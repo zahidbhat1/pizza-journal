@@ -20,4 +20,6 @@ class ProfileEvent with _$ProfileEvent {
 
   const factory ProfileEvent.updateProfile(Map<String, dynamic> data) =
       UpdateProfile;
+  const factory ProfileEvent.loadSearches() = LoadSearches;
+  const factory ProfileEvent.deleteSearch(String searchId) = DeleteSearch;
 }

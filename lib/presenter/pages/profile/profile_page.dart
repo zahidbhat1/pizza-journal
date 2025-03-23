@@ -229,11 +229,11 @@ class _ProfilePageState extends State<ProfilePage> {
                   onTap: () =>
                       AutoRouter.of(context).push(const MyPlacesRoute()),
                 ),
+
                 _buildMenuItem(
-                  icon: Icons.lock_outline,
-                  title: 'Change Password',
-                  onTap: () =>
-                      AutoRouter.of(context).push(const ProfileRoute()),
+                  icon: Icons.search, // ✅ New "My Searches" button
+                  title: 'My Searches',
+                  onTap: () => AutoRouter.of(context).push(const SearchRoute()),
                 ),
                 _buildMenuItem(
                   icon: Icons.logout,

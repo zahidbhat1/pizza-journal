@@ -11,6 +11,7 @@ import 'package:pizzajournals/data/source/network/models/user_model.dart';
 import '../source/network/models/placeDetails.dart';
 import '../source/network/models/place_suggestion.dart';
 import '../source/network/models/place_suggestion_model.dart';
+import '../source/network/models/user_search_response.dart';
 
 abstract class UserRepository {
   const UserRepository();
@@ -20,6 +21,14 @@ abstract class UserRepository {
     required String password,
   });
   Future<PlaceDetails> getPlaceDetails(String placeId);
+
+  Future<UserSearchesResponse> getSearches();
+  Future<void>delSearch(String searchId);
+  Future<DataItem<void>> updatePizzaPlaceReview({
+    required Map<String, dynamic> data,
+    required String reviewId,
+  });
+
 
 
   Future<List<PlaceSuggestion>> getSuggestions(String pizzaPlaceId);

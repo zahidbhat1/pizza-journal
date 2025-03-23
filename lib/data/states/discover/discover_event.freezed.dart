@@ -27,6 +27,8 @@ mixin _$DiscoverEvent {
     required TResult Function(File image, int index) addImage,
     required TResult Function(Map<String, dynamic> data) addPizzaPlace,
     required TResult Function(Map<String, dynamic> data) addPizzaPlaceReview,
+    required TResult Function(String reviewId, Map<String, dynamic> data)
+        updatePizzaPlaceReview,
     required TResult Function(PizzaPlaceModel pizzaPlace) suggestEdit,
     required TResult Function(LatLng location) updateMapLocation,
     required TResult Function(String placeId) fetchPlaceDetails,
@@ -49,6 +51,8 @@ mixin _$DiscoverEvent {
     TResult? Function(File image, int index)? addImage,
     TResult? Function(Map<String, dynamic> data)? addPizzaPlace,
     TResult? Function(Map<String, dynamic> data)? addPizzaPlaceReview,
+    TResult? Function(String reviewId, Map<String, dynamic> data)?
+        updatePizzaPlaceReview,
     TResult? Function(PizzaPlaceModel pizzaPlace)? suggestEdit,
     TResult? Function(LatLng location)? updateMapLocation,
     TResult? Function(String placeId)? fetchPlaceDetails,
@@ -71,6 +75,8 @@ mixin _$DiscoverEvent {
     TResult Function(File image, int index)? addImage,
     TResult Function(Map<String, dynamic> data)? addPizzaPlace,
     TResult Function(Map<String, dynamic> data)? addPizzaPlaceReview,
+    TResult Function(String reviewId, Map<String, dynamic> data)?
+        updatePizzaPlaceReview,
     TResult Function(PizzaPlaceModel pizzaPlace)? suggestEdit,
     TResult Function(LatLng location)? updateMapLocation,
     TResult Function(String placeId)? fetchPlaceDetails,
@@ -95,6 +101,8 @@ mixin _$DiscoverEvent {
     required TResult Function(DiscoverAddImage value) addImage,
     required TResult Function(DiscoverAddPlace value) addPizzaPlace,
     required TResult Function(DiscoverAddPlaceReview value) addPizzaPlaceReview,
+    required TResult Function(DiscoverUpdatePlaceReview value)
+        updatePizzaPlaceReview,
     required TResult Function(DiscoverSuggestEdit value) suggestEdit,
     required TResult Function(UpdateMapLocation value) updateMapLocation,
     required TResult Function(FetchPlaceDetails value) fetchPlaceDetails,
@@ -116,6 +124,7 @@ mixin _$DiscoverEvent {
     TResult? Function(DiscoverAddImage value)? addImage,
     TResult? Function(DiscoverAddPlace value)? addPizzaPlace,
     TResult? Function(DiscoverAddPlaceReview value)? addPizzaPlaceReview,
+    TResult? Function(DiscoverUpdatePlaceReview value)? updatePizzaPlaceReview,
     TResult? Function(DiscoverSuggestEdit value)? suggestEdit,
     TResult? Function(UpdateMapLocation value)? updateMapLocation,
     TResult? Function(FetchPlaceDetails value)? fetchPlaceDetails,
@@ -137,6 +146,7 @@ mixin _$DiscoverEvent {
     TResult Function(DiscoverAddImage value)? addImage,
     TResult Function(DiscoverAddPlace value)? addPizzaPlace,
     TResult Function(DiscoverAddPlaceReview value)? addPizzaPlaceReview,
+    TResult Function(DiscoverUpdatePlaceReview value)? updatePizzaPlaceReview,
     TResult Function(DiscoverSuggestEdit value)? suggestEdit,
     TResult Function(UpdateMapLocation value)? updateMapLocation,
     TResult Function(FetchPlaceDetails value)? fetchPlaceDetails,
@@ -251,6 +261,8 @@ class _$DiscoverLoadImpl implements DiscoverLoad {
     required TResult Function(File image, int index) addImage,
     required TResult Function(Map<String, dynamic> data) addPizzaPlace,
     required TResult Function(Map<String, dynamic> data) addPizzaPlaceReview,
+    required TResult Function(String reviewId, Map<String, dynamic> data)
+        updatePizzaPlaceReview,
     required TResult Function(PizzaPlaceModel pizzaPlace) suggestEdit,
     required TResult Function(LatLng location) updateMapLocation,
     required TResult Function(String placeId) fetchPlaceDetails,
@@ -276,6 +288,8 @@ class _$DiscoverLoadImpl implements DiscoverLoad {
     TResult? Function(File image, int index)? addImage,
     TResult? Function(Map<String, dynamic> data)? addPizzaPlace,
     TResult? Function(Map<String, dynamic> data)? addPizzaPlaceReview,
+    TResult? Function(String reviewId, Map<String, dynamic> data)?
+        updatePizzaPlaceReview,
     TResult? Function(PizzaPlaceModel pizzaPlace)? suggestEdit,
     TResult? Function(LatLng location)? updateMapLocation,
     TResult? Function(String placeId)? fetchPlaceDetails,
@@ -301,6 +315,8 @@ class _$DiscoverLoadImpl implements DiscoverLoad {
     TResult Function(File image, int index)? addImage,
     TResult Function(Map<String, dynamic> data)? addPizzaPlace,
     TResult Function(Map<String, dynamic> data)? addPizzaPlaceReview,
+    TResult Function(String reviewId, Map<String, dynamic> data)?
+        updatePizzaPlaceReview,
     TResult Function(PizzaPlaceModel pizzaPlace)? suggestEdit,
     TResult Function(LatLng location)? updateMapLocation,
     TResult Function(String placeId)? fetchPlaceDetails,
@@ -331,6 +347,8 @@ class _$DiscoverLoadImpl implements DiscoverLoad {
     required TResult Function(DiscoverAddImage value) addImage,
     required TResult Function(DiscoverAddPlace value) addPizzaPlace,
     required TResult Function(DiscoverAddPlaceReview value) addPizzaPlaceReview,
+    required TResult Function(DiscoverUpdatePlaceReview value)
+        updatePizzaPlaceReview,
     required TResult Function(DiscoverSuggestEdit value) suggestEdit,
     required TResult Function(UpdateMapLocation value) updateMapLocation,
     required TResult Function(FetchPlaceDetails value) fetchPlaceDetails,
@@ -355,6 +373,7 @@ class _$DiscoverLoadImpl implements DiscoverLoad {
     TResult? Function(DiscoverAddImage value)? addImage,
     TResult? Function(DiscoverAddPlace value)? addPizzaPlace,
     TResult? Function(DiscoverAddPlaceReview value)? addPizzaPlaceReview,
+    TResult? Function(DiscoverUpdatePlaceReview value)? updatePizzaPlaceReview,
     TResult? Function(DiscoverSuggestEdit value)? suggestEdit,
     TResult? Function(UpdateMapLocation value)? updateMapLocation,
     TResult? Function(FetchPlaceDetails value)? fetchPlaceDetails,
@@ -379,6 +398,7 @@ class _$DiscoverLoadImpl implements DiscoverLoad {
     TResult Function(DiscoverAddImage value)? addImage,
     TResult Function(DiscoverAddPlace value)? addPizzaPlace,
     TResult Function(DiscoverAddPlaceReview value)? addPizzaPlaceReview,
+    TResult Function(DiscoverUpdatePlaceReview value)? updatePizzaPlaceReview,
     TResult Function(DiscoverSuggestEdit value)? suggestEdit,
     TResult Function(UpdateMapLocation value)? updateMapLocation,
     TResult Function(FetchPlaceDetails value)? fetchPlaceDetails,
@@ -457,6 +477,8 @@ class _$DiscoverLoadUserPlacesImpl implements DiscoverLoadUserPlaces {
     required TResult Function(File image, int index) addImage,
     required TResult Function(Map<String, dynamic> data) addPizzaPlace,
     required TResult Function(Map<String, dynamic> data) addPizzaPlaceReview,
+    required TResult Function(String reviewId, Map<String, dynamic> data)
+        updatePizzaPlaceReview,
     required TResult Function(PizzaPlaceModel pizzaPlace) suggestEdit,
     required TResult Function(LatLng location) updateMapLocation,
     required TResult Function(String placeId) fetchPlaceDetails,
@@ -482,6 +504,8 @@ class _$DiscoverLoadUserPlacesImpl implements DiscoverLoadUserPlaces {
     TResult? Function(File image, int index)? addImage,
     TResult? Function(Map<String, dynamic> data)? addPizzaPlace,
     TResult? Function(Map<String, dynamic> data)? addPizzaPlaceReview,
+    TResult? Function(String reviewId, Map<String, dynamic> data)?
+        updatePizzaPlaceReview,
     TResult? Function(PizzaPlaceModel pizzaPlace)? suggestEdit,
     TResult? Function(LatLng location)? updateMapLocation,
     TResult? Function(String placeId)? fetchPlaceDetails,
@@ -507,6 +531,8 @@ class _$DiscoverLoadUserPlacesImpl implements DiscoverLoadUserPlaces {
     TResult Function(File image, int index)? addImage,
     TResult Function(Map<String, dynamic> data)? addPizzaPlace,
     TResult Function(Map<String, dynamic> data)? addPizzaPlaceReview,
+    TResult Function(String reviewId, Map<String, dynamic> data)?
+        updatePizzaPlaceReview,
     TResult Function(PizzaPlaceModel pizzaPlace)? suggestEdit,
     TResult Function(LatLng location)? updateMapLocation,
     TResult Function(String placeId)? fetchPlaceDetails,
@@ -537,6 +563,8 @@ class _$DiscoverLoadUserPlacesImpl implements DiscoverLoadUserPlaces {
     required TResult Function(DiscoverAddImage value) addImage,
     required TResult Function(DiscoverAddPlace value) addPizzaPlace,
     required TResult Function(DiscoverAddPlaceReview value) addPizzaPlaceReview,
+    required TResult Function(DiscoverUpdatePlaceReview value)
+        updatePizzaPlaceReview,
     required TResult Function(DiscoverSuggestEdit value) suggestEdit,
     required TResult Function(UpdateMapLocation value) updateMapLocation,
     required TResult Function(FetchPlaceDetails value) fetchPlaceDetails,
@@ -561,6 +589,7 @@ class _$DiscoverLoadUserPlacesImpl implements DiscoverLoadUserPlaces {
     TResult? Function(DiscoverAddImage value)? addImage,
     TResult? Function(DiscoverAddPlace value)? addPizzaPlace,
     TResult? Function(DiscoverAddPlaceReview value)? addPizzaPlaceReview,
+    TResult? Function(DiscoverUpdatePlaceReview value)? updatePizzaPlaceReview,
     TResult? Function(DiscoverSuggestEdit value)? suggestEdit,
     TResult? Function(UpdateMapLocation value)? updateMapLocation,
     TResult? Function(FetchPlaceDetails value)? fetchPlaceDetails,
@@ -585,6 +614,7 @@ class _$DiscoverLoadUserPlacesImpl implements DiscoverLoadUserPlaces {
     TResult Function(DiscoverAddImage value)? addImage,
     TResult Function(DiscoverAddPlace value)? addPizzaPlace,
     TResult Function(DiscoverAddPlaceReview value)? addPizzaPlaceReview,
+    TResult Function(DiscoverUpdatePlaceReview value)? updatePizzaPlaceReview,
     TResult Function(DiscoverSuggestEdit value)? suggestEdit,
     TResult Function(UpdateMapLocation value)? updateMapLocation,
     TResult Function(FetchPlaceDetails value)? fetchPlaceDetails,
@@ -654,6 +684,8 @@ class _$DiscoverRefreshImpl implements DiscoverRefresh {
     required TResult Function(File image, int index) addImage,
     required TResult Function(Map<String, dynamic> data) addPizzaPlace,
     required TResult Function(Map<String, dynamic> data) addPizzaPlaceReview,
+    required TResult Function(String reviewId, Map<String, dynamic> data)
+        updatePizzaPlaceReview,
     required TResult Function(PizzaPlaceModel pizzaPlace) suggestEdit,
     required TResult Function(LatLng location) updateMapLocation,
     required TResult Function(String placeId) fetchPlaceDetails,
@@ -679,6 +711,8 @@ class _$DiscoverRefreshImpl implements DiscoverRefresh {
     TResult? Function(File image, int index)? addImage,
     TResult? Function(Map<String, dynamic> data)? addPizzaPlace,
     TResult? Function(Map<String, dynamic> data)? addPizzaPlaceReview,
+    TResult? Function(String reviewId, Map<String, dynamic> data)?
+        updatePizzaPlaceReview,
     TResult? Function(PizzaPlaceModel pizzaPlace)? suggestEdit,
     TResult? Function(LatLng location)? updateMapLocation,
     TResult? Function(String placeId)? fetchPlaceDetails,
@@ -704,6 +738,8 @@ class _$DiscoverRefreshImpl implements DiscoverRefresh {
     TResult Function(File image, int index)? addImage,
     TResult Function(Map<String, dynamic> data)? addPizzaPlace,
     TResult Function(Map<String, dynamic> data)? addPizzaPlaceReview,
+    TResult Function(String reviewId, Map<String, dynamic> data)?
+        updatePizzaPlaceReview,
     TResult Function(PizzaPlaceModel pizzaPlace)? suggestEdit,
     TResult Function(LatLng location)? updateMapLocation,
     TResult Function(String placeId)? fetchPlaceDetails,
@@ -734,6 +770,8 @@ class _$DiscoverRefreshImpl implements DiscoverRefresh {
     required TResult Function(DiscoverAddImage value) addImage,
     required TResult Function(DiscoverAddPlace value) addPizzaPlace,
     required TResult Function(DiscoverAddPlaceReview value) addPizzaPlaceReview,
+    required TResult Function(DiscoverUpdatePlaceReview value)
+        updatePizzaPlaceReview,
     required TResult Function(DiscoverSuggestEdit value) suggestEdit,
     required TResult Function(UpdateMapLocation value) updateMapLocation,
     required TResult Function(FetchPlaceDetails value) fetchPlaceDetails,
@@ -758,6 +796,7 @@ class _$DiscoverRefreshImpl implements DiscoverRefresh {
     TResult? Function(DiscoverAddImage value)? addImage,
     TResult? Function(DiscoverAddPlace value)? addPizzaPlace,
     TResult? Function(DiscoverAddPlaceReview value)? addPizzaPlaceReview,
+    TResult? Function(DiscoverUpdatePlaceReview value)? updatePizzaPlaceReview,
     TResult? Function(DiscoverSuggestEdit value)? suggestEdit,
     TResult? Function(UpdateMapLocation value)? updateMapLocation,
     TResult? Function(FetchPlaceDetails value)? fetchPlaceDetails,
@@ -782,6 +821,7 @@ class _$DiscoverRefreshImpl implements DiscoverRefresh {
     TResult Function(DiscoverAddImage value)? addImage,
     TResult Function(DiscoverAddPlace value)? addPizzaPlace,
     TResult Function(DiscoverAddPlaceReview value)? addPizzaPlaceReview,
+    TResult Function(DiscoverUpdatePlaceReview value)? updatePizzaPlaceReview,
     TResult Function(DiscoverSuggestEdit value)? suggestEdit,
     TResult Function(UpdateMapLocation value)? updateMapLocation,
     TResult Function(FetchPlaceDetails value)? fetchPlaceDetails,
@@ -889,6 +929,8 @@ class _$DiscoverPizzaPlaceImpl implements DiscoverPizzaPlace {
     required TResult Function(File image, int index) addImage,
     required TResult Function(Map<String, dynamic> data) addPizzaPlace,
     required TResult Function(Map<String, dynamic> data) addPizzaPlaceReview,
+    required TResult Function(String reviewId, Map<String, dynamic> data)
+        updatePizzaPlaceReview,
     required TResult Function(PizzaPlaceModel pizzaPlace) suggestEdit,
     required TResult Function(LatLng location) updateMapLocation,
     required TResult Function(String placeId) fetchPlaceDetails,
@@ -914,6 +956,8 @@ class _$DiscoverPizzaPlaceImpl implements DiscoverPizzaPlace {
     TResult? Function(File image, int index)? addImage,
     TResult? Function(Map<String, dynamic> data)? addPizzaPlace,
     TResult? Function(Map<String, dynamic> data)? addPizzaPlaceReview,
+    TResult? Function(String reviewId, Map<String, dynamic> data)?
+        updatePizzaPlaceReview,
     TResult? Function(PizzaPlaceModel pizzaPlace)? suggestEdit,
     TResult? Function(LatLng location)? updateMapLocation,
     TResult? Function(String placeId)? fetchPlaceDetails,
@@ -939,6 +983,8 @@ class _$DiscoverPizzaPlaceImpl implements DiscoverPizzaPlace {
     TResult Function(File image, int index)? addImage,
     TResult Function(Map<String, dynamic> data)? addPizzaPlace,
     TResult Function(Map<String, dynamic> data)? addPizzaPlaceReview,
+    TResult Function(String reviewId, Map<String, dynamic> data)?
+        updatePizzaPlaceReview,
     TResult Function(PizzaPlaceModel pizzaPlace)? suggestEdit,
     TResult Function(LatLng location)? updateMapLocation,
     TResult Function(String placeId)? fetchPlaceDetails,
@@ -969,6 +1015,8 @@ class _$DiscoverPizzaPlaceImpl implements DiscoverPizzaPlace {
     required TResult Function(DiscoverAddImage value) addImage,
     required TResult Function(DiscoverAddPlace value) addPizzaPlace,
     required TResult Function(DiscoverAddPlaceReview value) addPizzaPlaceReview,
+    required TResult Function(DiscoverUpdatePlaceReview value)
+        updatePizzaPlaceReview,
     required TResult Function(DiscoverSuggestEdit value) suggestEdit,
     required TResult Function(UpdateMapLocation value) updateMapLocation,
     required TResult Function(FetchPlaceDetails value) fetchPlaceDetails,
@@ -993,6 +1041,7 @@ class _$DiscoverPizzaPlaceImpl implements DiscoverPizzaPlace {
     TResult? Function(DiscoverAddImage value)? addImage,
     TResult? Function(DiscoverAddPlace value)? addPizzaPlace,
     TResult? Function(DiscoverAddPlaceReview value)? addPizzaPlaceReview,
+    TResult? Function(DiscoverUpdatePlaceReview value)? updatePizzaPlaceReview,
     TResult? Function(DiscoverSuggestEdit value)? suggestEdit,
     TResult? Function(UpdateMapLocation value)? updateMapLocation,
     TResult? Function(FetchPlaceDetails value)? fetchPlaceDetails,
@@ -1017,6 +1066,7 @@ class _$DiscoverPizzaPlaceImpl implements DiscoverPizzaPlace {
     TResult Function(DiscoverAddImage value)? addImage,
     TResult Function(DiscoverAddPlace value)? addPizzaPlace,
     TResult Function(DiscoverAddPlaceReview value)? addPizzaPlaceReview,
+    TResult Function(DiscoverUpdatePlaceReview value)? updatePizzaPlaceReview,
     TResult Function(DiscoverSuggestEdit value)? suggestEdit,
     TResult Function(UpdateMapLocation value)? updateMapLocation,
     TResult Function(FetchPlaceDetails value)? fetchPlaceDetails,
@@ -1136,6 +1186,8 @@ class _$DiscoverPizzaPlaceReviewsImpl implements DiscoverPizzaPlaceReviews {
     required TResult Function(File image, int index) addImage,
     required TResult Function(Map<String, dynamic> data) addPizzaPlace,
     required TResult Function(Map<String, dynamic> data) addPizzaPlaceReview,
+    required TResult Function(String reviewId, Map<String, dynamic> data)
+        updatePizzaPlaceReview,
     required TResult Function(PizzaPlaceModel pizzaPlace) suggestEdit,
     required TResult Function(LatLng location) updateMapLocation,
     required TResult Function(String placeId) fetchPlaceDetails,
@@ -1161,6 +1213,8 @@ class _$DiscoverPizzaPlaceReviewsImpl implements DiscoverPizzaPlaceReviews {
     TResult? Function(File image, int index)? addImage,
     TResult? Function(Map<String, dynamic> data)? addPizzaPlace,
     TResult? Function(Map<String, dynamic> data)? addPizzaPlaceReview,
+    TResult? Function(String reviewId, Map<String, dynamic> data)?
+        updatePizzaPlaceReview,
     TResult? Function(PizzaPlaceModel pizzaPlace)? suggestEdit,
     TResult? Function(LatLng location)? updateMapLocation,
     TResult? Function(String placeId)? fetchPlaceDetails,
@@ -1186,6 +1240,8 @@ class _$DiscoverPizzaPlaceReviewsImpl implements DiscoverPizzaPlaceReviews {
     TResult Function(File image, int index)? addImage,
     TResult Function(Map<String, dynamic> data)? addPizzaPlace,
     TResult Function(Map<String, dynamic> data)? addPizzaPlaceReview,
+    TResult Function(String reviewId, Map<String, dynamic> data)?
+        updatePizzaPlaceReview,
     TResult Function(PizzaPlaceModel pizzaPlace)? suggestEdit,
     TResult Function(LatLng location)? updateMapLocation,
     TResult Function(String placeId)? fetchPlaceDetails,
@@ -1216,6 +1272,8 @@ class _$DiscoverPizzaPlaceReviewsImpl implements DiscoverPizzaPlaceReviews {
     required TResult Function(DiscoverAddImage value) addImage,
     required TResult Function(DiscoverAddPlace value) addPizzaPlace,
     required TResult Function(DiscoverAddPlaceReview value) addPizzaPlaceReview,
+    required TResult Function(DiscoverUpdatePlaceReview value)
+        updatePizzaPlaceReview,
     required TResult Function(DiscoverSuggestEdit value) suggestEdit,
     required TResult Function(UpdateMapLocation value) updateMapLocation,
     required TResult Function(FetchPlaceDetails value) fetchPlaceDetails,
@@ -1240,6 +1298,7 @@ class _$DiscoverPizzaPlaceReviewsImpl implements DiscoverPizzaPlaceReviews {
     TResult? Function(DiscoverAddImage value)? addImage,
     TResult? Function(DiscoverAddPlace value)? addPizzaPlace,
     TResult? Function(DiscoverAddPlaceReview value)? addPizzaPlaceReview,
+    TResult? Function(DiscoverUpdatePlaceReview value)? updatePizzaPlaceReview,
     TResult? Function(DiscoverSuggestEdit value)? suggestEdit,
     TResult? Function(UpdateMapLocation value)? updateMapLocation,
     TResult? Function(FetchPlaceDetails value)? fetchPlaceDetails,
@@ -1264,6 +1323,7 @@ class _$DiscoverPizzaPlaceReviewsImpl implements DiscoverPizzaPlaceReviews {
     TResult Function(DiscoverAddImage value)? addImage,
     TResult Function(DiscoverAddPlace value)? addPizzaPlace,
     TResult Function(DiscoverAddPlaceReview value)? addPizzaPlaceReview,
+    TResult Function(DiscoverUpdatePlaceReview value)? updatePizzaPlaceReview,
     TResult Function(DiscoverSuggestEdit value)? suggestEdit,
     TResult Function(UpdateMapLocation value)? updateMapLocation,
     TResult Function(FetchPlaceDetails value)? fetchPlaceDetails,
@@ -1374,6 +1434,8 @@ class _$DiscoverAddImageImpl implements DiscoverAddImage {
     required TResult Function(File image, int index) addImage,
     required TResult Function(Map<String, dynamic> data) addPizzaPlace,
     required TResult Function(Map<String, dynamic> data) addPizzaPlaceReview,
+    required TResult Function(String reviewId, Map<String, dynamic> data)
+        updatePizzaPlaceReview,
     required TResult Function(PizzaPlaceModel pizzaPlace) suggestEdit,
     required TResult Function(LatLng location) updateMapLocation,
     required TResult Function(String placeId) fetchPlaceDetails,
@@ -1399,6 +1461,8 @@ class _$DiscoverAddImageImpl implements DiscoverAddImage {
     TResult? Function(File image, int index)? addImage,
     TResult? Function(Map<String, dynamic> data)? addPizzaPlace,
     TResult? Function(Map<String, dynamic> data)? addPizzaPlaceReview,
+    TResult? Function(String reviewId, Map<String, dynamic> data)?
+        updatePizzaPlaceReview,
     TResult? Function(PizzaPlaceModel pizzaPlace)? suggestEdit,
     TResult? Function(LatLng location)? updateMapLocation,
     TResult? Function(String placeId)? fetchPlaceDetails,
@@ -1424,6 +1488,8 @@ class _$DiscoverAddImageImpl implements DiscoverAddImage {
     TResult Function(File image, int index)? addImage,
     TResult Function(Map<String, dynamic> data)? addPizzaPlace,
     TResult Function(Map<String, dynamic> data)? addPizzaPlaceReview,
+    TResult Function(String reviewId, Map<String, dynamic> data)?
+        updatePizzaPlaceReview,
     TResult Function(PizzaPlaceModel pizzaPlace)? suggestEdit,
     TResult Function(LatLng location)? updateMapLocation,
     TResult Function(String placeId)? fetchPlaceDetails,
@@ -1454,6 +1520,8 @@ class _$DiscoverAddImageImpl implements DiscoverAddImage {
     required TResult Function(DiscoverAddImage value) addImage,
     required TResult Function(DiscoverAddPlace value) addPizzaPlace,
     required TResult Function(DiscoverAddPlaceReview value) addPizzaPlaceReview,
+    required TResult Function(DiscoverUpdatePlaceReview value)
+        updatePizzaPlaceReview,
     required TResult Function(DiscoverSuggestEdit value) suggestEdit,
     required TResult Function(UpdateMapLocation value) updateMapLocation,
     required TResult Function(FetchPlaceDetails value) fetchPlaceDetails,
@@ -1478,6 +1546,7 @@ class _$DiscoverAddImageImpl implements DiscoverAddImage {
     TResult? Function(DiscoverAddImage value)? addImage,
     TResult? Function(DiscoverAddPlace value)? addPizzaPlace,
     TResult? Function(DiscoverAddPlaceReview value)? addPizzaPlaceReview,
+    TResult? Function(DiscoverUpdatePlaceReview value)? updatePizzaPlaceReview,
     TResult? Function(DiscoverSuggestEdit value)? suggestEdit,
     TResult? Function(UpdateMapLocation value)? updateMapLocation,
     TResult? Function(FetchPlaceDetails value)? fetchPlaceDetails,
@@ -1502,6 +1571,7 @@ class _$DiscoverAddImageImpl implements DiscoverAddImage {
     TResult Function(DiscoverAddImage value)? addImage,
     TResult Function(DiscoverAddPlace value)? addPizzaPlace,
     TResult Function(DiscoverAddPlaceReview value)? addPizzaPlaceReview,
+    TResult Function(DiscoverUpdatePlaceReview value)? updatePizzaPlaceReview,
     TResult Function(DiscoverSuggestEdit value)? suggestEdit,
     TResult Function(UpdateMapLocation value)? updateMapLocation,
     TResult Function(FetchPlaceDetails value)? fetchPlaceDetails,
@@ -1611,6 +1681,8 @@ class _$DiscoverAddPlaceImpl implements DiscoverAddPlace {
     required TResult Function(File image, int index) addImage,
     required TResult Function(Map<String, dynamic> data) addPizzaPlace,
     required TResult Function(Map<String, dynamic> data) addPizzaPlaceReview,
+    required TResult Function(String reviewId, Map<String, dynamic> data)
+        updatePizzaPlaceReview,
     required TResult Function(PizzaPlaceModel pizzaPlace) suggestEdit,
     required TResult Function(LatLng location) updateMapLocation,
     required TResult Function(String placeId) fetchPlaceDetails,
@@ -1636,6 +1708,8 @@ class _$DiscoverAddPlaceImpl implements DiscoverAddPlace {
     TResult? Function(File image, int index)? addImage,
     TResult? Function(Map<String, dynamic> data)? addPizzaPlace,
     TResult? Function(Map<String, dynamic> data)? addPizzaPlaceReview,
+    TResult? Function(String reviewId, Map<String, dynamic> data)?
+        updatePizzaPlaceReview,
     TResult? Function(PizzaPlaceModel pizzaPlace)? suggestEdit,
     TResult? Function(LatLng location)? updateMapLocation,
     TResult? Function(String placeId)? fetchPlaceDetails,
@@ -1661,6 +1735,8 @@ class _$DiscoverAddPlaceImpl implements DiscoverAddPlace {
     TResult Function(File image, int index)? addImage,
     TResult Function(Map<String, dynamic> data)? addPizzaPlace,
     TResult Function(Map<String, dynamic> data)? addPizzaPlaceReview,
+    TResult Function(String reviewId, Map<String, dynamic> data)?
+        updatePizzaPlaceReview,
     TResult Function(PizzaPlaceModel pizzaPlace)? suggestEdit,
     TResult Function(LatLng location)? updateMapLocation,
     TResult Function(String placeId)? fetchPlaceDetails,
@@ -1691,6 +1767,8 @@ class _$DiscoverAddPlaceImpl implements DiscoverAddPlace {
     required TResult Function(DiscoverAddImage value) addImage,
     required TResult Function(DiscoverAddPlace value) addPizzaPlace,
     required TResult Function(DiscoverAddPlaceReview value) addPizzaPlaceReview,
+    required TResult Function(DiscoverUpdatePlaceReview value)
+        updatePizzaPlaceReview,
     required TResult Function(DiscoverSuggestEdit value) suggestEdit,
     required TResult Function(UpdateMapLocation value) updateMapLocation,
     required TResult Function(FetchPlaceDetails value) fetchPlaceDetails,
@@ -1715,6 +1793,7 @@ class _$DiscoverAddPlaceImpl implements DiscoverAddPlace {
     TResult? Function(DiscoverAddImage value)? addImage,
     TResult? Function(DiscoverAddPlace value)? addPizzaPlace,
     TResult? Function(DiscoverAddPlaceReview value)? addPizzaPlaceReview,
+    TResult? Function(DiscoverUpdatePlaceReview value)? updatePizzaPlaceReview,
     TResult? Function(DiscoverSuggestEdit value)? suggestEdit,
     TResult? Function(UpdateMapLocation value)? updateMapLocation,
     TResult? Function(FetchPlaceDetails value)? fetchPlaceDetails,
@@ -1739,6 +1818,7 @@ class _$DiscoverAddPlaceImpl implements DiscoverAddPlace {
     TResult Function(DiscoverAddImage value)? addImage,
     TResult Function(DiscoverAddPlace value)? addPizzaPlace,
     TResult Function(DiscoverAddPlaceReview value)? addPizzaPlaceReview,
+    TResult Function(DiscoverUpdatePlaceReview value)? updatePizzaPlaceReview,
     TResult Function(DiscoverSuggestEdit value)? suggestEdit,
     TResult Function(UpdateMapLocation value)? updateMapLocation,
     TResult Function(FetchPlaceDetails value)? fetchPlaceDetails,
@@ -1850,6 +1930,8 @@ class _$DiscoverAddPlaceReviewImpl implements DiscoverAddPlaceReview {
     required TResult Function(File image, int index) addImage,
     required TResult Function(Map<String, dynamic> data) addPizzaPlace,
     required TResult Function(Map<String, dynamic> data) addPizzaPlaceReview,
+    required TResult Function(String reviewId, Map<String, dynamic> data)
+        updatePizzaPlaceReview,
     required TResult Function(PizzaPlaceModel pizzaPlace) suggestEdit,
     required TResult Function(LatLng location) updateMapLocation,
     required TResult Function(String placeId) fetchPlaceDetails,
@@ -1875,6 +1957,8 @@ class _$DiscoverAddPlaceReviewImpl implements DiscoverAddPlaceReview {
     TResult? Function(File image, int index)? addImage,
     TResult? Function(Map<String, dynamic> data)? addPizzaPlace,
     TResult? Function(Map<String, dynamic> data)? addPizzaPlaceReview,
+    TResult? Function(String reviewId, Map<String, dynamic> data)?
+        updatePizzaPlaceReview,
     TResult? Function(PizzaPlaceModel pizzaPlace)? suggestEdit,
     TResult? Function(LatLng location)? updateMapLocation,
     TResult? Function(String placeId)? fetchPlaceDetails,
@@ -1900,6 +1984,8 @@ class _$DiscoverAddPlaceReviewImpl implements DiscoverAddPlaceReview {
     TResult Function(File image, int index)? addImage,
     TResult Function(Map<String, dynamic> data)? addPizzaPlace,
     TResult Function(Map<String, dynamic> data)? addPizzaPlaceReview,
+    TResult Function(String reviewId, Map<String, dynamic> data)?
+        updatePizzaPlaceReview,
     TResult Function(PizzaPlaceModel pizzaPlace)? suggestEdit,
     TResult Function(LatLng location)? updateMapLocation,
     TResult Function(String placeId)? fetchPlaceDetails,
@@ -1930,6 +2016,8 @@ class _$DiscoverAddPlaceReviewImpl implements DiscoverAddPlaceReview {
     required TResult Function(DiscoverAddImage value) addImage,
     required TResult Function(DiscoverAddPlace value) addPizzaPlace,
     required TResult Function(DiscoverAddPlaceReview value) addPizzaPlaceReview,
+    required TResult Function(DiscoverUpdatePlaceReview value)
+        updatePizzaPlaceReview,
     required TResult Function(DiscoverSuggestEdit value) suggestEdit,
     required TResult Function(UpdateMapLocation value) updateMapLocation,
     required TResult Function(FetchPlaceDetails value) fetchPlaceDetails,
@@ -1954,6 +2042,7 @@ class _$DiscoverAddPlaceReviewImpl implements DiscoverAddPlaceReview {
     TResult? Function(DiscoverAddImage value)? addImage,
     TResult? Function(DiscoverAddPlace value)? addPizzaPlace,
     TResult? Function(DiscoverAddPlaceReview value)? addPizzaPlaceReview,
+    TResult? Function(DiscoverUpdatePlaceReview value)? updatePizzaPlaceReview,
     TResult? Function(DiscoverSuggestEdit value)? suggestEdit,
     TResult? Function(UpdateMapLocation value)? updateMapLocation,
     TResult? Function(FetchPlaceDetails value)? fetchPlaceDetails,
@@ -1978,6 +2067,7 @@ class _$DiscoverAddPlaceReviewImpl implements DiscoverAddPlaceReview {
     TResult Function(DiscoverAddImage value)? addImage,
     TResult Function(DiscoverAddPlace value)? addPizzaPlace,
     TResult Function(DiscoverAddPlaceReview value)? addPizzaPlaceReview,
+    TResult Function(DiscoverUpdatePlaceReview value)? updatePizzaPlaceReview,
     TResult Function(DiscoverSuggestEdit value)? suggestEdit,
     TResult Function(UpdateMapLocation value)? updateMapLocation,
     TResult Function(FetchPlaceDetails value)? fetchPlaceDetails,
@@ -2003,6 +2093,268 @@ abstract class DiscoverAddPlaceReview implements DiscoverEvent {
   Map<String, dynamic> get data;
   @JsonKey(ignore: true)
   _$$DiscoverAddPlaceReviewImplCopyWith<_$DiscoverAddPlaceReviewImpl>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$DiscoverUpdatePlaceReviewImplCopyWith<$Res> {
+  factory _$$DiscoverUpdatePlaceReviewImplCopyWith(
+          _$DiscoverUpdatePlaceReviewImpl value,
+          $Res Function(_$DiscoverUpdatePlaceReviewImpl) then) =
+      __$$DiscoverUpdatePlaceReviewImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({String reviewId, Map<String, dynamic> data});
+}
+
+/// @nodoc
+class __$$DiscoverUpdatePlaceReviewImplCopyWithImpl<$Res>
+    extends _$DiscoverEventCopyWithImpl<$Res, _$DiscoverUpdatePlaceReviewImpl>
+    implements _$$DiscoverUpdatePlaceReviewImplCopyWith<$Res> {
+  __$$DiscoverUpdatePlaceReviewImplCopyWithImpl(
+      _$DiscoverUpdatePlaceReviewImpl _value,
+      $Res Function(_$DiscoverUpdatePlaceReviewImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? reviewId = null,
+    Object? data = null,
+  }) {
+    return _then(_$DiscoverUpdatePlaceReviewImpl(
+      reviewId: null == reviewId
+          ? _value.reviewId
+          : reviewId // ignore: cast_nullable_to_non_nullable
+              as String,
+      data: null == data
+          ? _value._data
+          : data // ignore: cast_nullable_to_non_nullable
+              as Map<String, dynamic>,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$DiscoverUpdatePlaceReviewImpl implements DiscoverUpdatePlaceReview {
+  const _$DiscoverUpdatePlaceReviewImpl(
+      {required this.reviewId, required final Map<String, dynamic> data})
+      : _data = data;
+
+  @override
+  final String reviewId;
+  final Map<String, dynamic> _data;
+  @override
+  Map<String, dynamic> get data {
+    if (_data is EqualUnmodifiableMapView) return _data;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(_data);
+  }
+
+  @override
+  String toString() {
+    return 'DiscoverEvent.updatePizzaPlaceReview(reviewId: $reviewId, data: $data)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$DiscoverUpdatePlaceReviewImpl &&
+            (identical(other.reviewId, reviewId) ||
+                other.reviewId == reviewId) &&
+            const DeepCollectionEquality().equals(other._data, _data));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType, reviewId, const DeepCollectionEquality().hash(_data));
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$DiscoverUpdatePlaceReviewImplCopyWith<_$DiscoverUpdatePlaceReviewImpl>
+      get copyWith => __$$DiscoverUpdatePlaceReviewImplCopyWithImpl<
+          _$DiscoverUpdatePlaceReviewImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(Map<String, String>? request) load,
+    required TResult Function() loadUserPlaces,
+    required TResult Function() refresh,
+    required TResult Function(PizzaPlaceModel pizzaPlaceModel) pizzaPlace,
+    required TResult Function(PizzaPlaceModel? pizzaPlaceModel)
+        pizzaPlaceReviews,
+    required TResult Function(File image, int index) addImage,
+    required TResult Function(Map<String, dynamic> data) addPizzaPlace,
+    required TResult Function(Map<String, dynamic> data) addPizzaPlaceReview,
+    required TResult Function(String reviewId, Map<String, dynamic> data)
+        updatePizzaPlaceReview,
+    required TResult Function(PizzaPlaceModel pizzaPlace) suggestEdit,
+    required TResult Function(LatLng location) updateMapLocation,
+    required TResult Function(String placeId) fetchPlaceDetails,
+    required TResult Function(String pizzaType) selectPizzaType,
+    required TResult Function(Map<String, dynamic> data) submitEdit,
+    required TResult Function(String query) searchLocations,
+    required TResult Function(String street, String pincode, String city,
+            String state, String country)
+        locationSelected,
+    required TResult Function(String pincode) fetchLocationFromPincode,
+  }) {
+    return updatePizzaPlaceReview(reviewId, data);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(Map<String, String>? request)? load,
+    TResult? Function()? loadUserPlaces,
+    TResult? Function()? refresh,
+    TResult? Function(PizzaPlaceModel pizzaPlaceModel)? pizzaPlace,
+    TResult? Function(PizzaPlaceModel? pizzaPlaceModel)? pizzaPlaceReviews,
+    TResult? Function(File image, int index)? addImage,
+    TResult? Function(Map<String, dynamic> data)? addPizzaPlace,
+    TResult? Function(Map<String, dynamic> data)? addPizzaPlaceReview,
+    TResult? Function(String reviewId, Map<String, dynamic> data)?
+        updatePizzaPlaceReview,
+    TResult? Function(PizzaPlaceModel pizzaPlace)? suggestEdit,
+    TResult? Function(LatLng location)? updateMapLocation,
+    TResult? Function(String placeId)? fetchPlaceDetails,
+    TResult? Function(String pizzaType)? selectPizzaType,
+    TResult? Function(Map<String, dynamic> data)? submitEdit,
+    TResult? Function(String query)? searchLocations,
+    TResult? Function(String street, String pincode, String city, String state,
+            String country)?
+        locationSelected,
+    TResult? Function(String pincode)? fetchLocationFromPincode,
+  }) {
+    return updatePizzaPlaceReview?.call(reviewId, data);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(Map<String, String>? request)? load,
+    TResult Function()? loadUserPlaces,
+    TResult Function()? refresh,
+    TResult Function(PizzaPlaceModel pizzaPlaceModel)? pizzaPlace,
+    TResult Function(PizzaPlaceModel? pizzaPlaceModel)? pizzaPlaceReviews,
+    TResult Function(File image, int index)? addImage,
+    TResult Function(Map<String, dynamic> data)? addPizzaPlace,
+    TResult Function(Map<String, dynamic> data)? addPizzaPlaceReview,
+    TResult Function(String reviewId, Map<String, dynamic> data)?
+        updatePizzaPlaceReview,
+    TResult Function(PizzaPlaceModel pizzaPlace)? suggestEdit,
+    TResult Function(LatLng location)? updateMapLocation,
+    TResult Function(String placeId)? fetchPlaceDetails,
+    TResult Function(String pizzaType)? selectPizzaType,
+    TResult Function(Map<String, dynamic> data)? submitEdit,
+    TResult Function(String query)? searchLocations,
+    TResult Function(String street, String pincode, String city, String state,
+            String country)?
+        locationSelected,
+    TResult Function(String pincode)? fetchLocationFromPincode,
+    required TResult orElse(),
+  }) {
+    if (updatePizzaPlaceReview != null) {
+      return updatePizzaPlaceReview(reviewId, data);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(DiscoverLoad value) load,
+    required TResult Function(DiscoverLoadUserPlaces value) loadUserPlaces,
+    required TResult Function(DiscoverRefresh value) refresh,
+    required TResult Function(DiscoverPizzaPlace value) pizzaPlace,
+    required TResult Function(DiscoverPizzaPlaceReviews value)
+        pizzaPlaceReviews,
+    required TResult Function(DiscoverAddImage value) addImage,
+    required TResult Function(DiscoverAddPlace value) addPizzaPlace,
+    required TResult Function(DiscoverAddPlaceReview value) addPizzaPlaceReview,
+    required TResult Function(DiscoverUpdatePlaceReview value)
+        updatePizzaPlaceReview,
+    required TResult Function(DiscoverSuggestEdit value) suggestEdit,
+    required TResult Function(UpdateMapLocation value) updateMapLocation,
+    required TResult Function(FetchPlaceDetails value) fetchPlaceDetails,
+    required TResult Function(DiscoverSelectPizzaType value) selectPizzaType,
+    required TResult Function(DiscoverSubmitEdit value) submitEdit,
+    required TResult Function(DiscoverSearchLocations value) searchLocations,
+    required TResult Function(LocationSelected value) locationSelected,
+    required TResult Function(DiscoverFetchLocationFromPincode value)
+        fetchLocationFromPincode,
+  }) {
+    return updatePizzaPlaceReview(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(DiscoverLoad value)? load,
+    TResult? Function(DiscoverLoadUserPlaces value)? loadUserPlaces,
+    TResult? Function(DiscoverRefresh value)? refresh,
+    TResult? Function(DiscoverPizzaPlace value)? pizzaPlace,
+    TResult? Function(DiscoverPizzaPlaceReviews value)? pizzaPlaceReviews,
+    TResult? Function(DiscoverAddImage value)? addImage,
+    TResult? Function(DiscoverAddPlace value)? addPizzaPlace,
+    TResult? Function(DiscoverAddPlaceReview value)? addPizzaPlaceReview,
+    TResult? Function(DiscoverUpdatePlaceReview value)? updatePizzaPlaceReview,
+    TResult? Function(DiscoverSuggestEdit value)? suggestEdit,
+    TResult? Function(UpdateMapLocation value)? updateMapLocation,
+    TResult? Function(FetchPlaceDetails value)? fetchPlaceDetails,
+    TResult? Function(DiscoverSelectPizzaType value)? selectPizzaType,
+    TResult? Function(DiscoverSubmitEdit value)? submitEdit,
+    TResult? Function(DiscoverSearchLocations value)? searchLocations,
+    TResult? Function(LocationSelected value)? locationSelected,
+    TResult? Function(DiscoverFetchLocationFromPincode value)?
+        fetchLocationFromPincode,
+  }) {
+    return updatePizzaPlaceReview?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(DiscoverLoad value)? load,
+    TResult Function(DiscoverLoadUserPlaces value)? loadUserPlaces,
+    TResult Function(DiscoverRefresh value)? refresh,
+    TResult Function(DiscoverPizzaPlace value)? pizzaPlace,
+    TResult Function(DiscoverPizzaPlaceReviews value)? pizzaPlaceReviews,
+    TResult Function(DiscoverAddImage value)? addImage,
+    TResult Function(DiscoverAddPlace value)? addPizzaPlace,
+    TResult Function(DiscoverAddPlaceReview value)? addPizzaPlaceReview,
+    TResult Function(DiscoverUpdatePlaceReview value)? updatePizzaPlaceReview,
+    TResult Function(DiscoverSuggestEdit value)? suggestEdit,
+    TResult Function(UpdateMapLocation value)? updateMapLocation,
+    TResult Function(FetchPlaceDetails value)? fetchPlaceDetails,
+    TResult Function(DiscoverSelectPizzaType value)? selectPizzaType,
+    TResult Function(DiscoverSubmitEdit value)? submitEdit,
+    TResult Function(DiscoverSearchLocations value)? searchLocations,
+    TResult Function(LocationSelected value)? locationSelected,
+    TResult Function(DiscoverFetchLocationFromPincode value)?
+        fetchLocationFromPincode,
+    required TResult orElse(),
+  }) {
+    if (updatePizzaPlaceReview != null) {
+      return updatePizzaPlaceReview(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class DiscoverUpdatePlaceReview implements DiscoverEvent {
+  const factory DiscoverUpdatePlaceReview(
+          {required final String reviewId,
+          required final Map<String, dynamic> data}) =
+      _$DiscoverUpdatePlaceReviewImpl;
+
+  String get reviewId;
+  Map<String, dynamic> get data;
+  @JsonKey(ignore: true)
+  _$$DiscoverUpdatePlaceReviewImplCopyWith<_$DiscoverUpdatePlaceReviewImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -2091,6 +2443,8 @@ class _$DiscoverSuggestEditImpl implements DiscoverSuggestEdit {
     required TResult Function(File image, int index) addImage,
     required TResult Function(Map<String, dynamic> data) addPizzaPlace,
     required TResult Function(Map<String, dynamic> data) addPizzaPlaceReview,
+    required TResult Function(String reviewId, Map<String, dynamic> data)
+        updatePizzaPlaceReview,
     required TResult Function(PizzaPlaceModel pizzaPlace) suggestEdit,
     required TResult Function(LatLng location) updateMapLocation,
     required TResult Function(String placeId) fetchPlaceDetails,
@@ -2116,6 +2470,8 @@ class _$DiscoverSuggestEditImpl implements DiscoverSuggestEdit {
     TResult? Function(File image, int index)? addImage,
     TResult? Function(Map<String, dynamic> data)? addPizzaPlace,
     TResult? Function(Map<String, dynamic> data)? addPizzaPlaceReview,
+    TResult? Function(String reviewId, Map<String, dynamic> data)?
+        updatePizzaPlaceReview,
     TResult? Function(PizzaPlaceModel pizzaPlace)? suggestEdit,
     TResult? Function(LatLng location)? updateMapLocation,
     TResult? Function(String placeId)? fetchPlaceDetails,
@@ -2141,6 +2497,8 @@ class _$DiscoverSuggestEditImpl implements DiscoverSuggestEdit {
     TResult Function(File image, int index)? addImage,
     TResult Function(Map<String, dynamic> data)? addPizzaPlace,
     TResult Function(Map<String, dynamic> data)? addPizzaPlaceReview,
+    TResult Function(String reviewId, Map<String, dynamic> data)?
+        updatePizzaPlaceReview,
     TResult Function(PizzaPlaceModel pizzaPlace)? suggestEdit,
     TResult Function(LatLng location)? updateMapLocation,
     TResult Function(String placeId)? fetchPlaceDetails,
@@ -2171,6 +2529,8 @@ class _$DiscoverSuggestEditImpl implements DiscoverSuggestEdit {
     required TResult Function(DiscoverAddImage value) addImage,
     required TResult Function(DiscoverAddPlace value) addPizzaPlace,
     required TResult Function(DiscoverAddPlaceReview value) addPizzaPlaceReview,
+    required TResult Function(DiscoverUpdatePlaceReview value)
+        updatePizzaPlaceReview,
     required TResult Function(DiscoverSuggestEdit value) suggestEdit,
     required TResult Function(UpdateMapLocation value) updateMapLocation,
     required TResult Function(FetchPlaceDetails value) fetchPlaceDetails,
@@ -2195,6 +2555,7 @@ class _$DiscoverSuggestEditImpl implements DiscoverSuggestEdit {
     TResult? Function(DiscoverAddImage value)? addImage,
     TResult? Function(DiscoverAddPlace value)? addPizzaPlace,
     TResult? Function(DiscoverAddPlaceReview value)? addPizzaPlaceReview,
+    TResult? Function(DiscoverUpdatePlaceReview value)? updatePizzaPlaceReview,
     TResult? Function(DiscoverSuggestEdit value)? suggestEdit,
     TResult? Function(UpdateMapLocation value)? updateMapLocation,
     TResult? Function(FetchPlaceDetails value)? fetchPlaceDetails,
@@ -2219,6 +2580,7 @@ class _$DiscoverSuggestEditImpl implements DiscoverSuggestEdit {
     TResult Function(DiscoverAddImage value)? addImage,
     TResult Function(DiscoverAddPlace value)? addPizzaPlace,
     TResult Function(DiscoverAddPlaceReview value)? addPizzaPlaceReview,
+    TResult Function(DiscoverUpdatePlaceReview value)? updatePizzaPlaceReview,
     TResult Function(DiscoverSuggestEdit value)? suggestEdit,
     TResult Function(UpdateMapLocation value)? updateMapLocation,
     TResult Function(FetchPlaceDetails value)? fetchPlaceDetails,
@@ -2322,6 +2684,8 @@ class _$UpdateMapLocationImpl implements UpdateMapLocation {
     required TResult Function(File image, int index) addImage,
     required TResult Function(Map<String, dynamic> data) addPizzaPlace,
     required TResult Function(Map<String, dynamic> data) addPizzaPlaceReview,
+    required TResult Function(String reviewId, Map<String, dynamic> data)
+        updatePizzaPlaceReview,
     required TResult Function(PizzaPlaceModel pizzaPlace) suggestEdit,
     required TResult Function(LatLng location) updateMapLocation,
     required TResult Function(String placeId) fetchPlaceDetails,
@@ -2347,6 +2711,8 @@ class _$UpdateMapLocationImpl implements UpdateMapLocation {
     TResult? Function(File image, int index)? addImage,
     TResult? Function(Map<String, dynamic> data)? addPizzaPlace,
     TResult? Function(Map<String, dynamic> data)? addPizzaPlaceReview,
+    TResult? Function(String reviewId, Map<String, dynamic> data)?
+        updatePizzaPlaceReview,
     TResult? Function(PizzaPlaceModel pizzaPlace)? suggestEdit,
     TResult? Function(LatLng location)? updateMapLocation,
     TResult? Function(String placeId)? fetchPlaceDetails,
@@ -2372,6 +2738,8 @@ class _$UpdateMapLocationImpl implements UpdateMapLocation {
     TResult Function(File image, int index)? addImage,
     TResult Function(Map<String, dynamic> data)? addPizzaPlace,
     TResult Function(Map<String, dynamic> data)? addPizzaPlaceReview,
+    TResult Function(String reviewId, Map<String, dynamic> data)?
+        updatePizzaPlaceReview,
     TResult Function(PizzaPlaceModel pizzaPlace)? suggestEdit,
     TResult Function(LatLng location)? updateMapLocation,
     TResult Function(String placeId)? fetchPlaceDetails,
@@ -2402,6 +2770,8 @@ class _$UpdateMapLocationImpl implements UpdateMapLocation {
     required TResult Function(DiscoverAddImage value) addImage,
     required TResult Function(DiscoverAddPlace value) addPizzaPlace,
     required TResult Function(DiscoverAddPlaceReview value) addPizzaPlaceReview,
+    required TResult Function(DiscoverUpdatePlaceReview value)
+        updatePizzaPlaceReview,
     required TResult Function(DiscoverSuggestEdit value) suggestEdit,
     required TResult Function(UpdateMapLocation value) updateMapLocation,
     required TResult Function(FetchPlaceDetails value) fetchPlaceDetails,
@@ -2426,6 +2796,7 @@ class _$UpdateMapLocationImpl implements UpdateMapLocation {
     TResult? Function(DiscoverAddImage value)? addImage,
     TResult? Function(DiscoverAddPlace value)? addPizzaPlace,
     TResult? Function(DiscoverAddPlaceReview value)? addPizzaPlaceReview,
+    TResult? Function(DiscoverUpdatePlaceReview value)? updatePizzaPlaceReview,
     TResult? Function(DiscoverSuggestEdit value)? suggestEdit,
     TResult? Function(UpdateMapLocation value)? updateMapLocation,
     TResult? Function(FetchPlaceDetails value)? fetchPlaceDetails,
@@ -2450,6 +2821,7 @@ class _$UpdateMapLocationImpl implements UpdateMapLocation {
     TResult Function(DiscoverAddImage value)? addImage,
     TResult Function(DiscoverAddPlace value)? addPizzaPlace,
     TResult Function(DiscoverAddPlaceReview value)? addPizzaPlaceReview,
+    TResult Function(DiscoverUpdatePlaceReview value)? updatePizzaPlaceReview,
     TResult Function(DiscoverSuggestEdit value)? suggestEdit,
     TResult Function(UpdateMapLocation value)? updateMapLocation,
     TResult Function(FetchPlaceDetails value)? fetchPlaceDetails,
@@ -2552,6 +2924,8 @@ class _$FetchPlaceDetailsImpl implements FetchPlaceDetails {
     required TResult Function(File image, int index) addImage,
     required TResult Function(Map<String, dynamic> data) addPizzaPlace,
     required TResult Function(Map<String, dynamic> data) addPizzaPlaceReview,
+    required TResult Function(String reviewId, Map<String, dynamic> data)
+        updatePizzaPlaceReview,
     required TResult Function(PizzaPlaceModel pizzaPlace) suggestEdit,
     required TResult Function(LatLng location) updateMapLocation,
     required TResult Function(String placeId) fetchPlaceDetails,
@@ -2577,6 +2951,8 @@ class _$FetchPlaceDetailsImpl implements FetchPlaceDetails {
     TResult? Function(File image, int index)? addImage,
     TResult? Function(Map<String, dynamic> data)? addPizzaPlace,
     TResult? Function(Map<String, dynamic> data)? addPizzaPlaceReview,
+    TResult? Function(String reviewId, Map<String, dynamic> data)?
+        updatePizzaPlaceReview,
     TResult? Function(PizzaPlaceModel pizzaPlace)? suggestEdit,
     TResult? Function(LatLng location)? updateMapLocation,
     TResult? Function(String placeId)? fetchPlaceDetails,
@@ -2602,6 +2978,8 @@ class _$FetchPlaceDetailsImpl implements FetchPlaceDetails {
     TResult Function(File image, int index)? addImage,
     TResult Function(Map<String, dynamic> data)? addPizzaPlace,
     TResult Function(Map<String, dynamic> data)? addPizzaPlaceReview,
+    TResult Function(String reviewId, Map<String, dynamic> data)?
+        updatePizzaPlaceReview,
     TResult Function(PizzaPlaceModel pizzaPlace)? suggestEdit,
     TResult Function(LatLng location)? updateMapLocation,
     TResult Function(String placeId)? fetchPlaceDetails,
@@ -2632,6 +3010,8 @@ class _$FetchPlaceDetailsImpl implements FetchPlaceDetails {
     required TResult Function(DiscoverAddImage value) addImage,
     required TResult Function(DiscoverAddPlace value) addPizzaPlace,
     required TResult Function(DiscoverAddPlaceReview value) addPizzaPlaceReview,
+    required TResult Function(DiscoverUpdatePlaceReview value)
+        updatePizzaPlaceReview,
     required TResult Function(DiscoverSuggestEdit value) suggestEdit,
     required TResult Function(UpdateMapLocation value) updateMapLocation,
     required TResult Function(FetchPlaceDetails value) fetchPlaceDetails,
@@ -2656,6 +3036,7 @@ class _$FetchPlaceDetailsImpl implements FetchPlaceDetails {
     TResult? Function(DiscoverAddImage value)? addImage,
     TResult? Function(DiscoverAddPlace value)? addPizzaPlace,
     TResult? Function(DiscoverAddPlaceReview value)? addPizzaPlaceReview,
+    TResult? Function(DiscoverUpdatePlaceReview value)? updatePizzaPlaceReview,
     TResult? Function(DiscoverSuggestEdit value)? suggestEdit,
     TResult? Function(UpdateMapLocation value)? updateMapLocation,
     TResult? Function(FetchPlaceDetails value)? fetchPlaceDetails,
@@ -2680,6 +3061,7 @@ class _$FetchPlaceDetailsImpl implements FetchPlaceDetails {
     TResult Function(DiscoverAddImage value)? addImage,
     TResult Function(DiscoverAddPlace value)? addPizzaPlace,
     TResult Function(DiscoverAddPlaceReview value)? addPizzaPlaceReview,
+    TResult Function(DiscoverUpdatePlaceReview value)? updatePizzaPlaceReview,
     TResult Function(DiscoverSuggestEdit value)? suggestEdit,
     TResult Function(UpdateMapLocation value)? updateMapLocation,
     TResult Function(FetchPlaceDetails value)? fetchPlaceDetails,
@@ -2785,6 +3167,8 @@ class _$DiscoverSelectPizzaTypeImpl implements DiscoverSelectPizzaType {
     required TResult Function(File image, int index) addImage,
     required TResult Function(Map<String, dynamic> data) addPizzaPlace,
     required TResult Function(Map<String, dynamic> data) addPizzaPlaceReview,
+    required TResult Function(String reviewId, Map<String, dynamic> data)
+        updatePizzaPlaceReview,
     required TResult Function(PizzaPlaceModel pizzaPlace) suggestEdit,
     required TResult Function(LatLng location) updateMapLocation,
     required TResult Function(String placeId) fetchPlaceDetails,
@@ -2810,6 +3194,8 @@ class _$DiscoverSelectPizzaTypeImpl implements DiscoverSelectPizzaType {
     TResult? Function(File image, int index)? addImage,
     TResult? Function(Map<String, dynamic> data)? addPizzaPlace,
     TResult? Function(Map<String, dynamic> data)? addPizzaPlaceReview,
+    TResult? Function(String reviewId, Map<String, dynamic> data)?
+        updatePizzaPlaceReview,
     TResult? Function(PizzaPlaceModel pizzaPlace)? suggestEdit,
     TResult? Function(LatLng location)? updateMapLocation,
     TResult? Function(String placeId)? fetchPlaceDetails,
@@ -2835,6 +3221,8 @@ class _$DiscoverSelectPizzaTypeImpl implements DiscoverSelectPizzaType {
     TResult Function(File image, int index)? addImage,
     TResult Function(Map<String, dynamic> data)? addPizzaPlace,
     TResult Function(Map<String, dynamic> data)? addPizzaPlaceReview,
+    TResult Function(String reviewId, Map<String, dynamic> data)?
+        updatePizzaPlaceReview,
     TResult Function(PizzaPlaceModel pizzaPlace)? suggestEdit,
     TResult Function(LatLng location)? updateMapLocation,
     TResult Function(String placeId)? fetchPlaceDetails,
@@ -2865,6 +3253,8 @@ class _$DiscoverSelectPizzaTypeImpl implements DiscoverSelectPizzaType {
     required TResult Function(DiscoverAddImage value) addImage,
     required TResult Function(DiscoverAddPlace value) addPizzaPlace,
     required TResult Function(DiscoverAddPlaceReview value) addPizzaPlaceReview,
+    required TResult Function(DiscoverUpdatePlaceReview value)
+        updatePizzaPlaceReview,
     required TResult Function(DiscoverSuggestEdit value) suggestEdit,
     required TResult Function(UpdateMapLocation value) updateMapLocation,
     required TResult Function(FetchPlaceDetails value) fetchPlaceDetails,
@@ -2889,6 +3279,7 @@ class _$DiscoverSelectPizzaTypeImpl implements DiscoverSelectPizzaType {
     TResult? Function(DiscoverAddImage value)? addImage,
     TResult? Function(DiscoverAddPlace value)? addPizzaPlace,
     TResult? Function(DiscoverAddPlaceReview value)? addPizzaPlaceReview,
+    TResult? Function(DiscoverUpdatePlaceReview value)? updatePizzaPlaceReview,
     TResult? Function(DiscoverSuggestEdit value)? suggestEdit,
     TResult? Function(UpdateMapLocation value)? updateMapLocation,
     TResult? Function(FetchPlaceDetails value)? fetchPlaceDetails,
@@ -2913,6 +3304,7 @@ class _$DiscoverSelectPizzaTypeImpl implements DiscoverSelectPizzaType {
     TResult Function(DiscoverAddImage value)? addImage,
     TResult Function(DiscoverAddPlace value)? addPizzaPlace,
     TResult Function(DiscoverAddPlaceReview value)? addPizzaPlaceReview,
+    TResult Function(DiscoverUpdatePlaceReview value)? updatePizzaPlaceReview,
     TResult Function(DiscoverSuggestEdit value)? suggestEdit,
     TResult Function(UpdateMapLocation value)? updateMapLocation,
     TResult Function(FetchPlaceDetails value)? fetchPlaceDetails,
@@ -3022,6 +3414,8 @@ class _$DiscoverSubmitEditImpl implements DiscoverSubmitEdit {
     required TResult Function(File image, int index) addImage,
     required TResult Function(Map<String, dynamic> data) addPizzaPlace,
     required TResult Function(Map<String, dynamic> data) addPizzaPlaceReview,
+    required TResult Function(String reviewId, Map<String, dynamic> data)
+        updatePizzaPlaceReview,
     required TResult Function(PizzaPlaceModel pizzaPlace) suggestEdit,
     required TResult Function(LatLng location) updateMapLocation,
     required TResult Function(String placeId) fetchPlaceDetails,
@@ -3047,6 +3441,8 @@ class _$DiscoverSubmitEditImpl implements DiscoverSubmitEdit {
     TResult? Function(File image, int index)? addImage,
     TResult? Function(Map<String, dynamic> data)? addPizzaPlace,
     TResult? Function(Map<String, dynamic> data)? addPizzaPlaceReview,
+    TResult? Function(String reviewId, Map<String, dynamic> data)?
+        updatePizzaPlaceReview,
     TResult? Function(PizzaPlaceModel pizzaPlace)? suggestEdit,
     TResult? Function(LatLng location)? updateMapLocation,
     TResult? Function(String placeId)? fetchPlaceDetails,
@@ -3072,6 +3468,8 @@ class _$DiscoverSubmitEditImpl implements DiscoverSubmitEdit {
     TResult Function(File image, int index)? addImage,
     TResult Function(Map<String, dynamic> data)? addPizzaPlace,
     TResult Function(Map<String, dynamic> data)? addPizzaPlaceReview,
+    TResult Function(String reviewId, Map<String, dynamic> data)?
+        updatePizzaPlaceReview,
     TResult Function(PizzaPlaceModel pizzaPlace)? suggestEdit,
     TResult Function(LatLng location)? updateMapLocation,
     TResult Function(String placeId)? fetchPlaceDetails,
@@ -3102,6 +3500,8 @@ class _$DiscoverSubmitEditImpl implements DiscoverSubmitEdit {
     required TResult Function(DiscoverAddImage value) addImage,
     required TResult Function(DiscoverAddPlace value) addPizzaPlace,
     required TResult Function(DiscoverAddPlaceReview value) addPizzaPlaceReview,
+    required TResult Function(DiscoverUpdatePlaceReview value)
+        updatePizzaPlaceReview,
     required TResult Function(DiscoverSuggestEdit value) suggestEdit,
     required TResult Function(UpdateMapLocation value) updateMapLocation,
     required TResult Function(FetchPlaceDetails value) fetchPlaceDetails,
@@ -3126,6 +3526,7 @@ class _$DiscoverSubmitEditImpl implements DiscoverSubmitEdit {
     TResult? Function(DiscoverAddImage value)? addImage,
     TResult? Function(DiscoverAddPlace value)? addPizzaPlace,
     TResult? Function(DiscoverAddPlaceReview value)? addPizzaPlaceReview,
+    TResult? Function(DiscoverUpdatePlaceReview value)? updatePizzaPlaceReview,
     TResult? Function(DiscoverSuggestEdit value)? suggestEdit,
     TResult? Function(UpdateMapLocation value)? updateMapLocation,
     TResult? Function(FetchPlaceDetails value)? fetchPlaceDetails,
@@ -3150,6 +3551,7 @@ class _$DiscoverSubmitEditImpl implements DiscoverSubmitEdit {
     TResult Function(DiscoverAddImage value)? addImage,
     TResult Function(DiscoverAddPlace value)? addPizzaPlace,
     TResult Function(DiscoverAddPlaceReview value)? addPizzaPlaceReview,
+    TResult Function(DiscoverUpdatePlaceReview value)? updatePizzaPlaceReview,
     TResult Function(DiscoverSuggestEdit value)? suggestEdit,
     TResult Function(UpdateMapLocation value)? updateMapLocation,
     TResult Function(FetchPlaceDetails value)? fetchPlaceDetails,
@@ -3254,6 +3656,8 @@ class _$DiscoverSearchLocationsImpl implements DiscoverSearchLocations {
     required TResult Function(File image, int index) addImage,
     required TResult Function(Map<String, dynamic> data) addPizzaPlace,
     required TResult Function(Map<String, dynamic> data) addPizzaPlaceReview,
+    required TResult Function(String reviewId, Map<String, dynamic> data)
+        updatePizzaPlaceReview,
     required TResult Function(PizzaPlaceModel pizzaPlace) suggestEdit,
     required TResult Function(LatLng location) updateMapLocation,
     required TResult Function(String placeId) fetchPlaceDetails,
@@ -3279,6 +3683,8 @@ class _$DiscoverSearchLocationsImpl implements DiscoverSearchLocations {
     TResult? Function(File image, int index)? addImage,
     TResult? Function(Map<String, dynamic> data)? addPizzaPlace,
     TResult? Function(Map<String, dynamic> data)? addPizzaPlaceReview,
+    TResult? Function(String reviewId, Map<String, dynamic> data)?
+        updatePizzaPlaceReview,
     TResult? Function(PizzaPlaceModel pizzaPlace)? suggestEdit,
     TResult? Function(LatLng location)? updateMapLocation,
     TResult? Function(String placeId)? fetchPlaceDetails,
@@ -3304,6 +3710,8 @@ class _$DiscoverSearchLocationsImpl implements DiscoverSearchLocations {
     TResult Function(File image, int index)? addImage,
     TResult Function(Map<String, dynamic> data)? addPizzaPlace,
     TResult Function(Map<String, dynamic> data)? addPizzaPlaceReview,
+    TResult Function(String reviewId, Map<String, dynamic> data)?
+        updatePizzaPlaceReview,
     TResult Function(PizzaPlaceModel pizzaPlace)? suggestEdit,
     TResult Function(LatLng location)? updateMapLocation,
     TResult Function(String placeId)? fetchPlaceDetails,
@@ -3334,6 +3742,8 @@ class _$DiscoverSearchLocationsImpl implements DiscoverSearchLocations {
     required TResult Function(DiscoverAddImage value) addImage,
     required TResult Function(DiscoverAddPlace value) addPizzaPlace,
     required TResult Function(DiscoverAddPlaceReview value) addPizzaPlaceReview,
+    required TResult Function(DiscoverUpdatePlaceReview value)
+        updatePizzaPlaceReview,
     required TResult Function(DiscoverSuggestEdit value) suggestEdit,
     required TResult Function(UpdateMapLocation value) updateMapLocation,
     required TResult Function(FetchPlaceDetails value) fetchPlaceDetails,
@@ -3358,6 +3768,7 @@ class _$DiscoverSearchLocationsImpl implements DiscoverSearchLocations {
     TResult? Function(DiscoverAddImage value)? addImage,
     TResult? Function(DiscoverAddPlace value)? addPizzaPlace,
     TResult? Function(DiscoverAddPlaceReview value)? addPizzaPlaceReview,
+    TResult? Function(DiscoverUpdatePlaceReview value)? updatePizzaPlaceReview,
     TResult? Function(DiscoverSuggestEdit value)? suggestEdit,
     TResult? Function(UpdateMapLocation value)? updateMapLocation,
     TResult? Function(FetchPlaceDetails value)? fetchPlaceDetails,
@@ -3382,6 +3793,7 @@ class _$DiscoverSearchLocationsImpl implements DiscoverSearchLocations {
     TResult Function(DiscoverAddImage value)? addImage,
     TResult Function(DiscoverAddPlace value)? addPizzaPlace,
     TResult Function(DiscoverAddPlaceReview value)? addPizzaPlaceReview,
+    TResult Function(DiscoverUpdatePlaceReview value)? updatePizzaPlaceReview,
     TResult Function(DiscoverSuggestEdit value)? suggestEdit,
     TResult Function(UpdateMapLocation value)? updateMapLocation,
     TResult Function(FetchPlaceDetails value)? fetchPlaceDetails,
@@ -3527,6 +3939,8 @@ class _$LocationSelectedImpl implements LocationSelected {
     required TResult Function(File image, int index) addImage,
     required TResult Function(Map<String, dynamic> data) addPizzaPlace,
     required TResult Function(Map<String, dynamic> data) addPizzaPlaceReview,
+    required TResult Function(String reviewId, Map<String, dynamic> data)
+        updatePizzaPlaceReview,
     required TResult Function(PizzaPlaceModel pizzaPlace) suggestEdit,
     required TResult Function(LatLng location) updateMapLocation,
     required TResult Function(String placeId) fetchPlaceDetails,
@@ -3552,6 +3966,8 @@ class _$LocationSelectedImpl implements LocationSelected {
     TResult? Function(File image, int index)? addImage,
     TResult? Function(Map<String, dynamic> data)? addPizzaPlace,
     TResult? Function(Map<String, dynamic> data)? addPizzaPlaceReview,
+    TResult? Function(String reviewId, Map<String, dynamic> data)?
+        updatePizzaPlaceReview,
     TResult? Function(PizzaPlaceModel pizzaPlace)? suggestEdit,
     TResult? Function(LatLng location)? updateMapLocation,
     TResult? Function(String placeId)? fetchPlaceDetails,
@@ -3577,6 +3993,8 @@ class _$LocationSelectedImpl implements LocationSelected {
     TResult Function(File image, int index)? addImage,
     TResult Function(Map<String, dynamic> data)? addPizzaPlace,
     TResult Function(Map<String, dynamic> data)? addPizzaPlaceReview,
+    TResult Function(String reviewId, Map<String, dynamic> data)?
+        updatePizzaPlaceReview,
     TResult Function(PizzaPlaceModel pizzaPlace)? suggestEdit,
     TResult Function(LatLng location)? updateMapLocation,
     TResult Function(String placeId)? fetchPlaceDetails,
@@ -3607,6 +4025,8 @@ class _$LocationSelectedImpl implements LocationSelected {
     required TResult Function(DiscoverAddImage value) addImage,
     required TResult Function(DiscoverAddPlace value) addPizzaPlace,
     required TResult Function(DiscoverAddPlaceReview value) addPizzaPlaceReview,
+    required TResult Function(DiscoverUpdatePlaceReview value)
+        updatePizzaPlaceReview,
     required TResult Function(DiscoverSuggestEdit value) suggestEdit,
     required TResult Function(UpdateMapLocation value) updateMapLocation,
     required TResult Function(FetchPlaceDetails value) fetchPlaceDetails,
@@ -3631,6 +4051,7 @@ class _$LocationSelectedImpl implements LocationSelected {
     TResult? Function(DiscoverAddImage value)? addImage,
     TResult? Function(DiscoverAddPlace value)? addPizzaPlace,
     TResult? Function(DiscoverAddPlaceReview value)? addPizzaPlaceReview,
+    TResult? Function(DiscoverUpdatePlaceReview value)? updatePizzaPlaceReview,
     TResult? Function(DiscoverSuggestEdit value)? suggestEdit,
     TResult? Function(UpdateMapLocation value)? updateMapLocation,
     TResult? Function(FetchPlaceDetails value)? fetchPlaceDetails,
@@ -3655,6 +4076,7 @@ class _$LocationSelectedImpl implements LocationSelected {
     TResult Function(DiscoverAddImage value)? addImage,
     TResult Function(DiscoverAddPlace value)? addPizzaPlace,
     TResult Function(DiscoverAddPlaceReview value)? addPizzaPlaceReview,
+    TResult Function(DiscoverUpdatePlaceReview value)? updatePizzaPlaceReview,
     TResult Function(DiscoverSuggestEdit value)? suggestEdit,
     TResult Function(UpdateMapLocation value)? updateMapLocation,
     TResult Function(FetchPlaceDetails value)? fetchPlaceDetails,
@@ -3770,6 +4192,8 @@ class _$DiscoverFetchLocationFromPincodeImpl
     required TResult Function(File image, int index) addImage,
     required TResult Function(Map<String, dynamic> data) addPizzaPlace,
     required TResult Function(Map<String, dynamic> data) addPizzaPlaceReview,
+    required TResult Function(String reviewId, Map<String, dynamic> data)
+        updatePizzaPlaceReview,
     required TResult Function(PizzaPlaceModel pizzaPlace) suggestEdit,
     required TResult Function(LatLng location) updateMapLocation,
     required TResult Function(String placeId) fetchPlaceDetails,
@@ -3795,6 +4219,8 @@ class _$DiscoverFetchLocationFromPincodeImpl
     TResult? Function(File image, int index)? addImage,
     TResult? Function(Map<String, dynamic> data)? addPizzaPlace,
     TResult? Function(Map<String, dynamic> data)? addPizzaPlaceReview,
+    TResult? Function(String reviewId, Map<String, dynamic> data)?
+        updatePizzaPlaceReview,
     TResult? Function(PizzaPlaceModel pizzaPlace)? suggestEdit,
     TResult? Function(LatLng location)? updateMapLocation,
     TResult? Function(String placeId)? fetchPlaceDetails,
@@ -3820,6 +4246,8 @@ class _$DiscoverFetchLocationFromPincodeImpl
     TResult Function(File image, int index)? addImage,
     TResult Function(Map<String, dynamic> data)? addPizzaPlace,
     TResult Function(Map<String, dynamic> data)? addPizzaPlaceReview,
+    TResult Function(String reviewId, Map<String, dynamic> data)?
+        updatePizzaPlaceReview,
     TResult Function(PizzaPlaceModel pizzaPlace)? suggestEdit,
     TResult Function(LatLng location)? updateMapLocation,
     TResult Function(String placeId)? fetchPlaceDetails,
@@ -3850,6 +4278,8 @@ class _$DiscoverFetchLocationFromPincodeImpl
     required TResult Function(DiscoverAddImage value) addImage,
     required TResult Function(DiscoverAddPlace value) addPizzaPlace,
     required TResult Function(DiscoverAddPlaceReview value) addPizzaPlaceReview,
+    required TResult Function(DiscoverUpdatePlaceReview value)
+        updatePizzaPlaceReview,
     required TResult Function(DiscoverSuggestEdit value) suggestEdit,
     required TResult Function(UpdateMapLocation value) updateMapLocation,
     required TResult Function(FetchPlaceDetails value) fetchPlaceDetails,
@@ -3874,6 +4304,7 @@ class _$DiscoverFetchLocationFromPincodeImpl
     TResult? Function(DiscoverAddImage value)? addImage,
     TResult? Function(DiscoverAddPlace value)? addPizzaPlace,
     TResult? Function(DiscoverAddPlaceReview value)? addPizzaPlaceReview,
+    TResult? Function(DiscoverUpdatePlaceReview value)? updatePizzaPlaceReview,
     TResult? Function(DiscoverSuggestEdit value)? suggestEdit,
     TResult? Function(UpdateMapLocation value)? updateMapLocation,
     TResult? Function(FetchPlaceDetails value)? fetchPlaceDetails,
@@ -3898,6 +4329,7 @@ class _$DiscoverFetchLocationFromPincodeImpl
     TResult Function(DiscoverAddImage value)? addImage,
     TResult Function(DiscoverAddPlace value)? addPizzaPlace,
     TResult Function(DiscoverAddPlaceReview value)? addPizzaPlaceReview,
+    TResult Function(DiscoverUpdatePlaceReview value)? updatePizzaPlaceReview,
     TResult Function(DiscoverSuggestEdit value)? suggestEdit,
     TResult Function(UpdateMapLocation value)? updateMapLocation,
     TResult Function(FetchPlaceDetails value)? fetchPlaceDetails,

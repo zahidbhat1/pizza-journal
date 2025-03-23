@@ -20,7 +20,9 @@ mixin _$ProfileState {
   File? get selectedImage => throw _privateConstructorUsedError;
   String? get uploadedImageUrl => throw _privateConstructorUsedError;
   bool get isUpdating => throw _privateConstructorUsedError;
+  bool get isLoadingSearches => throw _privateConstructorUsedError;
   String? get error => throw _privateConstructorUsedError;
+  List<UserSearch> get searches => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $ProfileStateCopyWith<ProfileState> get copyWith =>
@@ -38,7 +40,9 @@ abstract class $ProfileStateCopyWith<$Res> {
       File? selectedImage,
       String? uploadedImageUrl,
       bool isUpdating,
-      String? error});
+      bool isLoadingSearches,
+      String? error,
+      List<UserSearch> searches});
 
   $UserModelCopyWith<$Res>? get user;
 }
@@ -60,7 +64,9 @@ class _$ProfileStateCopyWithImpl<$Res, $Val extends ProfileState>
     Object? selectedImage = freezed,
     Object? uploadedImageUrl = freezed,
     Object? isUpdating = null,
+    Object? isLoadingSearches = null,
     Object? error = freezed,
+    Object? searches = null,
   }) {
     return _then(_value.copyWith(
       user: freezed == user
@@ -79,10 +85,18 @@ class _$ProfileStateCopyWithImpl<$Res, $Val extends ProfileState>
           ? _value.isUpdating
           : isUpdating // ignore: cast_nullable_to_non_nullable
               as bool,
+      isLoadingSearches: null == isLoadingSearches
+          ? _value.isLoadingSearches
+          : isLoadingSearches // ignore: cast_nullable_to_non_nullable
+              as bool,
       error: freezed == error
           ? _value.error
           : error // ignore: cast_nullable_to_non_nullable
               as String?,
+      searches: null == searches
+          ? _value.searches
+          : searches // ignore: cast_nullable_to_non_nullable
+              as List<UserSearch>,
     ) as $Val);
   }
 
@@ -112,7 +126,9 @@ abstract class _$$ProfileStateImplCopyWith<$Res>
       File? selectedImage,
       String? uploadedImageUrl,
       bool isUpdating,
-      String? error});
+      bool isLoadingSearches,
+      String? error,
+      List<UserSearch> searches});
 
   @override
   $UserModelCopyWith<$Res>? get user;
@@ -133,7 +149,9 @@ class __$$ProfileStateImplCopyWithImpl<$Res>
     Object? selectedImage = freezed,
     Object? uploadedImageUrl = freezed,
     Object? isUpdating = null,
+    Object? isLoadingSearches = null,
     Object? error = freezed,
+    Object? searches = null,
   }) {
     return _then(_$ProfileStateImpl(
       user: freezed == user
@@ -152,10 +170,18 @@ class __$$ProfileStateImplCopyWithImpl<$Res>
           ? _value.isUpdating
           : isUpdating // ignore: cast_nullable_to_non_nullable
               as bool,
+      isLoadingSearches: null == isLoadingSearches
+          ? _value.isLoadingSearches
+          : isLoadingSearches // ignore: cast_nullable_to_non_nullable
+              as bool,
       error: freezed == error
           ? _value.error
           : error // ignore: cast_nullable_to_non_nullable
               as String?,
+      searches: null == searches
+          ? _value._searches
+          : searches // ignore: cast_nullable_to_non_nullable
+              as List<UserSearch>,
     ));
   }
 }
@@ -168,7 +194,10 @@ class _$ProfileStateImpl implements _ProfileState {
       this.selectedImage,
       this.uploadedImageUrl,
       this.isUpdating = false,
-      this.error});
+      this.isLoadingSearches = false,
+      this.error,
+      final List<UserSearch> searches = const []})
+      : _searches = searches;
 
   @override
   final UserModel? user;
@@ -180,11 +209,22 @@ class _$ProfileStateImpl implements _ProfileState {
   @JsonKey()
   final bool isUpdating;
   @override
+  @JsonKey()
+  final bool isLoadingSearches;
+  @override
   final String? error;
+  final List<UserSearch> _searches;
+  @override
+  @JsonKey()
+  List<UserSearch> get searches {
+    if (_searches is EqualUnmodifiableListView) return _searches;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_searches);
+  }
 
   @override
   String toString() {
-    return 'ProfileState(user: $user, selectedImage: $selectedImage, uploadedImageUrl: $uploadedImageUrl, isUpdating: $isUpdating, error: $error)';
+    return 'ProfileState(user: $user, selectedImage: $selectedImage, uploadedImageUrl: $uploadedImageUrl, isUpdating: $isUpdating, isLoadingSearches: $isLoadingSearches, error: $error, searches: $searches)';
   }
 
   @override
@@ -199,12 +239,22 @@ class _$ProfileStateImpl implements _ProfileState {
                 other.uploadedImageUrl == uploadedImageUrl) &&
             (identical(other.isUpdating, isUpdating) ||
                 other.isUpdating == isUpdating) &&
-            (identical(other.error, error) || other.error == error));
+            (identical(other.isLoadingSearches, isLoadingSearches) ||
+                other.isLoadingSearches == isLoadingSearches) &&
+            (identical(other.error, error) || other.error == error) &&
+            const DeepCollectionEquality().equals(other._searches, _searches));
   }
 
   @override
   int get hashCode => Object.hash(
-      runtimeType, user, selectedImage, uploadedImageUrl, isUpdating, error);
+      runtimeType,
+      user,
+      selectedImage,
+      uploadedImageUrl,
+      isUpdating,
+      isLoadingSearches,
+      error,
+      const DeepCollectionEquality().hash(_searches));
 
   @JsonKey(ignore: true)
   @override
@@ -219,7 +269,9 @@ abstract class _ProfileState implements ProfileState {
       final File? selectedImage,
       final String? uploadedImageUrl,
       final bool isUpdating,
-      final String? error}) = _$ProfileStateImpl;
+      final bool isLoadingSearches,
+      final String? error,
+      final List<UserSearch> searches}) = _$ProfileStateImpl;
 
   @override
   UserModel? get user;
@@ -230,7 +282,11 @@ abstract class _ProfileState implements ProfileState {
   @override
   bool get isUpdating;
   @override
+  bool get isLoadingSearches;
+  @override
   String? get error;
+  @override
+  List<UserSearch> get searches;
   @override
   @JsonKey(ignore: true)
   _$$ProfileStateImplCopyWith<_$ProfileStateImpl> get copyWith =>

@@ -23,6 +23,8 @@ mixin _$ProfileEvent {
     required TResult Function() refresh,
     required TResult Function(File? image) addProfileImage,
     required TResult Function(Map<String, dynamic> data) updateProfile,
+    required TResult Function() loadSearches,
+    required TResult Function(String searchId) deleteSearch,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -32,6 +34,8 @@ mixin _$ProfileEvent {
     TResult? Function()? refresh,
     TResult? Function(File? image)? addProfileImage,
     TResult? Function(Map<String, dynamic> data)? updateProfile,
+    TResult? Function()? loadSearches,
+    TResult? Function(String searchId)? deleteSearch,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -41,6 +45,8 @@ mixin _$ProfileEvent {
     TResult Function()? refresh,
     TResult Function(File? image)? addProfileImage,
     TResult Function(Map<String, dynamic> data)? updateProfile,
+    TResult Function()? loadSearches,
+    TResult Function(String searchId)? deleteSearch,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -51,6 +57,8 @@ mixin _$ProfileEvent {
     required TResult Function(ProfileRefresh value) refresh,
     required TResult Function(AddProfileImage value) addProfileImage,
     required TResult Function(UpdateProfile value) updateProfile,
+    required TResult Function(LoadSearches value) loadSearches,
+    required TResult Function(DeleteSearch value) deleteSearch,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -60,6 +68,8 @@ mixin _$ProfileEvent {
     TResult? Function(ProfileRefresh value)? refresh,
     TResult? Function(AddProfileImage value)? addProfileImage,
     TResult? Function(UpdateProfile value)? updateProfile,
+    TResult? Function(LoadSearches value)? loadSearches,
+    TResult? Function(DeleteSearch value)? deleteSearch,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -69,6 +79,8 @@ mixin _$ProfileEvent {
     TResult Function(ProfileRefresh value)? refresh,
     TResult Function(AddProfileImage value)? addProfileImage,
     TResult Function(UpdateProfile value)? updateProfile,
+    TResult Function(LoadSearches value)? loadSearches,
+    TResult Function(DeleteSearch value)? deleteSearch,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -175,6 +187,8 @@ class _$ProfileLoadImpl implements ProfileLoad {
     required TResult Function() refresh,
     required TResult Function(File? image) addProfileImage,
     required TResult Function(Map<String, dynamic> data) updateProfile,
+    required TResult Function() loadSearches,
+    required TResult Function(String searchId) deleteSearch,
   }) {
     return load(user);
   }
@@ -187,6 +201,8 @@ class _$ProfileLoadImpl implements ProfileLoad {
     TResult? Function()? refresh,
     TResult? Function(File? image)? addProfileImage,
     TResult? Function(Map<String, dynamic> data)? updateProfile,
+    TResult? Function()? loadSearches,
+    TResult? Function(String searchId)? deleteSearch,
   }) {
     return load?.call(user);
   }
@@ -199,6 +215,8 @@ class _$ProfileLoadImpl implements ProfileLoad {
     TResult Function()? refresh,
     TResult Function(File? image)? addProfileImage,
     TResult Function(Map<String, dynamic> data)? updateProfile,
+    TResult Function()? loadSearches,
+    TResult Function(String searchId)? deleteSearch,
     required TResult orElse(),
   }) {
     if (load != null) {
@@ -215,6 +233,8 @@ class _$ProfileLoadImpl implements ProfileLoad {
     required TResult Function(ProfileRefresh value) refresh,
     required TResult Function(AddProfileImage value) addProfileImage,
     required TResult Function(UpdateProfile value) updateProfile,
+    required TResult Function(LoadSearches value) loadSearches,
+    required TResult Function(DeleteSearch value) deleteSearch,
   }) {
     return load(this);
   }
@@ -227,6 +247,8 @@ class _$ProfileLoadImpl implements ProfileLoad {
     TResult? Function(ProfileRefresh value)? refresh,
     TResult? Function(AddProfileImage value)? addProfileImage,
     TResult? Function(UpdateProfile value)? updateProfile,
+    TResult? Function(LoadSearches value)? loadSearches,
+    TResult? Function(DeleteSearch value)? deleteSearch,
   }) {
     return load?.call(this);
   }
@@ -239,6 +261,8 @@ class _$ProfileLoadImpl implements ProfileLoad {
     TResult Function(ProfileRefresh value)? refresh,
     TResult Function(AddProfileImage value)? addProfileImage,
     TResult Function(UpdateProfile value)? updateProfile,
+    TResult Function(LoadSearches value)? loadSearches,
+    TResult Function(DeleteSearch value)? deleteSearch,
     required TResult orElse(),
   }) {
     if (load != null) {
@@ -300,6 +324,8 @@ class _$ProfileLogoutImpl implements ProfileLogout {
     required TResult Function() refresh,
     required TResult Function(File? image) addProfileImage,
     required TResult Function(Map<String, dynamic> data) updateProfile,
+    required TResult Function() loadSearches,
+    required TResult Function(String searchId) deleteSearch,
   }) {
     return logout();
   }
@@ -312,6 +338,8 @@ class _$ProfileLogoutImpl implements ProfileLogout {
     TResult? Function()? refresh,
     TResult? Function(File? image)? addProfileImage,
     TResult? Function(Map<String, dynamic> data)? updateProfile,
+    TResult? Function()? loadSearches,
+    TResult? Function(String searchId)? deleteSearch,
   }) {
     return logout?.call();
   }
@@ -324,6 +352,8 @@ class _$ProfileLogoutImpl implements ProfileLogout {
     TResult Function()? refresh,
     TResult Function(File? image)? addProfileImage,
     TResult Function(Map<String, dynamic> data)? updateProfile,
+    TResult Function()? loadSearches,
+    TResult Function(String searchId)? deleteSearch,
     required TResult orElse(),
   }) {
     if (logout != null) {
@@ -340,6 +370,8 @@ class _$ProfileLogoutImpl implements ProfileLogout {
     required TResult Function(ProfileRefresh value) refresh,
     required TResult Function(AddProfileImage value) addProfileImage,
     required TResult Function(UpdateProfile value) updateProfile,
+    required TResult Function(LoadSearches value) loadSearches,
+    required TResult Function(DeleteSearch value) deleteSearch,
   }) {
     return logout(this);
   }
@@ -352,6 +384,8 @@ class _$ProfileLogoutImpl implements ProfileLogout {
     TResult? Function(ProfileRefresh value)? refresh,
     TResult? Function(AddProfileImage value)? addProfileImage,
     TResult? Function(UpdateProfile value)? updateProfile,
+    TResult? Function(LoadSearches value)? loadSearches,
+    TResult? Function(DeleteSearch value)? deleteSearch,
   }) {
     return logout?.call(this);
   }
@@ -364,6 +398,8 @@ class _$ProfileLogoutImpl implements ProfileLogout {
     TResult Function(ProfileRefresh value)? refresh,
     TResult Function(AddProfileImage value)? addProfileImage,
     TResult Function(UpdateProfile value)? updateProfile,
+    TResult Function(LoadSearches value)? loadSearches,
+    TResult Function(DeleteSearch value)? deleteSearch,
     required TResult orElse(),
   }) {
     if (logout != null) {
@@ -420,6 +456,8 @@ class _$ProfileRefreshImpl implements ProfileRefresh {
     required TResult Function() refresh,
     required TResult Function(File? image) addProfileImage,
     required TResult Function(Map<String, dynamic> data) updateProfile,
+    required TResult Function() loadSearches,
+    required TResult Function(String searchId) deleteSearch,
   }) {
     return refresh();
   }
@@ -432,6 +470,8 @@ class _$ProfileRefreshImpl implements ProfileRefresh {
     TResult? Function()? refresh,
     TResult? Function(File? image)? addProfileImage,
     TResult? Function(Map<String, dynamic> data)? updateProfile,
+    TResult? Function()? loadSearches,
+    TResult? Function(String searchId)? deleteSearch,
   }) {
     return refresh?.call();
   }
@@ -444,6 +484,8 @@ class _$ProfileRefreshImpl implements ProfileRefresh {
     TResult Function()? refresh,
     TResult Function(File? image)? addProfileImage,
     TResult Function(Map<String, dynamic> data)? updateProfile,
+    TResult Function()? loadSearches,
+    TResult Function(String searchId)? deleteSearch,
     required TResult orElse(),
   }) {
     if (refresh != null) {
@@ -460,6 +502,8 @@ class _$ProfileRefreshImpl implements ProfileRefresh {
     required TResult Function(ProfileRefresh value) refresh,
     required TResult Function(AddProfileImage value) addProfileImage,
     required TResult Function(UpdateProfile value) updateProfile,
+    required TResult Function(LoadSearches value) loadSearches,
+    required TResult Function(DeleteSearch value) deleteSearch,
   }) {
     return refresh(this);
   }
@@ -472,6 +516,8 @@ class _$ProfileRefreshImpl implements ProfileRefresh {
     TResult? Function(ProfileRefresh value)? refresh,
     TResult? Function(AddProfileImage value)? addProfileImage,
     TResult? Function(UpdateProfile value)? updateProfile,
+    TResult? Function(LoadSearches value)? loadSearches,
+    TResult? Function(DeleteSearch value)? deleteSearch,
   }) {
     return refresh?.call(this);
   }
@@ -484,6 +530,8 @@ class _$ProfileRefreshImpl implements ProfileRefresh {
     TResult Function(ProfileRefresh value)? refresh,
     TResult Function(AddProfileImage value)? addProfileImage,
     TResult Function(UpdateProfile value)? updateProfile,
+    TResult Function(LoadSearches value)? loadSearches,
+    TResult Function(DeleteSearch value)? deleteSearch,
     required TResult orElse(),
   }) {
     if (refresh != null) {
@@ -567,6 +615,8 @@ class _$AddProfileImageImpl implements AddProfileImage {
     required TResult Function() refresh,
     required TResult Function(File? image) addProfileImage,
     required TResult Function(Map<String, dynamic> data) updateProfile,
+    required TResult Function() loadSearches,
+    required TResult Function(String searchId) deleteSearch,
   }) {
     return addProfileImage(image);
   }
@@ -579,6 +629,8 @@ class _$AddProfileImageImpl implements AddProfileImage {
     TResult? Function()? refresh,
     TResult? Function(File? image)? addProfileImage,
     TResult? Function(Map<String, dynamic> data)? updateProfile,
+    TResult? Function()? loadSearches,
+    TResult? Function(String searchId)? deleteSearch,
   }) {
     return addProfileImage?.call(image);
   }
@@ -591,6 +643,8 @@ class _$AddProfileImageImpl implements AddProfileImage {
     TResult Function()? refresh,
     TResult Function(File? image)? addProfileImage,
     TResult Function(Map<String, dynamic> data)? updateProfile,
+    TResult Function()? loadSearches,
+    TResult Function(String searchId)? deleteSearch,
     required TResult orElse(),
   }) {
     if (addProfileImage != null) {
@@ -607,6 +661,8 @@ class _$AddProfileImageImpl implements AddProfileImage {
     required TResult Function(ProfileRefresh value) refresh,
     required TResult Function(AddProfileImage value) addProfileImage,
     required TResult Function(UpdateProfile value) updateProfile,
+    required TResult Function(LoadSearches value) loadSearches,
+    required TResult Function(DeleteSearch value) deleteSearch,
   }) {
     return addProfileImage(this);
   }
@@ -619,6 +675,8 @@ class _$AddProfileImageImpl implements AddProfileImage {
     TResult? Function(ProfileRefresh value)? refresh,
     TResult? Function(AddProfileImage value)? addProfileImage,
     TResult? Function(UpdateProfile value)? updateProfile,
+    TResult? Function(LoadSearches value)? loadSearches,
+    TResult? Function(DeleteSearch value)? deleteSearch,
   }) {
     return addProfileImage?.call(this);
   }
@@ -631,6 +689,8 @@ class _$AddProfileImageImpl implements AddProfileImage {
     TResult Function(ProfileRefresh value)? refresh,
     TResult Function(AddProfileImage value)? addProfileImage,
     TResult Function(UpdateProfile value)? updateProfile,
+    TResult Function(LoadSearches value)? loadSearches,
+    TResult Function(DeleteSearch value)? deleteSearch,
     required TResult orElse(),
   }) {
     if (addProfileImage != null) {
@@ -724,6 +784,8 @@ class _$UpdateProfileImpl implements UpdateProfile {
     required TResult Function() refresh,
     required TResult Function(File? image) addProfileImage,
     required TResult Function(Map<String, dynamic> data) updateProfile,
+    required TResult Function() loadSearches,
+    required TResult Function(String searchId) deleteSearch,
   }) {
     return updateProfile(data);
   }
@@ -736,6 +798,8 @@ class _$UpdateProfileImpl implements UpdateProfile {
     TResult? Function()? refresh,
     TResult? Function(File? image)? addProfileImage,
     TResult? Function(Map<String, dynamic> data)? updateProfile,
+    TResult? Function()? loadSearches,
+    TResult? Function(String searchId)? deleteSearch,
   }) {
     return updateProfile?.call(data);
   }
@@ -748,6 +812,8 @@ class _$UpdateProfileImpl implements UpdateProfile {
     TResult Function()? refresh,
     TResult Function(File? image)? addProfileImage,
     TResult Function(Map<String, dynamic> data)? updateProfile,
+    TResult Function()? loadSearches,
+    TResult Function(String searchId)? deleteSearch,
     required TResult orElse(),
   }) {
     if (updateProfile != null) {
@@ -764,6 +830,8 @@ class _$UpdateProfileImpl implements UpdateProfile {
     required TResult Function(ProfileRefresh value) refresh,
     required TResult Function(AddProfileImage value) addProfileImage,
     required TResult Function(UpdateProfile value) updateProfile,
+    required TResult Function(LoadSearches value) loadSearches,
+    required TResult Function(DeleteSearch value) deleteSearch,
   }) {
     return updateProfile(this);
   }
@@ -776,6 +844,8 @@ class _$UpdateProfileImpl implements UpdateProfile {
     TResult? Function(ProfileRefresh value)? refresh,
     TResult? Function(AddProfileImage value)? addProfileImage,
     TResult? Function(UpdateProfile value)? updateProfile,
+    TResult? Function(LoadSearches value)? loadSearches,
+    TResult? Function(DeleteSearch value)? deleteSearch,
   }) {
     return updateProfile?.call(this);
   }
@@ -788,6 +858,8 @@ class _$UpdateProfileImpl implements UpdateProfile {
     TResult Function(ProfileRefresh value)? refresh,
     TResult Function(AddProfileImage value)? addProfileImage,
     TResult Function(UpdateProfile value)? updateProfile,
+    TResult Function(LoadSearches value)? loadSearches,
+    TResult Function(DeleteSearch value)? deleteSearch,
     required TResult orElse(),
   }) {
     if (updateProfile != null) {
@@ -804,5 +876,301 @@ abstract class UpdateProfile implements ProfileEvent {
   Map<String, dynamic> get data;
   @JsonKey(ignore: true)
   _$$UpdateProfileImplCopyWith<_$UpdateProfileImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$LoadSearchesImplCopyWith<$Res> {
+  factory _$$LoadSearchesImplCopyWith(
+          _$LoadSearchesImpl value, $Res Function(_$LoadSearchesImpl) then) =
+      __$$LoadSearchesImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$LoadSearchesImplCopyWithImpl<$Res>
+    extends _$ProfileEventCopyWithImpl<$Res, _$LoadSearchesImpl>
+    implements _$$LoadSearchesImplCopyWith<$Res> {
+  __$$LoadSearchesImplCopyWithImpl(
+      _$LoadSearchesImpl _value, $Res Function(_$LoadSearchesImpl) _then)
+      : super(_value, _then);
+}
+
+/// @nodoc
+
+class _$LoadSearchesImpl implements LoadSearches {
+  const _$LoadSearchesImpl();
+
+  @override
+  String toString() {
+    return 'ProfileEvent.loadSearches()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$LoadSearchesImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(UserModel? user) load,
+    required TResult Function() logout,
+    required TResult Function() refresh,
+    required TResult Function(File? image) addProfileImage,
+    required TResult Function(Map<String, dynamic> data) updateProfile,
+    required TResult Function() loadSearches,
+    required TResult Function(String searchId) deleteSearch,
+  }) {
+    return loadSearches();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(UserModel? user)? load,
+    TResult? Function()? logout,
+    TResult? Function()? refresh,
+    TResult? Function(File? image)? addProfileImage,
+    TResult? Function(Map<String, dynamic> data)? updateProfile,
+    TResult? Function()? loadSearches,
+    TResult? Function(String searchId)? deleteSearch,
+  }) {
+    return loadSearches?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(UserModel? user)? load,
+    TResult Function()? logout,
+    TResult Function()? refresh,
+    TResult Function(File? image)? addProfileImage,
+    TResult Function(Map<String, dynamic> data)? updateProfile,
+    TResult Function()? loadSearches,
+    TResult Function(String searchId)? deleteSearch,
+    required TResult orElse(),
+  }) {
+    if (loadSearches != null) {
+      return loadSearches();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(ProfileLoad value) load,
+    required TResult Function(ProfileLogout value) logout,
+    required TResult Function(ProfileRefresh value) refresh,
+    required TResult Function(AddProfileImage value) addProfileImage,
+    required TResult Function(UpdateProfile value) updateProfile,
+    required TResult Function(LoadSearches value) loadSearches,
+    required TResult Function(DeleteSearch value) deleteSearch,
+  }) {
+    return loadSearches(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(ProfileLoad value)? load,
+    TResult? Function(ProfileLogout value)? logout,
+    TResult? Function(ProfileRefresh value)? refresh,
+    TResult? Function(AddProfileImage value)? addProfileImage,
+    TResult? Function(UpdateProfile value)? updateProfile,
+    TResult? Function(LoadSearches value)? loadSearches,
+    TResult? Function(DeleteSearch value)? deleteSearch,
+  }) {
+    return loadSearches?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(ProfileLoad value)? load,
+    TResult Function(ProfileLogout value)? logout,
+    TResult Function(ProfileRefresh value)? refresh,
+    TResult Function(AddProfileImage value)? addProfileImage,
+    TResult Function(UpdateProfile value)? updateProfile,
+    TResult Function(LoadSearches value)? loadSearches,
+    TResult Function(DeleteSearch value)? deleteSearch,
+    required TResult orElse(),
+  }) {
+    if (loadSearches != null) {
+      return loadSearches(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class LoadSearches implements ProfileEvent {
+  const factory LoadSearches() = _$LoadSearchesImpl;
+}
+
+/// @nodoc
+abstract class _$$DeleteSearchImplCopyWith<$Res> {
+  factory _$$DeleteSearchImplCopyWith(
+          _$DeleteSearchImpl value, $Res Function(_$DeleteSearchImpl) then) =
+      __$$DeleteSearchImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({String searchId});
+}
+
+/// @nodoc
+class __$$DeleteSearchImplCopyWithImpl<$Res>
+    extends _$ProfileEventCopyWithImpl<$Res, _$DeleteSearchImpl>
+    implements _$$DeleteSearchImplCopyWith<$Res> {
+  __$$DeleteSearchImplCopyWithImpl(
+      _$DeleteSearchImpl _value, $Res Function(_$DeleteSearchImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? searchId = null,
+  }) {
+    return _then(_$DeleteSearchImpl(
+      null == searchId
+          ? _value.searchId
+          : searchId // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$DeleteSearchImpl implements DeleteSearch {
+  const _$DeleteSearchImpl(this.searchId);
+
+  @override
+  final String searchId;
+
+  @override
+  String toString() {
+    return 'ProfileEvent.deleteSearch(searchId: $searchId)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$DeleteSearchImpl &&
+            (identical(other.searchId, searchId) ||
+                other.searchId == searchId));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, searchId);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$DeleteSearchImplCopyWith<_$DeleteSearchImpl> get copyWith =>
+      __$$DeleteSearchImplCopyWithImpl<_$DeleteSearchImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(UserModel? user) load,
+    required TResult Function() logout,
+    required TResult Function() refresh,
+    required TResult Function(File? image) addProfileImage,
+    required TResult Function(Map<String, dynamic> data) updateProfile,
+    required TResult Function() loadSearches,
+    required TResult Function(String searchId) deleteSearch,
+  }) {
+    return deleteSearch(searchId);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(UserModel? user)? load,
+    TResult? Function()? logout,
+    TResult? Function()? refresh,
+    TResult? Function(File? image)? addProfileImage,
+    TResult? Function(Map<String, dynamic> data)? updateProfile,
+    TResult? Function()? loadSearches,
+    TResult? Function(String searchId)? deleteSearch,
+  }) {
+    return deleteSearch?.call(searchId);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(UserModel? user)? load,
+    TResult Function()? logout,
+    TResult Function()? refresh,
+    TResult Function(File? image)? addProfileImage,
+    TResult Function(Map<String, dynamic> data)? updateProfile,
+    TResult Function()? loadSearches,
+    TResult Function(String searchId)? deleteSearch,
+    required TResult orElse(),
+  }) {
+    if (deleteSearch != null) {
+      return deleteSearch(searchId);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(ProfileLoad value) load,
+    required TResult Function(ProfileLogout value) logout,
+    required TResult Function(ProfileRefresh value) refresh,
+    required TResult Function(AddProfileImage value) addProfileImage,
+    required TResult Function(UpdateProfile value) updateProfile,
+    required TResult Function(LoadSearches value) loadSearches,
+    required TResult Function(DeleteSearch value) deleteSearch,
+  }) {
+    return deleteSearch(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(ProfileLoad value)? load,
+    TResult? Function(ProfileLogout value)? logout,
+    TResult? Function(ProfileRefresh value)? refresh,
+    TResult? Function(AddProfileImage value)? addProfileImage,
+    TResult? Function(UpdateProfile value)? updateProfile,
+    TResult? Function(LoadSearches value)? loadSearches,
+    TResult? Function(DeleteSearch value)? deleteSearch,
+  }) {
+    return deleteSearch?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(ProfileLoad value)? load,
+    TResult Function(ProfileLogout value)? logout,
+    TResult Function(ProfileRefresh value)? refresh,
+    TResult Function(AddProfileImage value)? addProfileImage,
+    TResult Function(UpdateProfile value)? updateProfile,
+    TResult Function(LoadSearches value)? loadSearches,
+    TResult Function(DeleteSearch value)? deleteSearch,
+    required TResult orElse(),
+  }) {
+    if (deleteSearch != null) {
+      return deleteSearch(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class DeleteSearch implements ProfileEvent {
+  const factory DeleteSearch(final String searchId) = _$DeleteSearchImpl;
+
+  String get searchId;
+  @JsonKey(ignore: true)
+  _$$DeleteSearchImplCopyWith<_$DeleteSearchImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

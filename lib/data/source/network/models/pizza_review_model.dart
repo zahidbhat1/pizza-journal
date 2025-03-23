@@ -25,7 +25,9 @@ class PizzaTypeSummary with _$PizzaTypeSummary {
     required CrustSummary crust,
     required SauceSummary sauce,
     required CheeseSummary cheese,
-    required int count, // Number of reviews for this pizza type
+    required int count,
+    required int totalStars,
+    required double averageRating,// Number of reviews for this pizza type
   }) = _PizzaTypeSummary;
 
   factory PizzaTypeSummary.fromJson(Map<String, Object?> json) =>
@@ -81,7 +83,7 @@ class Review with _$Review {
     required CrustReview? crust,
     required SauceReview? sauce,
     required CheeseReview? cheese,
-    required String? id,
+    @JsonKey(name: '_id') required String? id,
     required int? stars,
     required String? pizzaType,
     required String? description,
